@@ -16,7 +16,7 @@ anyhow = "1"
 arboard = "3"
 directories = "6"
 eframe = { version = "0.31", features = ["wgpu"] }
-egui = "0.31"
+egui = "0.36"
 raw-window-handle = "0.6"
 global-hotkey = "0.6"
 image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
