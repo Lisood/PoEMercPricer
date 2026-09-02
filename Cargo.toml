@@ -29,7 +29,7 @@ thiserror = "2"
 xcap = "0.4"
 
 [target.'cfg(windows)'.dependencies]
-windows = { version = "0.58", features = [
+windows = { version = "0.60", features = [
     "Foundation",
     "Foundation_Collections",
     "Graphics_Imaging",
