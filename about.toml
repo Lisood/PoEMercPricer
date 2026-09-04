@@ -1,0 +1,50 @@
+# cargo-about config for the THIRD_PARTY_NOTICES.html shipped with every release.
+# Regenerate with:
+#   cargo about generate about.hbs -o THIRD_PARTY_NOTICES.html
+
+# Only the shipped target matters; this drops Linux/macOS-only crates
+# (accesskit_unix, zbus, objc2, ...) from the notices.
+targets = ["x86_64-pc-windows-msvc"]
+
+# Neither build scripts nor test-only crates are linked into the exe.
+ignore-build-dependencies = true
+ignore-dev-dependencies = true
+
+# The permissive and weak-copyleft licenses allowed in the shipped exe, most
+# preferred first: a crate offering `MIT OR Apache-2.0` is listed under MIT.
+# Anything outside this list fails the build so a new licence gets a look.
+accepted = [
+    # Present in the current tree.
+    "MIT",
+    "Apache-2.0",
+    "Unicode-3.0",
+    "BSL-1.0",
+    "CC0-1.0",
+    "ISC",
+    "MPL-2.0",
+    "Zlib",
+    # assets/fonts/Ubuntu-Light.ttf, embedded in the exe and shipped under UFL.txt.
+    "Ubuntu-font-1.0",
+    # Not in the current tree; pre-approved so a dependency bump does not stall
+    # a release over a licence we would accept anyway.
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "Unicode-DFS-2016",
+    "OFL-1.1",
+]
+
+# The root crate uses `license-file`, not `license`, and it ships the Ubuntu
+# font alongside its own MIT terms, so spell both out here.
+[poemercpricer.clarify]
+license = "MIT AND Ubuntu-font-1.0"
+
+[[poemercpricer.clarify.files]]
+path = "LICENSE"
+license = "MIT"
+checksum = "1052af01a6e1d80a9a52af45fc6c4825369e88a473bfbe266ad111a9b09598c7"
+
+[[poemercpricer.clarify.files]]
+path = "assets/fonts/UFL.txt"
+license = "Ubuntu-font-1.0"
+checksum = "2f0015108d68627bd788d313f529c21ff4da2c2c42a5e1f3883acc83480f9002"

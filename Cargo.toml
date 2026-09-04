@@ -1,0 +1,84 @@
+[package]
+name = "poemercpricer"
+version = "0.0.0"
+edition = "2021"
+description = "In-game overlay that screens Path of Exile 3.29 Mercenary Warrants from the clipboard or screen OCR"
+license-file = "LICENSE"
+repository = "https://github.com/Lisood/PoEMercPricer"
+readme = "README.md"
+authors = ["Lisood"]
+keywords = ["path-of-exile", "poe", "overlay", "mercenary"]
+categories = ["games"]
+rust-version = "1.88"
+
+[dependencies]
+anyhow = "1"
+arboard = "3"
+directories = "6"
+flate2 = "1"
+eframe = { version = "0.31", default-features = false, features = ["wgpu", "accesskit"] }
+egui = { version = "0.31", default-features = false }
+raw-window-handle = "0.6"
+global-hotkey = "0.6"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+open = "5"
+regex = { version = "1", default-features = false, features = ["std", "perf", "unicode-case", "unicode-perl"] }
+self-replace = "1"
+semver = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+strsim = "0.11"
+xcap = "0.4"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.58", features = [
+    "Foundation",
+    "Foundation_Collections",
+    "Globalization",
+    "Graphics_Imaging",
+    "Media_Ocr",
+    "Storage",
+    "Storage_Streams",
+    "Web_Http",
+    "Web_Http_Headers",
+    "Win32_Foundation",
+    "Win32_Security_Cryptography",
+    "Win32_System_Com",
+    "Win32_System_Console",
+    "Win32_System_ProcessStatus",
+    "Win32_System_WinRT",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[build-dependencies]
+winresource = { version = "0.1.31", default-features = false }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+debug = "line-tables-only"
+# "s" measured 21% smaller with unchanged scan latency; "z" was 15% slower. See docs/performance.md.
+opt-level = "s"
+
+# Renderer setup and window plumbing are not on the scan path or the per-frame
+# path in any measurable way; "z" here saved 270 KB with the warm-scan gate
+# unchanged. Keep the app crate, image codecs, egui and epaint at "s".
+[profile.release.package.naga]
+opt-level = "z"
+[profile.release.package.wgpu-core]
+opt-level = "z"
+[profile.release.package.wgpu-hal]
+opt-level = "z"
+[profile.release.package.wgpu]
+opt-level = "z"
+[profile.release.package.winit]
+opt-level = "z"
+[profile.release.package.egui-winit]
+opt-level = "z"
+[profile.release.package.accesskit_windows]
+opt-level = "z"
+[profile.release.package.accesskit_consumer]
+opt-level = "z"
+[profile.release.package.windows]
+opt-level = "z"

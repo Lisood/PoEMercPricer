@@ -1,0 +1,76 @@
+name: release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # Reuses the ci run's fmt, test, clippy, audit and MSRV gates instead of
+      # duplicating them; a tag on a commit that never reached main can't publish.
+      - name: Tagged commit must be on main with a green ci run
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $status = gh api "repos/$env:GITHUB_REPOSITORY/compare/main...$env:GITHUB_SHA" --jq .status
+          if ($status -ne 'identical' -and $status -ne 'behind') { throw "$env:GITHUB_SHA is not on main ($status)" }
+          $id = $null
+          for ($i = 0; $i -lt 20; $i++) {
+            $id = gh run list --workflow ci.yml --commit $env:GITHUB_SHA --json databaseId --jq '.[0].databaseId'
+            if ($id) { break }
+            Start-Sleep -Seconds 15
+          }
+          if (-not $id) { throw "no ci run for $env:GITHUB_SHA" }
+          gh run watch $id --exit-status
+      # Pinned to commits: this job holds the write token and its output is
+      # auto-installed by every running copy, so a moved tag must not reach it.
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+        with:
+          # Also caches ~/.cargo/bin, so the cargo-about install below is a
+          # no-op on every release after the first.
+          cache-all-crates: true
+      - name: Tag must match Cargo.toml
+        shell: pwsh
+        run: |
+          $v = (cargo metadata --format-version 1 --no-deps | ConvertFrom-Json).packages[0].version
+          if ("v$v" -ne $env:GITHUB_REF_NAME) { throw "tag $env:GITHUB_REF_NAME does not match Cargo.toml version $v" }
+      - run: cargo build --release --locked
+      - name: Size budget (docs/performance.md, "Binary size and memory")
+        shell: pwsh
+        run: |
+          $bytes = (Get-Item target/release/poemercpricer.exe).Length
+          if ($bytes -gt 11000000) { throw "poemercpricer.exe is $bytes bytes, above the 11000000 byte budget" }
+          "poemercpricer.exe $bytes bytes"
+      - run: Copy-Item target/release/poemercpricer.exe poemercpricer-windows-x64.exe
+      - name: Gzip sibling asset (the updater prefers it, verifies it against the exe digest)
+        shell: pwsh
+        run: |
+          $in = [IO.File]::OpenRead('poemercpricer-windows-x64.exe')
+          $out = [IO.File]::Create('poemercpricer-windows-x64.exe.gz')
+          $gz = [IO.Compression.GZipStream]::new($out, [IO.Compression.CompressionLevel]::SmallestSize)
+          $in.CopyTo($gz); $gz.Dispose(); $out.Dispose(); $in.Dispose()
+          "poemercpricer-windows-x64.exe.gz $((Get-Item poemercpricer-windows-x64.exe.gz).Length) bytes"
+      - name: Install cargo-about
+        # 0.9 puts the binary behind the non-default `cli` feature.
+        run: cargo install cargo-about --version 0.9.2 --locked --features cli
+      - name: Third-party notices from the tagged Cargo.lock
+        shell: pwsh
+        run: |
+          cargo about generate --locked --fail about.hbs -o THIRD_PARTY_NOTICES.html
+          "THIRD_PARTY_NOTICES.html $((Get-Item THIRD_PARTY_NOTICES.html).Length) bytes"
+      # Immutable releases lock the tag and assets at publish, so everything
+      # is uploaded to the draft first.
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html --draft --title $env:GITHUB_REF_NAME --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - run: gh release edit $env:GITHUB_REF_NAME --draft=false
+        env:
+          GH_TOKEN: ${{ github.token }}

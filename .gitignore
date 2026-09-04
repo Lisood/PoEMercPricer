@@ -1,0 +1,17 @@
+/target
+/target-*/
+**/*.rs.bk
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+debug/
+.idea/
+.vscode/
+.DS_Store
+
+*.log
+THIRD_PARTY_NOTICES.html

@@ -1,0 +1,60 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - name: Ensure a Windows OCR language is installed
+        # Windows PowerShell 5.1: the WinRT type projection below is not
+        # available in pwsh 7.
+        shell: powershell
+        run: |
+          $count = [Windows.Media.Ocr.OcrEngine, Windows.Media.Ocr, ContentType=WindowsRuntime]::AvailableRecognizerLanguages.Count
+          if ($count -eq 0) { Add-WindowsCapability -Online -Name Language.OCR~~~en-US~0.0.1.0 }
+      - name: No secrets
+        # Same patterns as scripts/release.ps1 step 0; a POESESSID pasted into a
+        # script is the realistic leak for a PoE tool.
+        shell: pwsh
+        run: |
+          $leaks = git grep -I -n -E 'POESESSID[=: ]*[0-9a-f]{32}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{22}|AKIA[0-9A-Z]{16}|BEGIN [A-Z ]*PRIVATE KEY' -- . ':!Cargo.lock'
+          if ($leaks) { throw "Secret-looking text is tracked:`n$($leaks -join "`n")" }
+          exit 0  # git grep exits 1 on no match, which pwsh would report as failure
+      - name: Format
+        run: cargo fmt --check
+      - name: Test
+        run: cargo test --locked
+      - name: Clippy
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+  msrv:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # same pin; toolchain below
+        with:
+          toolchain: "1.88"
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - run: cargo check --locked
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - run: cargo install cargo-audit --locked
+      # quick-xml advisories reach us only through accesskit_unix (Linux-only).
+      - run: cargo audit --ignore RUSTSEC-2026-0194 --ignore RUSTSEC-2026-0195

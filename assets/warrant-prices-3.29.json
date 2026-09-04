@@ -1,0 +1,3782 @@
+{
+  "generated_at": "2026-09-02T12:59:33Z",
+  "league": "Allflame",
+  "patch": "3.29",
+  "source": "https://www.pathofexile.com/api/trade/search (status securable, ilvl >= 83, sort price asc; cheapest 10 fetched; one mercenary stats group per package; listings caps at 10000; chaos rates from poe.ninja stash currency overview)",
+  "chaos_per_divine": 298.1,
+  "min_level": 83,
+  "placeholder": false,
+  "rows": [
+    {
+      "family": "manyshot",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 2.08,
+      "fresh_share": 1.0,
+      "query_id": "9zL6p8nzuK"
+    },
+    {
+      "family": "manyshot",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Vaal Ice Shot",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "EBPeWZ60u5",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "manyshot",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Vaal Ice Shot",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 94,
+      "sampled": 10,
+      "lowest_chaos": 2980.0,
+      "median_chaos": 8195.0,
+      "p75_chaos": 11175.0,
+      "median_age_days": 5.345,
+      "fresh_share": 0.5,
+      "query_id": "9zL6p8W0CK",
+      "search_total": 94,
+      "scanned": 70,
+      "passed": 14,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "manyshot",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Ice Shot",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 736,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 13.5,
+      "p75_chaos": 18.75,
+      "median_age_days": 8.911,
+      "fresh_share": 0.5,
+      "query_id": "jWQODdRohX",
+      "search_total": 736,
+      "scanned": 30,
+      "passed": 10,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "manyshot",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 9.834,
+      "fresh_share": 0.4,
+      "query_id": "D6P9goq4C5"
+    },
+    {
+      "family": "manyshot",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Vaal Ice Shot",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 1,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 0.055,
+      "fresh_share": 1.0,
+      "query_id": "veYOBoQMIE",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 1,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "manyshot",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Vaal Ice Shot",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 173,
+      "sampled": 6,
+      "lowest_chaos": 2980.0,
+      "median_chaos": 4470.0,
+      "p75_chaos": 4470.0,
+      "median_age_days": 4.062,
+      "fresh_share": 0.667,
+      "query_id": "nr0OVdmMt0",
+      "search_total": 173,
+      "scanned": 100,
+      "passed": 6,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "manyshot",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Ice Shot",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 1152,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 15.0,
+      "median_age_days": 10.031,
+      "fresh_share": 0.3,
+      "query_id": "pJ0O7dLXT0",
+      "search_total": 1152,
+      "scanned": 30,
+      "passed": 13,
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+    },
+    {
+      "family": "kineticist",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 0.492,
+      "fresh_share": 1.0,
+      "query_id": "d80bED85cJ"
+    },
+    {
+      "family": "kineticist",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Kinetic Blast of Clustering",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "EBPeWMaRT5",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon"
+    },
+    {
+      "family": "kineticist",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Kinetic Blast of Clustering",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 216,
+      "sampled": 10,
+      "lowest_chaos": 50677.0,
+      "median_chaos": 81828.45,
+      "p75_chaos": 89430.0,
+      "median_age_days": 1.058,
+      "fresh_share": 1.0,
+      "query_id": "wv9OE089hb",
+      "search_total": 216,
+      "scanned": 80,
+      "passed": 10,
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "price_floor_chaos": 23848.0
+    },
+    {
+      "family": "kineticist",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 2.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 6.412,
+      "fresh_share": 0.5,
+      "query_id": "eRbO8gM6UL"
+    },
+    {
+      "family": "kineticist",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Kinetic Blast of Clustering",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "02e5oO9YFg",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon"
+    },
+    {
+      "family": "kineticist",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Kinetic Blast of Clustering",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 274,
+      "sampled": 5,
+      "lowest_chaos": 53658.0,
+      "median_chaos": 80487.0,
+      "p75_chaos": 83468.0,
+      "median_age_days": 0.186,
+      "fresh_share": 0.8,
+      "query_id": "nr0OYbqBT0",
+      "search_total": 274,
+      "scanned": 100,
+      "passed": 5,
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "price_floor_chaos": 23848.0
+    },
+    {
+      "family": "combatant",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 2.428,
+      "fresh_share": 0.9,
+      "query_id": "D6P9gMX5H5"
+    },
+    {
+      "family": "combatant",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Frost Blades",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "RJGD0eJOF7",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix"
+    },
+    {
+      "family": "combatant",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Frost Blades",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "chain",
+          "tier": 2
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        }
+      ],
+      "listings": 159,
+      "sampled": 10,
+      "lowest_chaos": 3875.3,
+      "median_chaos": 13265.45,
+      "p75_chaos": 14905.0,
+      "median_age_days": 4.73,
+      "fresh_share": 0.7,
+      "query_id": "MdP8269LiJ",
+      "search_total": 159,
+      "scanned": 100,
+      "passed": 10,
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "price_floor_chaos": 894.3
+    },
+    {
+      "family": "combatant",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Wild Strike",
+      "gates": [
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 30,
+      "sampled": 2,
+      "lowest_chaos": 29810.0,
+      "median_chaos": 59321.9,
+      "p75_chaos": 74077.85,
+      "median_age_days": 3.746,
+      "fresh_share": 1.0,
+      "query_id": "mk0ORYbwC6",
+      "search_total": 30,
+      "scanned": 30,
+      "passed": 2,
+      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix"
+    },
+    {
+      "family": "combatant",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 3.0,
+      "p75_chaos": 4.0,
+      "median_age_days": 0.246,
+      "fresh_share": 1.0,
+      "query_id": "rPoO4pmEuQ"
+    },
+    {
+      "family": "combatant",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Frost Blades",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "KlP24GODh5",
+      "search_total": 10000,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix"
+    },
+    {
+      "family": "combatant",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Frost Blades",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "chain",
+          "tier": 2
+        },
+        {
+          "canonical": "edwa",
+          "tier": 3
+        }
+      ],
+      "listings": 248,
+      "sampled": 4,
+      "lowest_chaos": 1490.5,
+      "median_chaos": 2981.0,
+      "p75_chaos": 3651.725,
+      "median_age_days": 0.978,
+      "fresh_share": 0.75,
+      "query_id": "EBPeYOZVH5",
+      "search_total": 248,
+      "scanned": 100,
+      "passed": 4,
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "price_floor_chaos": 894.3
+    },
+    {
+      "family": "combatant",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Wild Strike",
+      "gates": [
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "glmOy4aacQ",
+      "search_total": 42,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix"
+    },
+    {
+      "family": "sniper",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 7.895,
+      "fresh_share": 0.5,
+      "query_id": "D6P9gWBgC5"
+    },
+    {
+      "family": "sniper",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Tornado Shot",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.901,
+      "fresh_share": 0.7,
+      "query_id": "4mKWY9a8u9"
+    },
+    {
+      "family": "sniper",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Tornado Shot",
+      "gates": [
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 3713,
+      "sampled": 4,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.25,
+      "median_age_days": 3.533,
+      "fresh_share": 0.75,
+      "query_id": "yYvO0Zj8iR",
+      "search_total": 3713,
+      "scanned": 30,
+      "passed": 4,
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality,arrow_nova"
+    },
+    {
+      "family": "sniper",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 14.639,
+      "fresh_share": 0.3,
+      "query_id": "d80bEKkRUJ"
+    },
+    {
+      "family": "sniper",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Tornado Shot",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 10.81,
+      "fresh_share": 0.2,
+      "query_id": "4mKWYbeMU9"
+    },
+    {
+      "family": "sniper",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Tornado Shot",
+      "gates": [
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 4730,
+      "sampled": 6,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 9.97,
+      "fresh_share": 0.333,
+      "query_id": "lg0OWk02fV",
+      "search_total": 4730,
+      "scanned": 30,
+      "passed": 6,
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality,arrow_nova"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.978,
+      "fresh_share": 0.6,
+      "query_id": "LgPEGyqjtn"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Soulrend of Reaping",
+      "gates": [],
+      "listings": 8805,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 3.167,
+      "fresh_share": 0.7,
+      "query_id": "5nrR9bwmHa"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Soulrend of Reaping",
+      "gates": [
+        {
+          "canonical": "gmp",
+          "tier": 3
+        },
+        {
+          "canonical": "return",
+          "tier": 3
+        }
+      ],
+      "listings": 544,
+      "sampled": 10,
+      "lowest_chaos": 20.0,
+      "median_chaos": 74.5,
+      "p75_chaos": 100.0,
+      "median_age_days": 3.119,
+      "fresh_share": 0.8,
+      "query_id": "bG0qrqazhL"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 0.408,
+      "fresh_share": 0.8,
+      "query_id": "q90O6OgLCg"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Soulrend of Reaping",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 6.0,
+      "p75_chaos": 7.0,
+      "median_age_days": 3.453,
+      "fresh_share": 0.8,
+      "query_id": "7nEmvmGRS5"
+    },
+    {
+      "family": "cruel_mistress",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Soulrend of Reaping",
+      "gates": [
+        {
+          "canonical": "gmp",
+          "tier": 3
+        },
+        {
+          "canonical": "return",
+          "tier": 3
+        }
+      ],
+      "listings": 985,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 44.5,
+      "p75_chaos": 50.0,
+      "median_age_days": 2.398,
+      "fresh_share": 0.9,
+      "query_id": "D6P9g0QBS5"
+    },
+    {
+      "family": "thunderquiver",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 15.621,
+      "fresh_share": 0.2,
+      "query_id": "MdP8j0YMiJ"
+    },
+    {
+      "family": "thunderquiver",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Lightning Arrow",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.38,
+      "fresh_share": 0.3,
+      "query_id": "jWQODrYlSX"
+    },
+    {
+      "family": "thunderquiver",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Lightning Arrow",
+      "gates": [
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 3436,
+      "sampled": 5,
+      "lowest_chaos": 1.0,
+      "median_chaos": 3.0,
+      "p75_chaos": 4.0,
+      "median_age_days": 6.656,
+      "fresh_share": 0.8,
+      "query_id": "4mKWYVdQT9",
+      "search_total": 3436,
+      "scanned": 30,
+      "passed": 5,
+      "partner_rule": "Require /Exclude Galvanic Arrow"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.699,
+      "fresh_share": 0.3,
+      "query_id": "lg0OWE3VfV"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Artillery Ballista",
+      "gates": [],
+      "listings": 3867,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.267,
+      "fresh_share": 0.4,
+      "query_id": "eRbO8e7ocL"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Artillery Ballista",
+      "gates": [
+        {
+          "canonical": "gilded_totemic_onslaught",
+          "tier": 3
+        },
+        {
+          "canonical": "multiple_totems",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        },
+        {
+          "canonical": "fire_penetration",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "veYOBVVLcE"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 4.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 0.36,
+      "fresh_share": 0.6,
+      "query_id": "Z6d4a0O0tQ"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Artillery Ballista",
+      "gates": [],
+      "listings": 5860,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 9.793,
+      "fresh_share": 0.4,
+      "query_id": "zb3OQ6Mvh4"
+    },
+    {
+      "family": "flamequiver",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Artillery Ballista",
+      "gates": [
+        {
+          "canonical": "gilded_totemic_onslaught",
+          "tier": 3
+        },
+        {
+          "canonical": "multiple_totems",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        },
+        {
+          "canonical": "fire_penetration",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "yYvO07djfR"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.587,
+      "fresh_share": 0.4,
+      "query_id": "Z6d4aGrYtQ"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Scourge Arrow of Menace",
+      "gates": [],
+      "listings": 5287,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.726,
+      "fresh_share": 0.2,
+      "query_id": "yYvO07KlfR"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Scourge Arrow of Menace",
+      "gates": [
+        {
+          "canonical": "gilded_additional_pods",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        },
+        {
+          "canonical": "mirage_archer",
+          "tier": 3
+        },
+        {
+          "canonical": "physical_as_extra_chaos",
+          "tier": 3
+        }
+      ],
+      "listings": 1,
+      "sampled": 1,
+      "lowest_chaos": 4473.0,
+      "median_chaos": 4473.0,
+      "p75_chaos": 4473.0,
+      "median_age_days": 25.56,
+      "fresh_share": 0.0,
+      "query_id": "q90O6gQPSg"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 9.54,
+      "fresh_share": 0.4,
+      "query_id": "8r873QeGFV"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Scourge Arrow of Menace",
+      "gates": [],
+      "listings": 5619,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 17.447,
+      "fresh_share": 0.1,
+      "query_id": "veYOB7VXSE"
+    },
+    {
+      "family": "toxicologist",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Scourge Arrow of Menace",
+      "gates": [
+        {
+          "canonical": "gilded_additional_pods",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        },
+        {
+          "canonical": "mirage_archer",
+          "tier": 3
+        },
+        {
+          "canonical": "physical_as_extra_chaos",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "MdP8jgzqiJ"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 7.772,
+      "fresh_share": 0.4,
+      "query_id": "LgPEGDp5cn"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Bear Trap",
+      "gates": [],
+      "listings": 5265,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.309,
+      "fresh_share": 0.2,
+      "query_id": "8r873mOZFV"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Bear Trap",
+      "gates": [
+        {
+          "canonical": "trigger_radius",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 54,
+      "sampled": 10,
+      "lowest_chaos": 2.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 35.0,
+      "median_age_days": 11.514,
+      "fresh_share": 0.3,
+      "query_id": "ky0OgaL0U5"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 13.705,
+      "fresh_share": 0.2,
+      "query_id": "9zL6p4rRCK"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Bear Trap",
+      "gates": [],
+      "listings": 8001,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 7.789,
+      "fresh_share": 0.5,
+      "query_id": "rPoO4KX7fQ"
+    },
+    {
+      "family": "blade_ambusher",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Bear Trap",
+      "gates": [
+        {
+          "canonical": "trigger_radius",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 85,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 50.0,
+      "p75_chaos": 50.0,
+      "median_age_days": 15.965,
+      "fresh_share": 0.1,
+      "query_id": "G6P3VzMbIb"
+    },
+    {
+      "family": "striker",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 14.613,
+      "fresh_share": 0.2,
+      "query_id": "veYOB8JDhE"
+    },
+    {
+      "family": "striker",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 3265,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 16.118,
+      "fresh_share": 0.2,
+      "query_id": "lg0OWngnhV"
+    },
+    {
+      "family": "striker",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 19,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 199.1,
+      "p75_chaos": 298.2,
+      "median_age_days": 21.635,
+      "fresh_share": 0.1,
+      "query_id": "d80bEnyqFJ"
+    },
+    {
+      "family": "striker",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 4.5,
+      "p75_chaos": 5.0,
+      "median_age_days": 4.145,
+      "fresh_share": 0.5,
+      "query_id": "bG0qrnKauL"
+    },
+    {
+      "family": "striker",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 6975,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 12.995,
+      "fresh_share": 0.2,
+      "query_id": "aL0OKnQMHe"
+    },
+    {
+      "family": "striker",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 44,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 75.0,
+      "p75_chaos": 142.5,
+      "median_age_days": 19.232,
+      "fresh_share": 0.0,
+      "query_id": "nr0OVVX2u0"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 0.96,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 8.643,
+      "fresh_share": 0.5,
+      "query_id": "8r873jOGFV"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Pestilent Strike",
+      "gates": [],
+      "listings": 7562,
+      "sampled": 10,
+      "lowest_chaos": 0.96,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 14.183,
+      "fresh_share": 0.1,
+      "query_id": "G6P3VYRZIb"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Pestilent Strike",
+      "gates": [
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "chance_to_poison",
+          "tier": 3
+        },
+        {
+          "canonical": "ailment_effect",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "8r873jX8IV"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 5.0,
+      "fresh_share": 0.6,
+      "query_id": "02e5oJ3eIg"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Pestilent Strike",
+      "gates": [],
+      "listings": 7722,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 15.821,
+      "fresh_share": 0.1,
+      "query_id": "G6P3Veo8ib"
+    },
+    {
+      "family": "bladebitter",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Pestilent Strike",
+      "gates": [
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "chance_to_poison",
+          "tier": 3
+        },
+        {
+          "canonical": "ailment_effect",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "WvGJoRKvfm"
+    },
+    {
+      "family": "stormhand",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 12.377,
+      "fresh_share": 0.3,
+      "query_id": "BgPmkZPLF8"
+    },
+    {
+      "family": "stormhand",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Arc",
+      "gates": [],
+      "listings": 3635,
+      "sampled": 1,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.844,
+      "fresh_share": 1.0,
+      "query_id": "LgPEGrqZcn",
+      "search_total": 3635,
+      "scanned": 30,
+      "passed": 1,
+      "partner_rule": "Require Ball Lightning of Static/Exclude "
+    },
+    {
+      "family": "stormhand",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Arc",
+      "gates": [
+        {
+          "canonical": "chain",
+          "tier": 2
+        },
+        {
+          "canonical": "gilded_chain_distance",
+          "tier": 3
+        }
+      ],
+      "listings": 224,
+      "sampled": 5,
+      "lowest_chaos": 1788.6,
+      "median_chaos": 2384.8,
+      "p75_chaos": 2981.0,
+      "median_age_days": 4.224,
+      "fresh_share": 0.8,
+      "query_id": "5nrRjoVKCa",
+      "search_total": 224,
+      "scanned": 100,
+      "passed": 5,
+      "partner_rule": "Require Ball Lightning of Static/Exclude ",
+      "price_floor_chaos": 298.1
+    },
+    {
+      "family": "stormhand",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 2.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 2.353,
+      "fresh_share": 0.9,
+      "query_id": "BgPmkZYKC8"
+    },
+    {
+      "family": "stormhand",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Arc",
+      "gates": [],
+      "listings": 7198,
+      "sampled": 2,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 4.722,
+      "fresh_share": 1.0,
+      "query_id": "2K3Dl68dUk",
+      "search_total": 7198,
+      "scanned": 30,
+      "passed": 2,
+      "partner_rule": "Require Ball Lightning of Static/Exclude "
+    },
+    {
+      "family": "stormhand",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Arc",
+      "gates": [
+        {
+          "canonical": "chain",
+          "tier": 2
+        },
+        {
+          "canonical": "gilded_chain_distance",
+          "tier": 3
+        }
+      ],
+      "listings": 619,
+      "sampled": 2,
+      "lowest_chaos": 894.3,
+      "median_chaos": 894.3,
+      "p75_chaos": 894.3,
+      "median_age_days": 2.842,
+      "fresh_share": 1.0,
+      "query_id": "pJ0OeMLdT0",
+      "search_total": 619,
+      "scanned": 100,
+      "passed": 2,
+      "partner_rule": "Require Ball Lightning of Static/Exclude ",
+      "price_floor_chaos": 298.1
+    },
+    {
+      "family": "withertouch",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 7.298,
+      "fresh_share": 0.5,
+      "query_id": "Z6d4aQzYHQ"
+    },
+    {
+      "family": "withertouch",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Scourstorm",
+      "gates": [],
+      "listings": 2523,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 13.838,
+      "fresh_share": 0.3,
+      "query_id": "pJ0O7poJu0"
+    },
+    {
+      "family": "withertouch",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Scourstorm",
+      "gates": [
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "swift_affliction",
+          "tier": 3
+        }
+      ],
+      "listings": 5,
+      "sampled": 5,
+      "lowest_chaos": 5.0,
+      "median_chaos": 100.0,
+      "p75_chaos": 298.2,
+      "median_age_days": 25.127,
+      "fresh_share": 0.0,
+      "query_id": "WvGJol4mum"
+    },
+    {
+      "family": "withertouch",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 2.932,
+      "fresh_share": 0.7,
+      "query_id": "d80bO3pRiJ"
+    },
+    {
+      "family": "withertouch",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Scourstorm",
+      "gates": [],
+      "listings": 3116,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 0.836,
+      "fresh_share": 0.9,
+      "query_id": "9zL6PEWQCK"
+    },
+    {
+      "family": "withertouch",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Scourstorm",
+      "gates": [
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "swift_affliction",
+          "tier": 3
+        }
+      ],
+      "listings": 7,
+      "sampled": 7,
+      "lowest_chaos": 50.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 894.6,
+      "median_age_days": 20.09,
+      "fresh_share": 0.0,
+      "query_id": "5nrR6qQnHa"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.485,
+      "fresh_share": 0.2,
+      "query_id": "YpG6R7dbiY"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Frost Blades",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 9.446,
+      "fresh_share": 0.4,
+      "query_id": "V5GVD5qwfp"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Frost Blades",
+      "gates": [
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 35,
+      "sampled": 10,
+      "lowest_chaos": 100.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 521.85,
+      "median_age_days": 20.641,
+      "fresh_share": 0.2,
+      "query_id": "RJGDLJjGU7"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 2946,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 7.115,
+      "fresh_share": 0.5,
+      "query_id": "EBPelBWzt5"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Frost Blades",
+      "gates": [],
+      "listings": 2170,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 11.703,
+      "fresh_share": 0.3,
+      "query_id": "4mKW7mnQT9"
+    },
+    {
+      "family": "mysterious_diver",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Frost Blades",
+      "gates": [
+        {
+          "canonical": "edwa",
+          "tier": 3
+        },
+        {
+          "canonical": "return",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        }
+      ],
+      "listings": 3,
+      "sampled": 3,
+      "lowest_chaos": 1491.0,
+      "median_chaos": 29820.0,
+      "p75_chaos": 31460.1,
+      "median_age_days": 21.21,
+      "fresh_share": 0.0,
+      "query_id": "d80bOVkqFJ"
+    },
+    {
+      "family": "frosthand",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9127,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 16.178,
+      "fresh_share": 0.2,
+      "query_id": "G6P3YvnbFb"
+    },
+    {
+      "family": "frosthand",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Ice Nova",
+      "gates": [],
+      "listings": 2933,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.02,
+      "fresh_share": 0.4,
+      "query_id": "pJ0O9KBXt0"
+    },
+    {
+      "family": "frosthand",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Ice Nova",
+      "gates": [
+        {
+          "canonical": "gilded_freezer_burn",
+          "tier": 3
+        },
+        {
+          "canonical": "cold_penetration",
+          "tier": 3
+        },
+        {
+          "canonical": "ailment_effect",
+          "tier": 3
+        }
+      ],
+      "listings": 5,
+      "sampled": 5,
+      "lowest_chaos": 20.0,
+      "median_chaos": 596.4,
+      "p75_chaos": 596.4,
+      "median_age_days": 6.465,
+      "fresh_share": 0.6,
+      "query_id": "bG0qBkG2tL"
+    },
+    {
+      "family": "frosthand",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 4.929,
+      "fresh_share": 0.6,
+      "query_id": "mk0OlZ6RS6"
+    },
+    {
+      "family": "frosthand",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Ice Nova",
+      "gates": [],
+      "listings": 4948,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 13.249,
+      "fresh_share": 0.3,
+      "query_id": "yYvO8pyBsR"
+    },
+    {
+      "family": "frosthand",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Ice Nova",
+      "gates": [
+        {
+          "canonical": "gilded_freezer_burn",
+          "tier": 3
+        },
+        {
+          "canonical": "cold_penetration",
+          "tier": 3
+        },
+        {
+          "canonical": "ailment_effect",
+          "tier": 3
+        }
+      ],
+      "listings": 10,
+      "sampled": 10,
+      "lowest_chaos": 100.0,
+      "median_chaos": 1938.3,
+      "p75_chaos": 6709.5,
+      "median_age_days": 16.537,
+      "fresh_share": 0.1,
+      "query_id": "lg0OmyLnuV"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5264,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 14.818,
+      "fresh_share": 0.2,
+      "query_id": "WvGJgqXbtm"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Shockwave Totem of Shocking",
+      "gates": [],
+      "listings": 1584,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 14.221,
+      "fresh_share": 0.2,
+      "query_id": "4mKW73mZC9"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Shockwave Totem of Shocking",
+      "gates": [
+        {
+          "canonical": "gilded_astral_totem",
+          "tier": 3
+        },
+        {
+          "canonical": "multiple_totems",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "lg0OmRVwTV"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 8.974,
+      "fresh_share": 0.5,
+      "query_id": "2K3DVqr5fk"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Shockwave Totem of Shocking",
+      "gates": [],
+      "listings": 4905,
+      "sampled": 10,
+      "lowest_chaos": 3.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 19.561,
+      "fresh_share": 0.2,
+      "query_id": "RJGDLlZGi7"
+    },
+    {
+      "family": "storming_zealot",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Shockwave Totem of Shocking",
+      "gates": [
+        {
+          "canonical": "gilded_astral_totem",
+          "tier": 3
+        },
+        {
+          "canonical": "multiple_totems",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "veYOrd4DuE"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9863,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 19.554,
+      "fresh_share": 0.3,
+      "query_id": "EBPel96yT5"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Seismic Crush",
+      "gates": [],
+      "listings": 2463,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 17.405,
+      "fresh_share": 0.3,
+      "query_id": "OgGy2670UE"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Seismic Crush",
+      "gates": [
+        {
+          "canonical": "crit_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "crit_chance",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "7nEmGXE7T5"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 4.978,
+      "fresh_share": 0.6,
+      "query_id": "5nrR6MWDfa"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Seismic Crush",
+      "gates": [],
+      "listings": 2638,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 9.901,
+      "fresh_share": 0.3,
+      "query_id": "veYOrXbJTE"
+    },
+    {
+      "family": "bladecaster",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Seismic Crush",
+      "gates": [
+        {
+          "canonical": "crit_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "crit_chance",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "YpG6RZrRhY"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7996,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.563,
+      "fresh_share": 0.3,
+      "query_id": "veYOrXGjIE"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Vaal Lightning Trap",
+      "gates": [],
+      "listings": 7996,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 16.661,
+      "fresh_share": 0.2,
+      "query_id": "MdP8KkyJFJ"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Vaal Lightning Trap",
+      "gates": [
+        {
+          "canonical": "added_lightning",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 35,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 62.5,
+      "p75_chaos": 248.65,
+      "median_age_days": 15.217,
+      "fresh_share": 0.2,
+      "query_id": "WvGJgZqRTm"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 13.212,
+      "fresh_share": 0.2,
+      "query_id": "RJGDLP9ZF7"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Vaal Lightning Trap",
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 10.239,
+      "fresh_share": 0.4,
+      "query_id": "mk0OlbPrh6"
+    },
+    {
+      "family": "shock_ambusher",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Vaal Lightning Trap",
+      "gates": [
+        {
+          "canonical": "added_lightning",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 55,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 50.0,
+      "p75_chaos": 50.0,
+      "median_age_days": 6.809,
+      "fresh_share": 0.5,
+      "query_id": "aL0OPm4Rte"
+    },
+    {
+      "family": "cardinal",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9977,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.546,
+      "fresh_share": 0.3,
+      "query_id": "4mKW7XwLS9"
+    },
+    {
+      "family": "cardinal",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Consecrated Path",
+      "gates": [],
+      "listings": 5988,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 5.54,
+      "fresh_share": 0.7,
+      "query_id": "eRbO02e6UL"
+    },
+    {
+      "family": "cardinal",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Consecrated Path",
+      "gates": [
+        {
+          "canonical": "gilded_consecration",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "JBPrvdQbhl"
+    },
+    {
+      "family": "cardinal",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9681,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 12.9,
+      "fresh_share": 0.4,
+      "query_id": "wv9O2Pdnhb"
+    },
+    {
+      "family": "cardinal",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Consecrated Path",
+      "gates": [],
+      "listings": 5796,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 5.841,
+      "fresh_share": 0.5,
+      "query_id": "nr0OajBBu0"
+    },
+    {
+      "family": "cardinal",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Consecrated Path",
+      "gates": [
+        {
+          "canonical": "gilded_consecration",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "RJGDLBqaU7"
+    },
+    {
+      "family": "warpriest",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9340,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 13.367,
+      "fresh_share": 0.1,
+      "query_id": "lg0Omj2jIV"
+    },
+    {
+      "family": "warpriest",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Herald of Purity",
+      "gates": [],
+      "listings": 6516,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.749,
+      "fresh_share": 0.2,
+      "query_id": "veYOrjZWHE"
+    },
+    {
+      "family": "warpriest",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Herald of Purity",
+      "gates": [
+        {
+          "canonical": "minion_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "pulverise",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "QLGk8Rajfw"
+    },
+    {
+      "family": "warpriest",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 9495,
+      "sampled": 10,
+      "lowest_chaos": 12.0,
+      "median_chaos": 15.0,
+      "p75_chaos": 15.0,
+      "median_age_days": 17.692,
+      "fresh_share": 0.1,
+      "query_id": "V5GVDgKdsp"
+    },
+    {
+      "family": "warpriest",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Herald of Purity",
+      "gates": [],
+      "listings": 6602,
+      "sampled": 10,
+      "lowest_chaos": 12.0,
+      "median_chaos": 15.0,
+      "p75_chaos": 15.0,
+      "median_age_days": 13.087,
+      "fresh_share": 0.2,
+      "query_id": "JBPrvbDYhl"
+    },
+    {
+      "family": "warpriest",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Herald of Purity",
+      "gates": [
+        {
+          "canonical": "minion_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "pulverise",
+          "tier": 3
+        },
+        {
+          "canonical": "aoe",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "zb3OLd8as4"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7367,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 5.839,
+      "fresh_share": 0.6,
+      "query_id": "rPoOvVB7uQ"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Rallying Cry",
+      "gates": [],
+      "listings": 7367,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.51,
+      "fresh_share": 0.6,
+      "query_id": "zb3OLdpvs4"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Rallying Cry",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 18,
+      "sampled": 10,
+      "lowest_chaos": 2982.0,
+      "median_chaos": 19233.9,
+      "p75_chaos": 46891.95,
+      "median_age_days": 3.667,
+      "fresh_share": 0.7,
+      "query_id": "zb3OLdPmF4"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 8491,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 7.922,
+      "fresh_share": 0.5,
+      "query_id": "EBPelKMyT5"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Rallying Cry",
+      "gates": [],
+      "listings": 8491,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 4.221,
+      "fresh_share": 0.7,
+      "query_id": "veYOr5JBuE"
+    },
+    {
+      "family": "swiftblade",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Rallying Cry",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 21,
+      "sampled": 10,
+      "lowest_chaos": 5964.0,
+      "median_chaos": 16401.0,
+      "p75_chaos": 29745.45,
+      "median_age_days": 2.611,
+      "fresh_share": 0.7,
+      "query_id": "nr0Oa64vH0"
+    },
+    {
+      "family": "smoulderstrike",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 10000,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 3.614,
+      "fresh_share": 0.9,
+      "query_id": "D6P9ZR7Xu5"
+    },
+    {
+      "family": "smoulderstrike",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Infernal Cry",
+      "gates": [],
+      "listings": 6559,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 6.702,
+      "fresh_share": 0.6,
+      "query_id": "8r87jV0BhV"
+    },
+    {
+      "family": "smoulderstrike",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Infernal Cry",
+      "gates": [
+        {
+          "canonical": "aoe",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 43,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 25.0,
+      "p75_chaos": 236.15,
+      "median_age_days": 18.461,
+      "fresh_share": 0.1,
+      "query_id": "lg0Om6MVTV"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7432,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 13.217,
+      "fresh_share": 0.3,
+      "query_id": "4mKW76B8S9"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Vaal Reap",
+      "gates": [],
+      "listings": 1908,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 5.869,
+      "fresh_share": 0.5,
+      "query_id": "MdP8KmyLiJ"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Vaal Reap",
+      "gates": [
+        {
+          "canonical": "gilded_searing_agony",
+          "tier": 3
+        },
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 4,
+      "sampled": 4,
+      "lowest_chaos": 298.2,
+      "median_chaos": 1640.1,
+      "p75_chaos": 5814.9,
+      "median_age_days": 8.685,
+      "fresh_share": 0.25,
+      "query_id": "LgPEp765tn"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7573,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 19.819,
+      "fresh_share": 0.0,
+      "query_id": "op0OYE5ghl"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Vaal Reap",
+      "gates": [],
+      "listings": 1906,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 8.52,
+      "fresh_share": 0.4,
+      "query_id": "eRbO05YoiL"
+    },
+    {
+      "family": "sanguimancer",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Vaal Reap",
+      "gates": [
+        {
+          "canonical": "gilded_searing_agony",
+          "tier": 3
+        },
+        {
+          "canonical": "dot_multiplier",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 5,
+      "sampled": 5,
+      "lowest_chaos": 80.0,
+      "median_chaos": 1491.0,
+      "p75_chaos": 1491.0,
+      "median_age_days": 22.179,
+      "fresh_share": 0.0,
+      "query_id": "V5GVDpeXTp"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6666,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 6.708,
+      "fresh_share": 0.7,
+      "query_id": "eRbO0DKYiL"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Molten Shell",
+      "gates": [],
+      "listings": 2640,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 13.518,
+      "fresh_share": 0.3,
+      "query_id": "YpG6R2kviY"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Molten Shell",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "gilded_physical_damage_reduction",
+          "tier": 3
+        }
+      ],
+      "listings": 20,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 174.1,
+      "p75_chaos": 298.2,
+      "median_age_days": 18.479,
+      "fresh_share": 0.3,
+      "query_id": "q90Oeladig"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7150,
+      "sampled": 10,
+      "lowest_chaos": 2.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 11.795,
+      "fresh_share": 0.2,
+      "query_id": "V5GVDp2rUp"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Molten Shell",
+      "gates": [],
+      "listings": 2872,
+      "sampled": 10,
+      "lowest_chaos": 3.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 8.384,
+      "fresh_share": 0.3,
+      "query_id": "LgPEpkjYin"
+    },
+    {
+      "family": "earthshaker",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Molten Shell",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "gilded_physical_damage_reduction",
+          "tier": 3
+        }
+      ],
+      "listings": 17,
+      "sampled": 10,
+      "lowest_chaos": 30.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 298.2,
+      "median_age_days": 16.286,
+      "fresh_share": 0.3,
+      "query_id": "yYvO8vBGiR"
+    },
+    {
+      "family": "reanimator",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6843,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 12.161,
+      "fresh_share": 0.3,
+      "query_id": "EBPelPbBC5"
+    },
+    {
+      "family": "reanimator",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Raise Zombie of Falling",
+      "gates": [],
+      "listings": 3134,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 8.146,
+      "fresh_share": 0.4,
+      "query_id": "4mKW7KPEi9"
+    },
+    {
+      "family": "reanimator",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Raise Zombie of Falling",
+      "gates": [
+        {
+          "canonical": "minion_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "added_chaos",
+          "tier": 3
+        },
+        {
+          "canonical": "melee_physical_damage",
+          "tier": 3
+        }
+      ],
+      "listings": 16,
+      "sampled": 10,
+      "lowest_chaos": 33.0,
+      "median_chaos": 80.0,
+      "p75_chaos": 298.2,
+      "median_age_days": 18.0,
+      "fresh_share": 0.3,
+      "query_id": "ky0Oo0PjT5"
+    },
+    {
+      "family": "reanimator",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6800,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 16.791,
+      "fresh_share": 0.0,
+      "query_id": "mk0Ol0zLC6"
+    },
+    {
+      "family": "reanimator",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Raise Zombie of Falling",
+      "gates": [],
+      "listings": 3109,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 17.211,
+      "fresh_share": 0.2,
+      "query_id": "rPoOvZb7SQ"
+    },
+    {
+      "family": "reanimator",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Raise Zombie of Falling",
+      "gates": [
+        {
+          "canonical": "minion_damage",
+          "tier": 3
+        },
+        {
+          "canonical": "added_chaos",
+          "tier": 3
+        },
+        {
+          "canonical": "melee_physical_damage",
+          "tier": 3
+        }
+      ],
+      "listings": 15,
+      "sampled": 10,
+      "lowest_chaos": 50.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 521.85,
+      "median_age_days": 17.896,
+      "fresh_share": 0.1,
+      "query_id": "6z2V4QYbsG"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5458,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 18.391,
+      "fresh_share": 0.2,
+      "query_id": "5nrR6QRnta"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 2690,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 9.355,
+      "fresh_share": 0.4,
+      "query_id": "lg0OmPlrFV"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        }
+      ],
+      "listings": 16,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 194.1,
+      "p75_chaos": 298.2,
+      "median_age_days": 19.521,
+      "fresh_share": 0.1,
+      "query_id": "glmOdX6dhQ"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 8189,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 18.068,
+      "fresh_share": 0.3,
+      "query_id": "ky0OoXRri5"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 4103,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 12.773,
+      "fresh_share": 0.3,
+      "query_id": "zb3OLepRU4"
+    },
+    {
+      "family": "bloodletter",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "faster_attacks",
+          "tier": 3
+        }
+      ],
+      "listings": 20,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 224.1,
+      "p75_chaos": 298.2,
+      "median_age_days": 20.215,
+      "fresh_share": 0.2,
+      "query_id": "rPoOvX8ZtQ"
+    },
+    {
+      "family": "fallen_reverend",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6557,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.45,
+      "fresh_share": 0.6,
+      "query_id": "JBPrvV4bil"
+    },
+    {
+      "family": "fallen_reverend",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Reinforce: Fallen Bishop",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "LgPEpmEjtn",
+      "search_total": 2130,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry"
+    },
+    {
+      "family": "fallen_reverend",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6231,
+      "sampled": 10,
+      "lowest_chaos": 8.0,
+      "median_chaos": 10.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 4.722,
+      "fresh_share": 0.6,
+      "query_id": "G6P3Yq2YFb"
+    },
+    {
+      "family": "fallen_reverend",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Reinforce: Fallen Bishop",
+      "gates": [],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "V5GVDqplfp",
+      "search_total": 2018,
+      "scanned": 30,
+      "passed": 0,
+      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry"
+    },
+    {
+      "family": "bastion",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5089,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.359,
+      "fresh_share": 0.1,
+      "query_id": "yYvO829rSR"
+    },
+    {
+      "family": "bastion",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Impenetrable Bastion",
+      "gates": [],
+      "listings": 851,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.002,
+      "fresh_share": 0.4,
+      "query_id": "6z2V40dkhG"
+    },
+    {
+      "family": "bastion",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Impenetrable Bastion",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 29,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 298.2,
+      "median_age_days": 9.11,
+      "fresh_share": 0.5,
+      "query_id": "PPG5EqX7IL"
+    },
+    {
+      "family": "bastion",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7624,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 7.662,
+      "fresh_share": 0.4,
+      "query_id": "veYOrM0MtE"
+    },
+    {
+      "family": "bastion",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Impenetrable Bastion",
+      "gates": [],
+      "listings": 1186,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 9.0,
+      "p75_chaos": 10.0,
+      "median_age_days": 13.236,
+      "fresh_share": 0.1,
+      "query_id": "KlP23ZL6s5"
+    },
+    {
+      "family": "bastion",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Impenetrable Bastion",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 27,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 298.2,
+      "median_age_days": 7.658,
+      "fresh_share": 0.4,
+      "query_id": "bG0qBMaaSL"
+    },
+    {
+      "family": "ripper",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6174,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 8.956,
+      "fresh_share": 0.3,
+      "query_id": "EBPelZnBC5"
+    },
+    {
+      "family": "ripper",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 2715,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 13.924,
+      "fresh_share": 0.3,
+      "query_id": "op0OYdR4Il"
+    },
+    {
+      "family": "ripper",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "pulverise",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "op0OYdZYhl"
+    },
+    {
+      "family": "ripper",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6518,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 7.394,
+      "fresh_share": 0.5,
+      "query_id": "OgGy2r98HE"
+    },
+    {
+      "family": "ripper",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Leap Slam",
+      "gates": [],
+      "listings": 3023,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 6.914,
+      "fresh_share": 0.5,
+      "query_id": "jWQOndqRuX"
+    },
+    {
+      "family": "ripper",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Leap Slam",
+      "gates": [
+        {
+          "canonical": "gilded_frenzy",
+          "tier": 3
+        },
+        {
+          "canonical": "pulverise",
+          "tier": 3
+        },
+        {
+          "canonical": "brutality",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "BgPmnVmaH8"
+    },
+    {
+      "family": "eruptor",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5318,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 9.751,
+      "fresh_share": 0.3,
+      "query_id": "D6P9Zor4H5"
+    },
+    {
+      "family": "eruptor",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Flame Link",
+      "gates": [],
+      "listings": 1122,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 6.437,
+      "fresh_share": 0.6,
+      "query_id": "QLGk8o77Hw"
+    },
+    {
+      "family": "eruptor",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Flame Link",
+      "gates": [
+        {
+          "canonical": "gilded_empowered_link",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "3qpgJOpKu5",
+      "search_total": 0,
+      "scanned": 0,
+      "passed": 0,
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+    },
+    {
+      "family": "eruptor",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5726,
+      "sampled": 10,
+      "lowest_chaos": 4.0,
+      "median_chaos": 5.0,
+      "p75_chaos": 5.0,
+      "median_age_days": 7.858,
+      "fresh_share": 0.5,
+      "query_id": "3qpgJO70S5"
+    },
+    {
+      "family": "eruptor",
+      "infamous": true,
+      "package": "money",
+      "money_skill": "Flame Link",
+      "gates": [],
+      "listings": 1211,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 8.5,
+      "p75_chaos": 10.0,
+      "median_age_days": 7.319,
+      "fresh_share": 0.5,
+      "query_id": "yYvO8QQehR"
+    },
+    {
+      "family": "eruptor",
+      "infamous": true,
+      "package": "money_gates",
+      "money_skill": "Flame Link",
+      "gates": [
+        {
+          "canonical": "gilded_empowered_link",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 0,
+      "sampled": 0,
+      "lowest_chaos": 0.0,
+      "median_chaos": 0.0,
+      "p75_chaos": 0.0,
+      "median_age_days": 0.0,
+      "fresh_share": 0.0,
+      "query_id": "pJ0O9Q7XH0",
+      "search_total": 0,
+      "scanned": 0,
+      "passed": 0,
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+    },
+    {
+      "family": "flamehand",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 8305,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 8.377,
+      "fresh_share": 0.5,
+      "query_id": "7nEmGwZBT5"
+    },
+    {
+      "family": "flamehand",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Rolling Magma",
+      "gates": [],
+      "listings": 2795,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 4.828,
+      "fresh_share": 0.6,
+      "query_id": "5nrR6wwJua"
+    },
+    {
+      "family": "flamehand",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Rolling Magma",
+      "gates": [
+        {
+          "canonical": "gilded_area_per_projectile",
+          "tier": 3
+        },
+        {
+          "canonical": "gmp",
+          "tier": 3
+        }
+      ],
+      "listings": 16,
+      "sampled": 10,
+      "lowest_chaos": 5.0,
+      "median_chaos": 3727.5,
+      "p75_chaos": 19383.0,
+      "median_age_days": 12.272,
+      "fresh_share": 0.4,
+      "query_id": "pJ0O9mR3f0"
+    },
+    {
+      "family": "winter_deacon",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 7412,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 6.195,
+      "fresh_share": 0.5,
+      "query_id": "wv9O2qRrsb"
+    },
+    {
+      "family": "winter_deacon",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Earthquake of Winter",
+      "gates": [],
+      "listings": 3662,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.335,
+      "fresh_share": 0.3,
+      "query_id": "8r87jprnhV"
+    },
+    {
+      "family": "winter_deacon",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Earthquake of Winter",
+      "gates": [
+        {
+          "canonical": "concentrated_effect",
+          "tier": 3
+        },
+        {
+          "canonical": "hypothermia",
+          "tier": 3
+        },
+        {
+          "canonical": "freeze_chance",
+          "tier": 3
+        }
+      ],
+      "listings": 13,
+      "sampled": 10,
+      "lowest_chaos": 298.2,
+      "median_chaos": 298.2,
+      "p75_chaos": 820.05,
+      "median_age_days": 9.322,
+      "fresh_share": 0.5,
+      "query_id": "glmOd4GKUQ"
+    },
+    {
+      "family": "frost_ambusher",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 6815,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.495,
+      "fresh_share": 0.4,
+      "query_id": "2K3DVazVfk"
+    },
+    {
+      "family": "frost_ambusher",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Ice Trap",
+      "gates": [],
+      "listings": 3295,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 9.35,
+      "fresh_share": 0.4,
+      "query_id": "d80bOJM3FJ"
+    },
+    {
+      "family": "frost_ambusher",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Ice Trap",
+      "gates": [
+        {
+          "canonical": "cold_penetration",
+          "tier": 3
+        },
+        {
+          "canonical": "trigger_radius",
+          "tier": 3
+        },
+        {
+          "canonical": "trap_and_mine_damage",
+          "tier": 3
+        }
+      ],
+      "listings": 8,
+      "sampled": 8,
+      "lowest_chaos": 11.0,
+      "median_chaos": 4473.0,
+      "p75_chaos": 12897.15,
+      "median_age_days": 14.188,
+      "fresh_share": 0.25,
+      "query_id": "LgPEpo6Bsn"
+    },
+    {
+      "family": "flaming_charlatan",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 5119,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 8.174,
+      "fresh_share": 0.3,
+      "query_id": "RJGDLenrh7"
+    },
+    {
+      "family": "flaming_charlatan",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Wave of Conviction of Trarthus",
+      "gates": [],
+      "listings": 1444,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.433,
+      "fresh_share": 0.4,
+      "query_id": "2K3DVMyjIk"
+    },
+    {
+      "family": "flaming_charlatan",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Wave of Conviction of Trarthus",
+      "gates": [
+        {
+          "canonical": "added_fire",
+          "tier": 3
+        },
+        {
+          "canonical": "cdr",
+          "tier": 3
+        }
+      ],
+      "listings": 12,
+      "sampled": 10,
+      "lowest_chaos": 22.0,
+      "median_chaos": 298.2,
+      "p75_chaos": 820.05,
+      "median_age_days": 19.133,
+      "fresh_share": 0.3,
+      "query_id": "EBPelmV4u5"
+    },
+    {
+      "family": "shattersword",
+      "infamous": false,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 4941,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 11.682,
+      "fresh_share": 0.1,
+      "query_id": "RJGDLRVOs7"
+    },
+    {
+      "family": "shattersword",
+      "infamous": false,
+      "package": "money",
+      "money_skill": "Rallying Cry",
+      "gates": [],
+      "listings": 4941,
+      "sampled": 10,
+      "lowest_chaos": 1.0,
+      "median_chaos": 1.0,
+      "p75_chaos": 1.0,
+      "median_age_days": 10.05,
+      "fresh_share": 0.2,
+      "query_id": "bG0qB35aCL"
+    },
+    {
+      "family": "shattersword",
+      "infamous": false,
+      "package": "money_gates",
+      "money_skill": "Rallying Cry",
+      "gates": [
+        {
+          "canonical": "cdr",
+          "tier": 3
+        },
+        {
+          "canonical": "more_duration",
+          "tier": 3
+        }
+      ],
+      "listings": 9,
+      "sampled": 9,
+      "lowest_chaos": 1789.2,
+      "median_chaos": 7455.0,
+      "p75_chaos": 149100.0,
+      "median_age_days": 7.59,
+      "fresh_share": 0.444,
+      "query_id": "EBPelmlzC5"
+    },
+    {
+      "family": "warpriest_of_the_ruckus",
+      "infamous": true,
+      "package": "base",
+      "money_skill": null,
+      "gates": [],
+      "listings": 2,
+      "sampled": 2,
+      "lowest_chaos": 298200.0,
+      "median_chaos": 457532.0,
+      "p75_chaos": 537198.0,
+      "median_age_days": 15.239,
+      "fresh_share": 0.5,
+      "query_id": "8r87jJB2FV"
+    }
+  ]
+}
