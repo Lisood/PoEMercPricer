@@ -29,6 +29,13 @@ fn install_child() {
         compressed: std::env::var("PMP_INSTALL_COMPRESSED").ok(),
         size: var("PMP_INSTALL_SIZE").parse().unwrap(),
         sha256: var("PMP_INSTALL_SHA256"),
+        notices: std::env::var("PMP_INSTALL_NOTICES").ok().map(|url| {
+            poemercpricer::update::NoticeAsset {
+                download: url,
+                size: var("PMP_INSTALL_NOTICES_SIZE").parse().unwrap(),
+                sha256: var("PMP_INSTALL_NOTICES_SHA256"),
+            }
+        }),
     };
     let exe = std::env::current_exe().unwrap();
     let outcome = match install(&release, &exe) {
@@ -127,11 +134,22 @@ fn run_install(
     sha256: &str,
 ) -> Outcome {
     let dir = std::env::temp_dir().join(format!(
-        "poemercpricer-install-{name}-{}",
+        "poemercpricer-install space 文-{name}-{}",
         std::process::id()
     ));
     let _ = std::fs::remove_dir_all(&dir);
     std::fs::create_dir_all(&dir).unwrap();
+    run_install_in(dir, download, compressed, size, sha256, None)
+}
+
+fn run_install_in(
+    dir: PathBuf,
+    download: &str,
+    compressed: Option<&str>,
+    size: u64,
+    sha256: &str,
+    notices: Option<&poemercpricer::update::NoticeAsset>,
+) -> Outcome {
     let exe = dir.join("poemercpricer.exe");
     std::fs::copy(std::env::current_exe().unwrap(), &exe).unwrap();
     let old_sha256 = sha256_hex(&std::fs::read(&exe).unwrap()).unwrap();
@@ -144,7 +162,14 @@ fn run_install(
         .env("PMP_INSTALL_DOWNLOAD", download)
         .env("PMP_INSTALL_SIZE", size.to_string())
         .env("PMP_INSTALL_SHA256", sha256)
-        .env_remove("PMP_INSTALL_COMPRESSED");
+        .env_remove("PMP_INSTALL_COMPRESSED")
+        .env_remove("PMP_INSTALL_NOTICES");
+    if let Some(asset) = notices {
+        child
+            .env("PMP_INSTALL_NOTICES", &asset.download)
+            .env("PMP_INSTALL_NOTICES_SIZE", asset.size.to_string())
+            .env("PMP_INSTALL_NOTICES_SHA256", &asset.sha256);
+    }
     if let Some(url) = compressed {
         child.env("PMP_INSTALL_COMPRESSED", url);
     }
@@ -160,6 +185,117 @@ fn run_install(
         dir,
         result,
         old_sha256,
+    }
+}
+
+/// Called only by the installer smoke script after it creates a uniquely
+/// registered test installation. Exercises the real swap in that installation.
+#[test]
+#[ignore = "scripts/test-installer.ps1 supplies an isolated installation"]
+fn installed_app_survives_update() {
+    let dir = PathBuf::from(std::env::var("PMP_INSTALLER_TEST_DIR").expect("isolated install dir"));
+    assert!(dir.join("installer-test-marker").is_file());
+    assert!(std::fs::canonicalize(&dir)
+        .unwrap()
+        .starts_with(std::fs::canonicalize(std::env::temp_dir()).unwrap()));
+    let app = std::fs::read(dir.join("poemercpricer.exe")).unwrap();
+    let notices = std::fs::read(dir.join(format!(
+        "THIRD_PARTY_NOTICES-{}.html",
+        poemercpricer::update::CURRENT
+    )))
+    .unwrap();
+    let notices_sha = sha256_hex(&notices).unwrap();
+    let notices_size = notices.len() as u64;
+    let base = serve(HashMap::from([
+        ("/exe.gz", gzip(&app)),
+        ("/notices", notices),
+    ]));
+    let (size, sha) = release_for(&app);
+    let asset = poemercpricer::update::NoticeAsset {
+        download: format!("{base}/notices"),
+        size: notices_size,
+        sha256: notices_sha.clone(),
+    };
+    let outcome = run_install_in(
+        dir,
+        &format!("{base}/exe"),
+        Some(&format!("{base}/exe.gz")),
+        size,
+        &sha,
+        Some(&asset),
+    );
+    assert_installed(&outcome, &app);
+    assert_eq!(
+        sha256_hex(&std::fs::read(outcome.dir.join("THIRD_PARTY_NOTICES-9.9.9.html")).unwrap())
+            .unwrap(),
+        notices_sha
+    );
+    // The installer script still needs the installation for uninstall checks.
+    std::mem::forget(outcome);
+}
+
+#[test]
+#[ignore = "downloads a published app from GitHub into an isolated child process"]
+fn live_published_app_installs_and_runs_its_version_command() {
+    use poemercpricer::update::{fetch, parse_release, REPO};
+    let json = fetch(
+        &format!("https://api.github.com/repos/{REPO}/releases/latest"),
+        std::time::Duration::from_secs(15),
+    )
+    .unwrap();
+    let release = parse_release(&json, "0.0.0")
+        .unwrap()
+        .expect("published release");
+    let dir =
+        std::env::temp_dir().join(format!("poemercpricer-live-install-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let outcome = run_install_in(
+        dir,
+        &release.download,
+        release.compressed.as_deref(),
+        release.size,
+        &release.sha256,
+        release.notices.as_ref(),
+    );
+    assert_eq!(outcome.result, "ok");
+    assert_eq!(sha256_hex(&outcome.exe()).unwrap(), release.sha256);
+    assert!(outcome.previous().is_some());
+    assert!(outcome.leftovers().is_empty());
+    let output = Command::new(outcome.dir.join("poemercpricer.exe"))
+        .arg("--version")
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    assert!(String::from_utf8_lossy(&output.stdout).contains(&release.version.to_string()));
+    let notices = release.notices.expect("published third-party notices");
+    assert_eq!(
+        sha256_hex(&std::fs::read(outcome.dir.join("THIRD_PARTY_NOTICES-9.9.9.html")).unwrap())
+            .unwrap(),
+        notices.sha256
+    );
+}
+
+#[test]
+fn install_rejects_missing_or_corrupt_notices_before_changing_the_app() {
+    let new = payload();
+    let (size, sha) = release_for(&new);
+    let base = serve(HashMap::from([
+        ("/exe", new),
+        ("/bad-notices", b"corrupted".to_vec()),
+    ]));
+    for route in ["missing-notices", "bad-notices"] {
+        let dir =
+            std::env::temp_dir().join(format!("poemercpricer-{route}-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let asset = poemercpricer::update::NoticeAsset {
+            download: format!("{base}/{route}"),
+            size: 9,
+            sha256: "0".repeat(64),
+        };
+        let outcome = run_install_in(dir, &format!("{base}/exe"), None, size, &sha, Some(&asset));
+        assert!(outcome.result.starts_with("err:"));
+        assert_untouched(&outcome);
+        assert!(!outcome.dir.join("THIRD_PARTY_NOTICES-9.9.9.html").exists());
     }
 }
 
@@ -320,4 +456,34 @@ fn install_reports_an_unreachable_host() {
         outcome.result
     );
     assert_untouched(&outcome);
+}
+
+#[test]
+fn competing_update_cannot_touch_the_app_and_can_retry_after_the_owner_exits() {
+    use std::os::windows::fs::OpenOptionsExt;
+    let dir =
+        std::env::temp_dir().join(format!("poemercpricer-update-lock-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let owner = std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .share_mode(0)
+        .open(dir.join("poemercpricer-update.lock"))
+        .unwrap();
+    let new = payload();
+    let (size, sha) = release_for(&new);
+    let base = serve(HashMap::from([("/exe", new.clone())]));
+    let busy = run_install_in(dir.clone(), &format!("{base}/exe"), None, size, &sha, None);
+    assert!(
+        busy.result.contains("another copy is updating"),
+        "{}",
+        busy.result
+    );
+    assert_untouched(&busy);
+    std::mem::forget(busy);
+    drop(owner);
+    let retried = run_install_in(dir, &format!("{base}/exe"), None, size, &sha, None);
+    assert_installed(&retried, &new);
+    assert!(!retried.dir.join("poemercpricer-update.lock").exists());
 }

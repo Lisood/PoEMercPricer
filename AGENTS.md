@@ -7,13 +7,18 @@ this repository. Read this before making changes.
 
 PoEMercPricer is a Windows-only Rust egui overlay that screens Path of Exile
 3.29 Mercenary Warrants, either from a pasted clipboard item or from an OCR
-scan of the game window. It builds to one unsigned exe, targets Rust 1.88+,
-and has no server component. Running `cargo run`, `poemercpricer --fixture`,
+scan of the game window. It builds to one unsigned exe, targets Rust 1.88+, and has no
+server component. Running `cargo run`, `poemercpricer --fixture`,
 or `poemercpricer --scan FILE` opens the GUI window and, in a release build,
 starts a hotkey listener and an update check; never run these in automation
 or CI. Safe to run non-interactively: `--help`, `--version`, `score`,
 `clipboard`, and the `dump-*` subcommands (`dump-scan`, `dump-trade-query`,
 `dump-clipboard-scan`, `dump-window-scan`) all print to stdout and exit.
+
+Version 0.2.0 adds installer support. The installer
+uses Inno Setup 6.7.3, installs per-user under `%LOCALAPPDATA%\Programs\PoEMercPricer`,
+and keeps the portable executable and updater asset names unchanged. See
+`docs/installation.md` for the lifecycle, recovery and release checks.
 
 ## 2. Checks before any commit
 
@@ -24,6 +29,12 @@ Size and memory gates are opt-in too (they measure this machine): after
 `cargo build --release`, run `cargo test --release --test resource_budgets --
 --ignored --test-threads=1` and the ignored latency test in
 `scan_screenshots`; see `docs/performance.md`, "Binary size and memory".
+
+For installer or updater changes, also build the release exe, generate notices,
+and run `pwsh scripts/test-installer.ps1`. CI runs this lifecycle on Windows.
+Live tests run via `update-live.yml` weekly or manually; also run
+`cargo test --locked --test update_install live_published_app_installs_and_runs_its_version_command -- --ignored --exact`.
+The installer smoke script never launches the overlay.
 
 ## 3. How to ship an update (release)
 
@@ -47,21 +58,20 @@ What the script does:
    and memory".
 3. Runs `cargo fmt --check`.
 4. Runs `cargo clippy --all-targets --locked -- -D warnings`.
-5. Runs `cargo test --locked`.
+5. Runs `cargo test --locked`, generates notices, and builds/tests the installer.
 6. Commits `Release X.Y.Z`.
 7. Tags `vX.Y.Z`.
 8. Pushes `main` and the tag together.
 9. Watches the `release.yml` run for that tag. The job first checks the
    tagged commit is on `main` and waits for that commit's `ci.yml` run to go
-   green, then builds and uploads the three assets to a draft release, then
-   publishes it.
-10. Verifies `poemercpricer-windows-x64.exe` (and its `.exe.gz` sibling) was uploaded with a sha256
-    digest, that `THIRD_PARTY_NOTICES.html` is there too, and prints the
-    release URL.
+   green, then builds and uploads the four assets to a draft release, then
+   publishes it after the final installer lifecycle and asset checks pass.
+10. Verifies that the exe, gzip, installer and third-party notices were uploaded
+    with nonzero sizes and SHA-256 digests, and prints the release URL.
 
 `release.yml` builds the exe, gzips it, then runs `cargo about` over the
 tagged `Cargo.lock` to produce `THIRD_PARTY_NOTICES.html` and uploads all
-three to a draft release before publishing it. The notices file is
+four to a draft release before publishing it. The notices file is
 generated, never committed; `about.toml` and `about.hbs` at the repo root
 configure it.
 
@@ -110,6 +120,11 @@ what the grep above misses.
 Semver: patch for a catalog, price, or bugfix change; minor for a feature;
 major has never been needed. The updater only ever sees tags shaped
 `vX.Y.Z` on non-prerelease releases; prereleases are invisible to it.
+
+The installer is the fourth asset, `poemercpricer-setup-windows-x64.exe`.
+The app, installer and uninstaller are unsigned. The release pipeline tests
+the final installed package and its updater before creating a draft. `release.ps1 -DryRun` now builds and tests the installer and always
+restores both Cargo files byte for byte, including when a local check fails.
 
 ## 4. How the updater works
 

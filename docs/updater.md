@@ -1,12 +1,14 @@
 # Auto-updater design
 
-Status: shipped. Written 2026-09-03 before the first release, implemented the
+Version 0.2.0 adds installer integration, versioned notices and bounded,
+serialized update downloads. See [installation.md](installation.md).
+Written 2026-09-03 before the first release, implemented the
 same day, released as v0.1.0 on 2026-09-04. Sections 1 to 7 describe the updater as it
 runs today. Sections 8, 9 and 12 are the original plan and its verification
 log, kept as history. Section 13 records what the first published release
 carried.
 
-PoEMercPricer ships as one unsigned `poemercpricer.exe`. Every Path of Exile patch changes the catalog, so users who fall behind get wrong verdicts. The updater keeps them current with the least machinery that actually works: GitHub Releases as the free host, one HTTPS request at startup and every 6 hours after, a verified download, an in-place swap of the running exe, and a visible "Restart to update" button. Nothing installs on exit and nothing restarts on its own.
+PoEMercPricer ships as one `poemercpricer.exe` (unsigned; see section 4). Every Path of Exile patch changes the catalog, so users who fall behind get wrong verdicts. The updater keeps them current with the least machinery that actually works: GitHub Releases as the free host, one HTTPS request at startup and every 6 hours after, a verified download, an in-place swap of the running exe, and a visible "Restart to update" button. Nothing installs on exit and nothing restarts on its own.
 
 ## 1. What Awakened PoE Trade does
 
@@ -53,7 +55,7 @@ Everything except the exe swap already ships in the binary:
 | Replace the running exe | `self-replace` 1.5.0 (Apache-2.0, by mitsuhiko, used by rustup/uv) | +1 crate; its deps `tempfile`, `fastrand`, `windows-sys 0.52` are already locked |
 | Inflate the gzip asset | `flate2::read::GzDecoder` | none; `flate2` is already linked for PNG |
 
-Rejected: `self_update` (pulls reqwest + tokio, interactive defaults, blocks on stdin), `ureq` (fine, but WinRT already does the job with zero new crates), MSI or NSIS installers (an installer needs its own updater story and the app is a single file), `MOVEFILE_DELAY_UNTIL_REBOOT` (needs a reboot), batch-file swaps (racy).
+Rejected: `self_update` (pulls reqwest + tokio, interactive defaults, blocks on stdin), `ureq` (fine, but WinRT already does the job with zero new crates), `MOVEFILE_DELAY_UNTIL_REBOOT` (needs a reboot), batch-file swaps (racy).
 
 ### 3.2 Module `src/update.rs`
 
@@ -70,7 +72,7 @@ const JSON_TIMEOUT: Duration = Duration::from_secs(15);
 const DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(120);
 
 #[derive(Clone, Debug)]
-pub struct Release { pub version: semver::Version, pub page: String, pub download: String, pub compressed: Option<String>, pub size: u64, pub sha256: String }
+pub struct Release { pub version: semver::Version, pub page: String, pub download: String, pub compressed: Option<String>, pub size: u64, pub sha256: String, pub notices: Option<NoticeAsset> }
 
 #[derive(Clone, Debug)]
 pub enum UpdateState {
@@ -103,34 +105,25 @@ pub fn fetch(url: &str, timeout: Duration) -> anyhow::Result<Vec<u8>>;
 
 HTTP helper. WinRT is initialised per thread with `RoInitialize(RO_INIT_MULTITHREADED)`, tolerating `RPC_E_CHANGED_MODE`, and deliberately never released, so the updater keeps a thread-local "initialised" flag instead of the RAII guard `winocr.rs` uses. `RoInitialize` alone ties the process MTA's lifetime to whichever threads called it: when the last one exits, the MTA tears down mid-process and the activation factories `windows` caches in statics dangle, faulting the next WinRT call from a fresh thread (reproduced by `cargo test --test update -- --test-threads=1`). `winrt()` also calls `CoIncrementMTAUsage` once per process, behind a `std::sync::Once`, to pin the MTA for good with a cookie that is deliberately never released.
 
-```rust
-pub fn fetch(url: &str, timeout: Duration) -> Result<Vec<u8>> {
-    let client = HttpClient::new()?;
-    let headers = client.DefaultRequestHeaders()?;
-    headers.UserAgent()?.TryParseAdd(&HSTRING::from(format!("PoEMercPricer/{CURRENT}")))?;
-    headers.Accept()?.TryParseAdd(&HSTRING::from("application/vnd.github+json"))?;
-    let op = client.GetAsync(&Uri::CreateUri(&HSTRING::from(url))?)?;
-    let started = Instant::now();
-    while op.Status()? == AsyncStatus::Started {          // HttpClient has no timeout of its own
-        if started.elapsed() > timeout { op.Cancel()?; bail!("timed out after {timeout:?}"); }
-        thread::sleep(Duration::from_millis(50));
-    }
-    let resp = op.GetResults()?;
-    if !resp.IsSuccessStatusCode()? {                     // 403 and 404 get their own wording
-        match resp.StatusCode()?.0 {
-            403 => bail!("GitHub rate limit, try again in an hour"),
-            404 => bail!("no release published yet"),
-            code => bail!("GitHub returned HTTP {code}"),
-        }
-    }
-    let buf = resp.Content()?.ReadAsBufferAsync()?.get()?;
-    let mut bytes = vec![0u8; buf.Length()? as usize];
-    DataReader::FromBuffer(&buf)?.ReadBytes(&mut bytes)?;
-    Ok(bytes)
-}
-```
+The HTTP helper requests headers first and reads the body in 64 KiB chunks.
+Both `Content-Length` and the actual streamed byte count are checked: JSON is
+limited to 5 MB, executable and notice bodies to their published sizes, and
+compressed downloads to 100 MB. Empty executable assets are rejected. One
+deadline covers the headers, stream acquisition and body reads, including a
+server that sends headers and then stalls. An oversized response is closed
+without buffering the rest. See `fetch_bounded` in `src/update.rs`.
+
+The implementation follows Microsoft's [HTTP completion options](https://learn.microsoft.com/en-us/uwp/api/windows.web.http.httpcompletionoption)
+and [input-stream reading API](https://learn.microsoft.com/en-us/uwp/api/windows.storage.streams.iinputstream.readasync).
 
 Timeouts: 15 s for the JSON, 120 s for the download. A 15 MB asset took 0.5 s on the test machine and the v0.1.0 exe is 8.8 MB, so 120 s is there to cover a slow connection without hanging forever.
+
+`install` first obtains an exclusive, delete-on-close file handle for
+`poemercpricer-update.lock` in the executable folder. The handle covers the
+download, rollback copy, replacement and metadata update, so another new
+client cannot race that transaction. It is released on return or process
+termination. This uses Windows' [file sharing rules](https://doc.rust-lang.org/std/os/windows/fs/trait.OpenOptionsExt.html#tymethod.share_mode).
+Older clients do not know about this lock; close extra copies when migrating.
 
 `install` step by step:
 
@@ -139,6 +132,16 @@ Timeouts: 15 s for the JSON, 120 s for the download. A 15 MB asset took 0.5 s on
 3. Write to `<exe dir>/poemercpricer.exe.<pid>.update` (same volume, so the swap is a rename, and Explorer never sees a half-written `poemercpricer.exe`). The pid keeps two running instances out of each other's temp file.
 4. `fs::copy(exe, exe_dir/poemercpricer-previous.exe)`: one line of rollback insurance. README tells the user to rename it back if the new version fails to start.
 5. `self_replace::self_replace(temp)`. The temp file is removed afterwards whether or not steps 4 and 5 succeeded.
+
+The new installer uses the same executable update pipeline. Before step 3,
+any listed `THIRD_PARTY_NOTICES.html` is downloaded and checked against its
+own size and digest (declared size: 1 byte to 5 MB); failure aborts before the
+swap. After a successful swap, verified notices are saved under the versioned
+name `THIRD_PARTY_NOTICES-X.Y.Z.html`, and the Installed apps `DisplayVersion`
+is refreshed only for the registered executable. Metadata or notice-write
+failures are logged without reporting the completed binary update as failed.
+Older listings without notices remain supported. Setup is never an update
+payload. See [installation.md](installation.md) for installation and release checks.
 
 A `PermissionDenied` from any of those writes is reported as "permission denied writing `<dir>`; move poemercpricer.exe to a folder you can write to"; other IO errors carry the directory in their context.
 
@@ -225,9 +228,13 @@ jobs:
       - run: cargo install cargo-about --version 0.9.2 --locked --features cli
       - name: Third-party notices from the tagged Cargo.lock
         run: cargo about generate --locked --fail about.hbs -o THIRD_PARTY_NOTICES.html
+      - run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe
+      - run: ./scripts/build-installer.ps1 -Payload poemercpricer-windows-x64.exe
+      - run: ./scripts/verify-release-assets.ps1
+      - run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe -Setup target/installer/poemercpricer-setup-windows-x64.exe
       # Immutable releases lock the tag and assets at publish, so everything
       # is uploaded to the draft first.
-      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html --draft --title $env:GITHUB_REF_NAME --generate-notes
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
       - run: gh release edit $env:GITHUB_REF_NAME --draft=false
@@ -237,9 +244,11 @@ jobs:
 
 The bodies of the PowerShell steps above are elided; `release.yml` is the source of truth.
 
-`gh` is preinstalled on the runner, so no marketplace action is needed. CI already tests every push to `main`; tags are cut from `main`, so the release job only builds. The job still requires the tagged commit to be on `main` with a green `ci.yml` run before it builds anything, since the tag push and the `main` push race each other. The notices file is generated from the tagged `Cargo.lock` and never committed; `about.toml` and `about.hbs` at the repo root configure it. GitHub adds the `digest` itself, asynchronously, which is why the release script polls for it. The release is created as a draft, all three assets are uploaded to it, and only then is it published; once published, immutable releases mean the tag and assets can never be changed or deleted, so a bad release is fixed by shipping a new patch version, not by editing the old one.
+The app, installer and uninstaller are unsigned. The updater trusts the size and SHA-256 digest published by GitHub; it does not depend on a signing service or publisher certificate.
 
-Cutting a release is one command, `.\scripts\release.ps1 -Version X.Y.Z` (rehearse with `-DryRun`). It refuses to run on a private repo, on a dirty tree, off `main`, or with secret-shaped text tracked. Then it bumps `Cargo.toml`, refreshes the lock, builds, checks the exe against the 11,000,000 byte budget, runs fmt, clippy and the tests, commits `Release X.Y.Z`, tags, pushes, watches the workflow run, and polls for up to three minutes until the uploaded exe carries a sha256 digest, failing if the `.gz` sibling or `THIRD_PARTY_NOTICES.html` is missing. The runbook with failure recovery is `AGENTS.md` at the repo root.
+`gh` is preinstalled on the runner, so no marketplace action is needed. CI already tests every push to `main`; tags are cut from `main`, so the release job reuses those checks and additionally tests the final installer. The job still requires the tagged commit to be on `main` with a green `ci.yml` run before it builds anything, since the tag push and the `main` push race each other. The notices file is generated from the tagged `Cargo.lock` and never committed; `about.toml` and `about.hbs` at the repo root configure it. GitHub adds the `digest` itself, asynchronously, which is why the release script polls for it. The release is created as a draft, all four assets are uploaded to it, and only then is it published; once published, immutable releases mean the tag and assets can never be changed or deleted, so a bad release is fixed by shipping a new patch version, not by editing the old one.
+
+Cutting a release is one command, `.\scripts\release.ps1 -Version X.Y.Z` (rehearse with `-DryRun`). It refuses to run on a private repo, on a dirty tree, off `main`, or with secret-shaped text tracked. Then it bumps `Cargo.toml`, refreshes the lock, builds, checks the exe against the 11,000,000 byte budget, runs fmt, clippy and the tests, commits `Release X.Y.Z`, tags, pushes, watches the workflow run, and polls for up to three minutes until the uploaded exe carries a sha256 digest, requiring valid digests for the exe, `.gz`, notices and installer. It also builds/tests the installer locally; see `docs/installation.md` for the installer build and final-package tests. The runbook with failure recovery is `AGENTS.md` at the repo root.
 
 The tag check makes a mismatched tag fail loudly instead of publishing an exe that reports the wrong version and then re-updates itself forever.
 
@@ -312,13 +321,13 @@ Short reasons come from the backend and are complete sentences: `no internet con
 | Compressed sibling missing or corrupt | Silent: the exe asset is downloaded and verified instead. |
 | Size or checksum mismatch | `Failed`, temp file deleted, exe untouched. |
 | Exe folder not writable (Program Files, read-only share) | `Failed` with the folder path and the move hint. |
-| Antivirus quarantines the swap | Surfaces as an OS error in `Failed`; `poemercpricer-previous.exe` is still there. Code signing would fix this properly and costs money; out of scope. |
+| Antivirus quarantines the swap | Surfaces as an OS error in `Failed`; `poemercpricer-previous.exe` is still there. |
 | New version crashes at start | User renames `poemercpricer-previous.exe` back. Documented in README. |
 | Restart while a scan is running | Restart to update is disabled while a scan is running, like Scan is. A scan past the 30 s watchdog stops counting as running. |
-| Two instances running | Each writes its own pid-suffixed temp file. Before copying to `poemercpricer-previous.exe` an instance hashes the exe on disk and skips the copy and the swap if it already holds the release, so a second instance can't overwrite the rollback copy with the new exe; the worst case is a `Failed` state in one instance. |
+| Two instances updating one folder | An exclusive `poemercpricer-update.lock` handle covers download, verification, rollback and replacement. A competing copy reports that another update is running and can retry. Windows deletes the lock on handle close, including process exit. A later attempt skips the swap when the target digest is already installed, preserving rollback. Older published clients do not participate in this lock. |
 | Downgrade on GitHub (latest tag lower than running) | `is_newer` is strict `>`, so nothing happens. |
 
-SmartScreen: files written by the app carry no Mark-of-the-Web, so a restart into the updated exe shows no SmartScreen prompt. The first manual download from the browser still does, as with any unsigned exe.
+The app and installer are unsigned. Windows or antivirus software may block a downloaded executable or a self-update; the updater reports filesystem failures and does not bypass those protections.
 
 ## 7. Tests
 
@@ -331,6 +340,8 @@ Offline by default; CI has no network guarantees. The live tests are `#[ignore]`
   - `sha256_hex(b"abc")` equals the FIPS 180 vector `ba7816bf…f20015ad` (exercises the `BCryptHash` wrapper; Windows-only test like the OCR ones).
   - Missing `digest` or missing exe asset error with "checksum" / "Windows download" in the message; a `size` over 100 MB errors with "implausibly large".
   - `winrt_survives_a_previous_updater_thread_exiting` spawns an updater thread, joins it, then hashes from a fresh thread: without the `CoIncrementMTAUsage` pin this faults on the dangling activation factory. Run the file single-threaded to reproduce the old behaviour.
+- `tests/update_http.rs` checks exact-length responses, oversized Content-Length, chunked and headerless overflows, and a body stalled after headers.
+- `tests/update_install.rs` also verifies that a competing process cannot touch the executable while another owner holds the update lock, and that retry succeeds after the owner releases it.
 - `tests/update_install.rs` (offline, Windows): `install()` end to end. A `std::net::TcpListener` on a random loopback port plays GitHub, and the test copies its own binary into a temp folder and runs that copy as a child process (`<copy> install_child --exact`, release passed in `PMP_INSTALL_*` env vars), so `self_replace` swaps the copy and never the running harness. The child writes `ok` or the error to a result file; the parent then reads the folder. Covered: the gzip sibling is used when it is the only route that answers; a missing (404) or corrupt `.gz` falls back to the exe; a release without a sibling installs from the exe; after a success `poemercpricer.exe` holds the served bytes, `poemercpricer-previous.exe` holds the old exe, and no `.update` temp file is left; a digest mismatch, a size mismatch, a 404 on the exe and a refused connection all leave the exe untouched with no `previous.exe` and no temp file, and the refused connection reads `no internet connection`; an exe that already holds the release (another instance got there first) is left alone with no `previous.exe` written.
 - `tests/update_live.rs` (network, `cargo test --test update_live -- --ignored`)
   - `check()` against the real repo: `Ok(Some)` when the tag is newer than the running build, `Ok(None)` when it is not, and an error only if it reads `no release published yet`.
@@ -340,6 +351,7 @@ Offline by default; CI has no network guarantees. The live tests are `#[ignore]`
   - `install()` is never called in-process here or anywhere else: `self_replace` would overwrite the running test harness. `tests/update_install.rs` runs it in a child process instead.
 - `src/main.rs` unit tests: `parse_args(["--no-updates"])`, `["--fixture", "--no-updates"]`, unknown flag still errors, `--scan` without a path errors.
 - `src/app.rs` unit tests: `update_copy` for every `UpdateState`, `checked_ago` at 5 s, 3 min, 2 h, and `recheck_in` (disabled, Ready and Checking give `None`; never checked and 7 h ago are due now; 1 h ago waits about 5 h).
+- App worker tests exercise the same check/install orchestration used by the overlay: automatic mode emits Downloading before installation, manual mode leaves the release Available, success preserves the version for Restart, and check errors, install errors and worker panics remain retryable. These use injected network/install operations without opening a native window. Debug builds reject manual replacement as well as automatic replacement; Check now still works, and release builds retain both installation paths.
 - `tests/cli.rs`: `--version` prints `CARGO_PKG_VERSION` and exits 0.
 - `tests/config_roundtrip.rs`: an old config without the two new keys loads with both true.
 - Live run of the release exe, once per release: start it with the check enabled, confirm the overlay comes up with no red status and that a failed check only writes `update check skipped: <reason>` to stderr (start it from a terminal to see it), screenshot with `scripts/screenshot-window.ps1`. Start it again with `--no-updates` and confirm no log line.
@@ -381,9 +393,9 @@ Estimated size: `update.rs` about 180 lines, `app.rs` about 120 lines, `main.rs`
 - Delta or block-map downloads. The exe is 8.8 MB, 4.0 MB gzipped, and downloads in about a second. Section "Binary size and memory" in `docs/performance.md` has the `bidiff` note.
 - Release notes inside the overlay. A link to the release page does the job without a markdown renderer.
 - A "skip this version" option. Turn off automatic install, or `--no-updates`.
-- Signing. Worth doing when there is a budget for a certificate; nothing here depends on it.
+- Code signing. Releases are unsigned; download integrity is checked against GitHub's release metadata.
 - Prerelease or beta channel. `releases/latest` ignores prereleases, which is the behaviour I want; a beta can still be published as a prerelease for people who download it by hand.
-- Uninstall. Delete the exe and the config folder.
+- Portable uninstall. Delete the exe; delete the config folder only if you want to remove settings too. Installed copies use Windows Installed apps; see [installation.md](installation.md).
 
 ## 11. What a release must not contain
 
@@ -392,7 +404,7 @@ Audited 2026-09-03 on the working tree and a local release build:
 | Risk | Finding | Guard |
 |---|---|---|
 | Local username in the exe | 117 occurrences of the Windows username in a locally built `poemercpricer.exe`, from `.cargo\registry` panic-location paths of dependencies | Only CI builds are published; `release.ps1` never uploads anything, `release.yml` builds on the runner |
-| Debug symbols | `debug = "line-tables-only"` writes a PDB next to the exe | The workflow uploads three named files: the exe, its `.gz` sibling and `THIRD_PARTY_NOTICES.html` |
+| Debug symbols | `debug = "line-tables-only"` writes a PDB next to the exe | The workflow uploads four named files: the exe, its `.gz` sibling, installer and `THIRD_PARTY_NOTICES.html` |
 | Session cookies and tokens | none tracked (`POESESSID`, `ghp_`, `github_pat_`, `AKIA`, private keys) | CI "No secrets" step and `release.ps1` step 0 |
 | Account names in data | `assets/*.json` hold prices and counts only | Refresh scripts request no seller fields |
 | Screenshots | samples show the mercenary panel and game UI, no chat or account names | Bug template asks reporters to crop |
@@ -400,7 +412,7 @@ Audited 2026-09-03 on the working tree and a local release build:
 | Commit messages | quoted by `--generate-notes` on the release page | Rule in `AGENTS.md` |
 | Email | none in the exe | `authors` is the GitHub handle |
 
-Not done on purpose: `--remap-path-prefix` for local builds (they are never published), code signing (costs money), SBOM or `cargo deny` (dependabot plus `cargo audit` already run in CI), and a git-history rewrite (nothing to remove).
+Not done on purpose: `--remap-path-prefix` for local builds (they are never published), SBOM or `cargo deny` (dependabot plus `cargo audit` already run in CI), and a git-history rewrite (nothing to remove).
 
 ## 12. Verification log, 2026-09-03
 

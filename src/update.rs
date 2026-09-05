@@ -12,11 +12,14 @@ pub const ASSET: &str = "poemercpricer-windows-x64.exe";
 /// the exe asset's own size and digest, so it adds no trust; a release without
 /// it, or a bad download of it, falls back to the exe asset.
 pub const COMPRESSED_ASSET: &str = "poemercpricer-windows-x64.exe.gz";
+pub const INSTALLER_ASSET: &str = "poemercpricer-setup-windows-x64.exe";
+pub const NOTICES_ASSET: &str = "THIRD_PARTY_NOTICES.html";
 pub const RELEASES_URL: &str = "https://github.com/Lisood/PoEMercPricer/releases";
 pub const CURRENT: &str = env!("CARGO_PKG_VERSION");
 
 const JSON_TIMEOUT: Duration = Duration::from_secs(15);
 const DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(120);
+const MAX_DOWNLOAD_BYTES: u64 = 100_000_000;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Release {
@@ -27,6 +30,15 @@ pub struct Release {
     pub compressed: Option<String>,
     /// Size and digest of the exe asset; the compressed copy is checked
     /// against these after inflation.
+    pub size: u64,
+    pub sha256: String,
+    /// Optional for compatibility with older release listings.
+    pub notices: Option<NoticeAsset>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct NoticeAsset {
+    pub download: String,
     pub size: u64,
     pub sha256: String,
 }
@@ -47,15 +59,18 @@ pub fn check() -> Result<Option<Release>> {
     #[cfg(windows)]
     winrt()?;
     let url = format!("https://api.github.com/repos/{REPO}/releases/latest");
-    let body = fetch(&url, JSON_TIMEOUT)?;
+    let body = fetch_bounded(&url, JSON_TIMEOUT, 5_000_000)?;
     parse_release(&body, CURRENT)
 }
 
 /// Download beside `exe`, verify size and sha256, keep the old exe as
-/// `poemercpricer-previous.exe`, then swap. Nothing is changed on failure.
+/// `poemercpricer-previous.exe`, then swap. Verification failures keep the app.
 pub fn install(release: &Release, exe: &Path) -> Result<()> {
     #[cfg(windows)]
     winrt()?;
+    let dir = exe.parent().unwrap_or(Path::new("."));
+    #[cfg(windows)]
+    let _lock = update_lock(dir)?;
     // Try the gzip sibling first; any failure there (missing, network, corrupt,
     // mismatch) falls back to the exe asset.
     let compressed = release
@@ -66,17 +81,34 @@ pub fn install(release: &Release, exe: &Path) -> Result<()> {
     let bytes = match compressed {
         Some(bytes) => bytes,
         None => {
-            let bytes = fetch(&release.download, DOWNLOAD_TIMEOUT)?;
+            let bytes = fetch_bounded(&release.download, DOWNLOAD_TIMEOUT, release.size)?;
             verify(&bytes, release)?;
             bytes
         }
     };
 
-    let dir = exe.parent().unwrap_or(Path::new("."));
+    // Fetch attribution before changing the executable. Corrupt or unavailable
+    // notices fail the update with the installed app and its notices untouched.
+    let notices = release
+        .notices
+        .as_ref()
+        .map(|asset| -> Result<Vec<u8>> {
+            let data = fetch_bounded(&asset.download, DOWNLOAD_TIMEOUT, asset.size)?;
+            if data.len() as u64 != asset.size || sha256_hex(&data)? != asset.sha256 {
+                bail!("third-party notices checksum mismatch");
+            }
+            Ok(data)
+        })
+        .transpose()?;
+
     // Per-pid, so two running instances updating at once cannot tear each
     // other's temp file out from under a write or a self_replace.
     let temp = exe.with_extension(format!("exe.{}.update", std::process::id()));
     std::fs::write(&temp, &bytes).map_err(|e| write_error(dir, e))?;
+
+    // Versioned names remain accurate even if writing after the binary swap
+    // fails. The release page always carries the notices for the current build.
+    let notices_path = dir.join(format!("THIRD_PARTY_NOTICES-{}.html", release.version));
 
     let finish = || -> Result<()> {
         // Another instance installed this same release while we were downloading;
@@ -91,7 +123,40 @@ pub fn install(release: &Release, exe: &Path) -> Result<()> {
     };
     let result = finish();
     let _ = std::fs::remove_file(&temp);
+    if result.is_ok() {
+        crate::installation::record_update(exe, &release.version.to_string());
+        if let Some(notices) = notices {
+            if let Err(error) = std::fs::write(&notices_path, notices) {
+                eprintln!(
+                    "Could not save third-party notices for {}: {error}",
+                    release.version
+                );
+            }
+        }
+    }
     result
+}
+
+#[cfg(windows)]
+fn update_lock(dir: &Path) -> Result<std::fs::File> {
+    use std::os::windows::fs::OpenOptionsExt;
+    // Windows deletes this file atomically when its exclusive handle closes,
+    // including on process termination. An abandoned update cannot leave a lock.
+    const FILE_FLAG_DELETE_ON_CLOSE: u32 = 0x04000000;
+    std::fs::OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(false)
+        .share_mode(0)
+        .custom_flags(FILE_FLAG_DELETE_ON_CLOSE)
+        .open(dir.join("poemercpricer-update.lock"))
+        .map_err(|error| {
+            if error.raw_os_error() == Some(32) {
+                anyhow::anyhow!("another copy is updating this folder; try again after it finishes")
+            } else {
+                write_error(dir, error)
+            }
+        })
 }
 
 /// Size and sha256 of the exe asset must both match; nothing else is trusted.
@@ -151,19 +216,40 @@ pub fn parse_release(json: &[u8], current: &str) -> Result<Option<Release>> {
         .iter()
         .find(|a| a.name == ASSET)
         .context("the release has no Windows download")?;
-    if asset.size > 100_000_000 {
+    if asset.size == 0 {
+        bail!("the release download is empty");
+    }
+    if asset.size > MAX_DOWNLOAD_BYTES {
         bail!(
             "the release download is implausibly large ({} bytes)",
             asset.size
         );
     }
-    let sha256 = asset
-        .digest
-        .as_deref()
-        .and_then(|d| d.strip_prefix("sha256:"))
-        .filter(|hex| hex.len() == 64 && hex.chars().all(|c| c.is_ascii_hexdigit()))
-        .context("the release has no usable sha256 checksum")?
-        .to_lowercase();
+    fn digest(asset: &Asset) -> Result<String> {
+        Ok(asset
+            .digest
+            .as_deref()
+            .and_then(|d| d.strip_prefix("sha256:"))
+            .filter(|hex| hex.len() == 64 && hex.chars().all(|c| c.is_ascii_hexdigit()))
+            .context("the release has no usable sha256 checksum")?
+            .to_lowercase())
+    }
+    let sha256 = digest(asset)?;
+    let notices = latest
+        .assets
+        .iter()
+        .find(|a| a.name == NOTICES_ASSET)
+        .map(|asset| -> Result<NoticeAsset> {
+            if asset.size == 0 || asset.size > 5_000_000 {
+                bail!("the release third-party notices size is invalid");
+            }
+            Ok(NoticeAsset {
+                download: asset.browser_download_url.clone(),
+                size: asset.size,
+                sha256: digest(asset)?,
+            })
+        })
+        .transpose()?;
     Ok(Some(Release {
         version: parse_tag(&latest.tag_name)?,
         page: latest.html_url,
@@ -175,6 +261,7 @@ pub fn parse_release(json: &[u8], current: &str) -> Result<Option<Release>> {
             .map(|a| a.browser_download_url.clone()),
         size: asset.size,
         sha256,
+        notices,
     }))
 }
 
@@ -267,17 +354,41 @@ fn winrt() -> Result<()> {
 
 /// One blocking GET through the OS HTTP stack: system proxy, OS trust store,
 /// redirects followed. Maps GitHub's 403 and 404 to the reasons the UI shows.
-#[cfg(windows)]
 pub fn fetch(url: &str, timeout: Duration) -> Result<Vec<u8>> {
-    use windows::core::HSTRING;
-    use windows::Foundation::{AsyncStatus, Uri};
-    use windows::Storage::Streams::DataReader;
-    use windows::Web::Http::HttpClient;
+    fetch_bounded(url, timeout, MAX_DOWNLOAD_BYTES)
+}
+
+/// Stream under a byte ceiling and one deadline covering headers and body.
+#[cfg(windows)]
+pub fn fetch_bounded(url: &str, timeout: Duration, limit: u64) -> Result<Vec<u8>> {
+    use windows::core::{Interface, HSTRING};
+    use windows::Foundation::{AsyncStatus, IAsyncInfo, Uri};
+    use windows::Storage::Streams::{Buffer, DataReader, InputStreamOptions};
+    use windows::Web::Http::{HttpClient, HttpCompletionOption, HttpResponseMessage};
 
     fn offline(error: windows::core::Error) -> anyhow::Error {
         anyhow::anyhow!("no internet connection ({error})")
     }
 
+    fn wait(op: &IAsyncInfo, started: std::time::Instant, timeout: Duration) -> Result<()> {
+        loop {
+            if started.elapsed() > timeout {
+                let _ = op.Cancel();
+                bail!(
+                    "no internet connection (timed out after {}s)",
+                    timeout.as_secs_f64()
+                );
+            }
+            if op.Status().map_err(offline)? != AsyncStatus::Started {
+                return Ok(());
+            }
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    }
+
+    if limit > MAX_DOWNLOAD_BYTES {
+        bail!("download byte limit exceeds the maximum");
+    }
     winrt()?;
     let client = HttpClient::new().map_err(offline)?;
     let headers = client.DefaultRequestHeaders()?;
@@ -288,22 +399,23 @@ pub fn fetch(url: &str, timeout: Duration) -> Result<Vec<u8>> {
         .Accept()?
         .TryParseAdd(&HSTRING::from("application/vnd.github+json"))?;
 
-    let op = client
-        .GetAsync(&Uri::CreateUri(&HSTRING::from(url))?)
-        .map_err(offline)?;
     let started = std::time::Instant::now();
-    while op.Status().map_err(offline)? == AsyncStatus::Started {
-        if started.elapsed() > timeout {
-            let _ = op.Cancel();
-            bail!(
-                "no internet connection (timed out after {}s)",
-                timeout.as_secs()
-            );
-        }
-        std::thread::sleep(Duration::from_millis(50));
-    }
+    let op = client
+        .GetWithOptionAsync(
+            &Uri::CreateUri(&HSTRING::from(url))?,
+            HttpCompletionOption::ResponseHeadersRead,
+        )
+        .map_err(offline)?;
+    wait(&op.cast()?, started, timeout)?;
 
     let response = op.GetResults().map_err(offline)?;
+    struct CloseResponse(HttpResponseMessage);
+    impl Drop for CloseResponse {
+        fn drop(&mut self) {
+            let _ = self.0.Close();
+        }
+    }
+    let _close = CloseResponse(response.clone());
     if !response.IsSuccessStatusCode().map_err(offline)? {
         match response.StatusCode().map_err(offline)?.0 {
             403 | 429 => bail!("GitHub rate limit, try again in an hour"),
@@ -312,21 +424,48 @@ pub fn fetch(url: &str, timeout: Duration) -> Result<Vec<u8>> {
         }
     }
 
-    let buffer = response
-        .Content()
-        .map_err(offline)?
-        .ReadAsBufferAsync()
-        .map_err(offline)?
-        .get()
-        .map_err(offline)?;
-    let mut bytes = vec![0u8; buffer.Length()? as usize];
-    DataReader::FromBuffer(&buffer)?.ReadBytes(&mut bytes)?;
+    let content = response.Content().map_err(offline)?;
+    let declared = content
+        .Headers()?
+        .ContentLength()
+        .ok()
+        .and_then(|n| n.Value().ok());
+    if declared.is_some_and(|size| size > limit) {
+        bail!("download exceeds the {limit} byte limit");
+    }
+    let input = content.ReadAsInputStreamAsync().map_err(offline)?;
+    wait(&input.cast()?, started, timeout)?;
+    let stream = input.GetResults().map_err(offline)?;
+    let mut bytes = Vec::with_capacity(declared.unwrap_or(0) as usize);
+    let buffer = Buffer::Create(64 * 1024)?;
+    loop {
+        // One extra byte detects oversized chunked responses without trusting
+        // Content-Length or buffering an unbounded response inside HttpClient.
+        let remaining = limit - bytes.len() as u64;
+        let count = (remaining + 1).min(64 * 1024) as u32;
+        buffer.SetLength(0)?;
+        let read = stream
+            .ReadAsync(&buffer, count, InputStreamOptions::Partial)
+            .map_err(offline)?;
+        wait(&read.cast()?, started, timeout)?;
+        let chunk = read.GetResults().map_err(offline)?;
+        let len = chunk.Length()? as usize;
+        if len == 0 {
+            break;
+        }
+        if len as u64 > remaining {
+            bail!("download exceeds the {limit} byte limit");
+        }
+        let offset = bytes.len();
+        bytes.resize(offset + len, 0);
+        DataReader::FromBuffer(&chunk)?.ReadBytes(&mut bytes[offset..])?;
+    }
     Ok(bytes)
 }
 
 /// See the Windows implementation; this crate only ships on Windows.
 #[cfg(not(windows))]
-pub fn fetch(url: &str, timeout: Duration) -> Result<Vec<u8>> {
-    let _ = (url, timeout);
+pub fn fetch_bounded(url: &str, timeout: Duration, limit: u64) -> Result<Vec<u8>> {
+    let _ = (url, timeout, limit);
     bail!("updates need Windows")
 }

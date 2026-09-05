@@ -1,0 +1,19 @@
+name: live updater
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 19 * * 1'
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - run: cargo test --locked --test update_live -- --ignored --nocapture --test-threads=1
+      - run: cargo test --locked --test update_install live_published_app_installs_and_runs_its_version_command -- --ignored --exact --nocapture

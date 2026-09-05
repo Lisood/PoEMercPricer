@@ -15,11 +15,12 @@ cargo test --locked
 
 Rust 1.88 is the minimum supported version, and CI checks it separately.
 
-Three suites are opt-in because they need a network, a desktop, or this
+Additional suites are opt-in because they need a network, a desktop, or this
 particular machine:
 
 ```powershell
 cargo test --test update_live -- --ignored
+cargo test --locked --test update_install live_published_app_installs_and_runs_its_version_command -- --ignored --exact
 cargo build --release
 cargo test --release --test resource_budgets -- --ignored --test-threads=1
 ```
@@ -35,6 +36,12 @@ subcommands print to stdout and exit.
 
 ## Where things live
 
+Installer/updater changes also require `scripts/test-installer.ps1` after a
+release build and notice generation, plus `scripts/test-release-dryrun.ps1`.
+The installer script uses isolated registrations and never opens the overlay.
+CI runs the lifecycle; `update-live.yml` runs real GitHub checks weekly and
+on manual dispatch. Build/release details are in `docs/installation.md`.
+
 - Scoring math: `src/scoring/`. A formula change needs a unit test in
   `tests/scoring.rs`.
 - Overlay UX: `src/app.rs`. Layout and accessibility rules are in
@@ -42,6 +49,8 @@ subcommands print to stdout and exit.
 - Capture, OCR and icon recognition: `src/capture.rs`, `src/winocr.rs`,
   `src/vision.rs`, `src/scan.rs`.
 - Updater: `src/update.rs`, designed in `docs/updater.md`.
+- Installer and Windows integration: `installer/`, `src/installation.rs`,
+  `scripts/build-installer.ps1`, `scripts/test-installer.ps1`.
 - Market data and its provenance: `assets/`, `docs/market-3.29.md`,
   `docs/research-3.29.md`.
 

@@ -122,6 +122,8 @@ fn main() -> Result<()> {
 
     let args = parse_args(&args)?;
 
+    poemercpricer::installation::mark_running()?;
+
     let (cfg, cfg_error) = AppConfig::load();
     // Topmost is applied via raw Win32 SetWindowPos in PricerApp::new, not
     // with_always_on_top(): eframe/winit topmost keeps glow in a continuous

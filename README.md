@@ -36,17 +36,25 @@ The scores are screening heuristics, not Divine/Mirror quotes. GGG confirms a Wa
 - Path of Exile in Windowed Fullscreen or Windowed. Exclusive Fullscreen blocks both the overlay and the screen capture.
 - If Path of Exile runs as Administrator, run PoEMercPricer as Administrator too. Otherwise Windows refuses the global hotkey while the game has focus.
 
-The download is one unsigned exe of about 8.8 MB. There is no installer and no runtime to add.
+The app is one exe of about 8.8 MB, with no extra runtime. The new installer is about 5.8 MB and includes the app. The app and installer are unsigned.
 
 ## Install
 
 ### Download (Windows)
 
-Get `poemercpricer-windows-x64.exe` from the [Releases page](https://github.com/Lisood/PoEMercPricer/releases). Rename it to `poemercpricer.exe` if you like, and put it in a folder you can write to (not Program Files) so updates can replace it. A folder such as `C:\Games\PoEMercPricer\` or somewhere under your user profile works.
+**Installer:** download and run [poemercpricer-setup-windows-x64.exe](https://github.com/Lisood/PoEMercPricer/releases/latest/download/poemercpricer-setup-windows-x64.exe). It installs to `%LOCALAPPDATA%\Programs\PoEMercPricer`, adds a Start menu shortcut, and offers an optional desktop shortcut. Installation and updates need no administrator password. Remove it through Windows Settings > Apps > Installed apps; your settings and debug captures are kept.
 
-The first run shows a SmartScreen prompt because the exe is unsigned: click More info, then Run anyway. An update the app installs itself carries no Mark-of-the-Web, so it shows no prompt.
+**Portable:** get `poemercpricer-windows-x64.exe` from the [Releases page](https://github.com/Lisood/PoEMercPricer/releases). Rename it to `poemercpricer.exe` if you like and keep it in a writable folder, such as `C:\Games\PoEMercPricer\`. Existing portable copies continue to update normally.
 
-Each release also carries `poemercpricer-windows-x64.exe.gz`, a gzip of the same bytes that the updater prefers, and `THIRD_PARTY_NOTICES.html`, the per-crate licence text for that exact build. Neither is needed to run the app.
+To move from portable to installed, close the portable copy, run setup, and start the app from the new shortcut. Both use the same existing settings. Once you have checked the installed copy, you can delete the old download and its old shortcut. Setup leaves them in place.
+
+The app and installer are unsigned, so Windows may show an unknown-publisher or SmartScreen warning when opening a downloaded copy.
+
+Each release also carries `poemercpricer-windows-x64.exe.gz`, a gzip of the same bytes that the updater prefers, and `THIRD_PARTY_NOTICES.html`, the per-crate licence text for that exact build. Setup and updates save notices beside the app as `THIRD_PARTY_NOTICES-X.Y.Z.html`. The updater checks their size and SHA-256 too. See [installation and recovery](docs/installation.md).
+
+### Release verification
+
+Release executables are built by GitHub Actions from a tagged commit on `main`. The updater verifies each download against the size and SHA-256 digest in GitHub release metadata. It does not depend on a code-signing service. The app makes network requests only for GitHub updates and collects no telemetry.
 
 ### From source (Windows)
 
@@ -57,6 +65,17 @@ cargo build --release
 ```
 
 That produces `target/release/poemercpricer.exe`. Put a shortcut wherever you like. Rust 1.88 or newer.
+
+To build the installer locally:
+
+```powershell
+cargo install cargo-about --version 0.9.2 --locked --features cli
+cargo about generate --locked --fail about.hbs -o THIRD_PARTY_NOTICES.html
+pwsh scripts/build-installer.ps1
+pwsh scripts/test-installer.ps1
+```
+
+The build script downloads a pinned, checksum- and signature-verified Inno Setup compiler into `target/installer-tools`. It produces an unsigned local test installer in `target/installer`. Release checks are described in [docs/installation.md](docs/installation.md#release).
 
 Release builds open no console window. Start the exe from a terminal when you want to see what the commands below print, or what a panicking worker or a failed background update check wrote to stderr.
 
@@ -164,7 +183,7 @@ The Open config folder link at the top right of the Settings pane opens it in Ex
 
 To reset everything, close the app, delete `config.json`, and start it again: a missing file is rewritten with the defaults above. A file that fails to parse is left untouched and reported in the status line, and defaults are used until you fix it, so a typo never costs you the rest of the file.
 
-Debug captures, when you turn that Advanced option on, land in a `debug` subfolder next to `config.json`. Nothing else is written anywhere: no registry keys, no services, no start-menu entries, no files beside the game.
+Debug captures, when you turn that Advanced option on, land in a `debug` subfolder next to `config.json`. Setup adds per-user shortcuts and an uninstall registration; successful updates refresh that registration's version. No service is installed and no files are written beside the game. Portable copies never register themselves.
 
 ## Updates
 
@@ -182,10 +201,12 @@ Clear "Check for updates at startup and every 6 hours" in Settings, or start the
 
 ## Uninstall
 
-There is no installer, so there is nothing to uninstall. Delete these and the machine is clean:
+For an installed copy, close the app and remove PoEMercPricer in Windows Settings > Apps > Installed apps. The uninstaller removes its app files, shortcuts and update backups while retaining your settings and debug captures.
 
-- `poemercpricer.exe` and, if it exists, `poemercpricer-previous.exe`
-- the folder `%APPDATA%\PoEMercPricer`, which holds `config\config.json` and any debug captures
+For a portable copy, delete the executable, `poemercpricer-previous.exe`, any `THIRD_PARTY_NOTICES-X.Y.Z.html` files beside it, and shortcuts you created.
+
+To also remove personal settings and debug captures after either option, delete `%APPDATA%\PoEMercPricer` once no other copy needs it.
+
 
 ## Command line
 
@@ -290,7 +311,7 @@ Add English (United States) under Settings > Time & Language > Language & region
 
 ### An update failed and antivirus is the suspect
 
-The swap writes a fresh unsigned exe next to the old one, which some scanners quarantine. The failure surfaces in the status line, and `poemercpricer-previous.exe` is there if a partial swap did land. Download the exe from the Releases page by hand, or add the folder to your scanner's exclusions.
+The swap writes a fresh exe next to the old one; a binary with little reputation is sometimes quarantined by a cautious scanner. The failure surfaces in the status line, and `poemercpricer-previous.exe` is there if a partial swap did land. Download the exe from the Releases page by hand, or add the folder to your scanner's exclusions.
 
 ### "permission denied writing ..."
 
@@ -302,7 +323,7 @@ Unauthenticated GitHub API calls are capped at 60 per hour per IP. The app spend
 
 ### Two copies running
 
-The second one fails to register the hotkey, because the first already holds it, and both draw on top of the game. Close the extra copy. If both happen to be mid-update, each writes its own temp file keyed to its process id, so neither corrupts the other's download.
+The second one fails to register the hotkey, because the first already holds it, and both draw on top of the game. Close the extra copy. Updates from new builds take an exclusive lock for their folder. A competing copy reports that an update is already running and can retry afterwards. This prevents competing replacements from damaging the rollback copy.
 
 ### High-DPI displays
 
@@ -316,7 +337,7 @@ The overlay declares itself per-monitor DPI aware and captures in physical pixel
 - 2.92% of audited 3.29 support contexts stay ambiguous after skill and tier filtering, because the art is byte-identical. Those cells ask you to pick.
 - Prices come from a snapshot bundled at build time, not a live query. They age between releases, and the UI shows the snapshot date so you can judge that.
 - Scores are screening heuristics tuned to the ledger, not valuations. A thin book swings hard.
-- The exe is unsigned, so the first download trips SmartScreen and some scanners look twice at the self-update.
+- Releases are unsigned. Windows or antivirus software may flag a download or self-update.
 - The catalog covers the 36 builds listed for 3.29.3. A new patch needs a new release before its skills are recognised.
 
 ## Safety and ToS

@@ -1,6 +1,7 @@
 pub mod catalog;
 pub mod config;
 pub mod icons;
+pub mod installation;
 pub mod models;
 pub mod parse;
 pub mod pricing;

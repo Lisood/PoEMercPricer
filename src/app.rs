@@ -565,27 +565,16 @@ impl PricerApp {
         // replace target/debug/poemercpricer.exe.
         let auto_install = self.cfg.install_updates_automatically && !cfg!(debug_assertions);
         thread::spawn(move || {
-            let work = || match update::check() {
-                Ok(None) => UpdateState::UpToDate {
-                    checked: Instant::now(),
+            let state = checked_state(
+                auto_install,
+                exe.as_deref(),
+                update::check,
+                installed_state,
+                |state| {
+                    let _ = tx.send(ScanMsg::Update(state));
+                    ctx.request_repaint();
                 },
-                Ok(Some(release)) => match (auto_install, &exe) {
-                    (true, Some(exe)) => {
-                        let _ = tx.send(ScanMsg::Update(UpdateState::Downloading(release.clone())));
-                        ctx.request_repaint();
-                        installed_state(&release, exe)
-                    }
-                    _ => UpdateState::Available(release),
-                },
-                Err(e) => UpdateState::Failed {
-                    message: format!("{e:#}"),
-                },
-            };
-            // A panic here must still report back, or the state stays Checking.
-            let state =
-                std::panic::catch_unwind(AssertUnwindSafe(work)).unwrap_or(UpdateState::Failed {
-                    message: "update worker panicked; see the console".into(),
-                });
+            );
             let _ = tx.send(ScanMsg::Update(state));
             ctx.request_repaint();
         });
@@ -615,11 +604,7 @@ impl PricerApp {
         let tx = self.tx.clone();
         let ctx = self.egui_ctx.clone();
         thread::spawn(move || {
-            let state =
-                std::panic::catch_unwind(AssertUnwindSafe(|| installed_state(&release, &exe)))
-                    .unwrap_or(UpdateState::Failed {
-                        message: "update worker panicked; see the console".into(),
-                    });
+            let state = run_update_worker(|| installed_state(&release, &exe));
             let _ = tx.send(ScanMsg::Update(state));
             ctx.request_repaint();
         });
@@ -2393,7 +2378,43 @@ fn megabytes(size: u64) -> u64 {
     (size as f64 / 1_000_000.0).round() as u64
 }
 
+fn run_update_worker(work: impl FnOnce() -> UpdateState) -> UpdateState {
+    // Both buttons and automatic checks must leave their busy state on panic.
+    std::panic::catch_unwind(AssertUnwindSafe(work)).unwrap_or(UpdateState::Failed {
+        message: "update worker panicked; see the console".into(),
+    })
+}
+
+fn checked_state(
+    auto_install: bool,
+    exe: Option<&Path>,
+    check: impl FnOnce() -> anyhow::Result<Option<update::Release>>,
+    install: impl FnOnce(&update::Release, &Path) -> UpdateState,
+    mut progress: impl FnMut(UpdateState),
+) -> UpdateState {
+    run_update_worker(|| match check() {
+        Ok(None) => UpdateState::UpToDate {
+            checked: Instant::now(),
+        },
+        Ok(Some(release)) => match (auto_install, exe) {
+            (true, Some(exe)) => {
+                progress(UpdateState::Downloading(release.clone()));
+                install(&release, exe)
+            }
+            _ => UpdateState::Available(release),
+        },
+        Err(error) => UpdateState::Failed {
+            message: format!("{error:#}"),
+        },
+    })
+}
+
 fn installed_state(release: &update::Release, exe: &Path) -> UpdateState {
+    if cfg!(debug_assertions) {
+        return UpdateState::Failed {
+            message: "self-updates are disabled in debug builds; use a release build".into(),
+        };
+    }
     match update::install(release, exe) {
         Ok(()) => UpdateState::Ready {
             version: release.version.to_string(),
@@ -3411,7 +3432,126 @@ mod tests {
             compressed: None,
             size: 12_300_000,
             sha256: "0".repeat(64),
+            notices: None,
         }
+    }
+
+    #[test]
+    fn update_worker_keeps_manual_updates_available_without_installing() {
+        for (automatic, exe) in [
+            (
+                false,
+                Some(std::path::Path::new("installed app/poemercpricer.exe")),
+            ),
+            (true, None),
+        ] {
+            let state = super::checked_state(
+                automatic,
+                exe,
+                || Ok(Some(release())),
+                |_, _| panic!("must not install without automatic mode and an executable"),
+                |_| panic!("must not report a download"),
+            );
+            assert!(matches!(state, UpdateState::Available(found) if found == release()));
+        }
+        let state = super::checked_state(
+            true,
+            Some(std::path::Path::new("poemercpricer.exe")),
+            || Ok(None),
+            |_, _| panic!("must not install an already-current release"),
+            |_| panic!("must not report a download"),
+        );
+        assert!(matches!(state, UpdateState::UpToDate { .. }));
+    }
+
+    #[test]
+    fn update_worker_reports_download_before_install_and_preserves_the_restart_version() {
+        let progress = std::cell::RefCell::new(Vec::new());
+        let exe = std::path::Path::new("permanent home \u{6587}/poemercpricer.exe");
+        let state = super::checked_state(
+            true,
+            Some(exe),
+            || Ok(Some(release())),
+            |found, path| {
+                assert_eq!(path, exe);
+                assert_eq!(found, &release());
+                assert!(matches!(
+                    progress.borrow().as_slice(),
+                    [UpdateState::Downloading(release)] if release == found
+                ));
+                UpdateState::Ready {
+                    version: found.version.to_string(),
+                }
+            },
+            |state| progress.borrow_mut().push(state),
+        );
+        assert!(matches!(&state, UpdateState::Ready { version } if version == "0.3.0"));
+        assert_eq!(recheck_in(Some(Instant::now()), &state, true), None);
+    }
+
+    #[test]
+    fn update_worker_surfaces_check_and_install_failures_without_offering_restart() {
+        let state = super::checked_state(
+            true,
+            Some(std::path::Path::new("poemercpricer.exe")),
+            || Err(anyhow::anyhow!("no internet connection")),
+            |_, _| panic!("must not install after a failed check"),
+            |_| panic!("must not report a download after a failed check"),
+        );
+        assert!(
+            matches!(&state, UpdateState::Failed { message } if message == "no internet connection")
+        );
+        assert_eq!(recheck_in(None, &state, true), Some(Duration::ZERO));
+
+        let state = super::checked_state(
+            true,
+            Some(std::path::Path::new("poemercpricer.exe")),
+            || Ok(Some(release())),
+            |_, _| UpdateState::Failed {
+                message: "checksum mismatch".into(),
+            },
+            |_| {},
+        );
+        assert!(
+            matches!(&state, UpdateState::Failed { message } if message == "checksum mismatch")
+        );
+        assert_eq!(recheck_in(None, &state, true), Some(Duration::ZERO));
+    }
+
+    #[test]
+    fn update_worker_panics_leave_checking_and_downloading_retryable() {
+        let checking = super::checked_state(
+            true,
+            None,
+            || panic!("check worker failed"),
+            |_, _| unreachable!(),
+            |_| unreachable!(),
+        );
+        let automatic_install = super::checked_state(
+            true,
+            Some(std::path::Path::new("poemercpricer.exe")),
+            || Ok(Some(release())),
+            |_, _| panic!("automatic install failed"),
+            |_| {},
+        );
+        let manual_install = super::run_update_worker(|| panic!("manual install failed"));
+        for state in [checking, automatic_install, manual_install] {
+            assert!(
+                matches!(&state, UpdateState::Failed { message } if message.contains("worker panicked"))
+            );
+            assert_eq!(recheck_in(None, &state, true), Some(Duration::ZERO));
+        }
+    }
+
+    #[test]
+    #[cfg(debug_assertions)]
+    fn manual_update_in_a_debug_build_never_downloads_or_replaces_the_app() {
+        let mut candidate = release();
+        candidate.download = "not-a-url".into();
+        let state = super::installed_state(&candidate, std::path::Path::new(""));
+        assert!(
+            matches!(state, UpdateState::Failed { message } if message.contains("disabled in debug builds"))
+        );
     }
 
     #[test]

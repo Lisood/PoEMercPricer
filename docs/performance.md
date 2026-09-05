@@ -2,6 +2,37 @@
 
 PoEMercPricer should stay a small companion overlay. OCR is on-demand work and never a resident service. This file covers the scan path, the binary and memory budgets, and the trade-search path.
 
+## Installer addition, 2026-09-05 (v0.2.0 preparation)
+
+The installer uses native Inno Setup controls, the existing gold icon and
+LZMA2/normal compression. It adds no webview, service, startup task or polling
+to the app. GUI startup creates one named mutex; registration metadata is
+accessed only after an update. Notice downloads add about 224 KB for the
+current build, with a 5 MB declared-size ceiling.
+
+| Measurement | Observed | Gate |
+|---|---:|---:|
+| Release app | 8,805,376 bytes | 11,000,000 bytes |
+| Unsigned installer including app and uninstaller | 5,747,108 bytes | 8,000,000 bytes |
+| Gzip app payload | 4,015,542 bytes | Must be smaller than the exe |
+| Silent install / repair | About 0.9 seconds each | 60-second smoke-test timeout |
+| Warm fullscreen scan | 48.97 ms | 1 second |
+| Fullscreen scan peak working set | 40.3 MiB | 96 MiB |
+| Idle GUI working set | 126.8 MiB | 160 MiB |
+
+The app is 25,600 bytes larger than the published v0.1.0 executable. Timing
+depends on disk and antivirus activity. `scripts/test-installer.ps1` records
+each lifecycle timing and launcher peak working set (about 16 MiB here).
+That launcher measurement excludes the separate Inno worker and is not a
+total installer memory measurement. The user explicitly authorized GUI tests,
+so the idle-GUI memory test was run too. The scan-memory and latency tests
+run without a GUI. The updater now streams bounded HTTP bodies in 64 KiB
+chunks and holds a file lock only during installation; it adds no idle polling.
+
+The size gates run during local packaging and before release publication,
+with the final package. Full installation and release details are in
+[installation.md](installation.md).
+
 ## Design limits
 
 - No child OCR process. `src/winocr.rs` calls `Windows.Media.Ocr` through the Rust Windows binding. It doesn't launch PowerShell, write a temporary PNG, or ship a neural-model runtime.

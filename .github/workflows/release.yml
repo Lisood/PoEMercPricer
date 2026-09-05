@@ -65,10 +65,23 @@ jobs:
         shell: pwsh
         run: |
           cargo about generate --locked --fail about.hbs -o THIRD_PARTY_NOTICES.html
+          if ($LASTEXITCODE -ne 0) { throw 'Third-party notice generation failed.' }
           "THIRD_PARTY_NOTICES.html $((Get-Item THIRD_PARTY_NOTICES.html).Length) bytes"
+      - name: Test the installer lifecycle with the release payload
+        shell: pwsh
+        run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe
+      - name: Build installer
+        shell: pwsh
+        run: ./scripts/build-installer.ps1 -Payload poemercpricer-windows-x64.exe
+      - name: Check all assets before creating the draft
+        shell: pwsh
+        run: ./scripts/verify-release-assets.ps1
+      - name: Exercise the final installer and installed updater
+        shell: pwsh
+        run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe -Setup target/installer/poemercpricer-setup-windows-x64.exe
       # Immutable releases lock the tag and assets at publish, so everything
       # is uploaded to the draft first.
-      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html --draft --title $env:GITHUB_REF_NAME --generate-notes
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
       - run: gh release edit $env:GITHUB_REF_NAME --draft=false

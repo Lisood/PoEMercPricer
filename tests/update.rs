@@ -85,6 +85,15 @@ fn a_release_with_an_implausibly_large_size_is_an_error() {
     );
 }
 
+#[test]
+fn an_empty_executable_asset_is_rejected() {
+    let json = edited("\"size\": 12358656", "      \"size\": 0,");
+    assert!(parse_release(&json, "0.2.0")
+        .unwrap_err()
+        .to_string()
+        .contains("empty"));
+}
+
 #[cfg(windows)]
 #[test]
 fn sha256_matches_the_fips_180_vector() {
@@ -124,6 +133,62 @@ fn a_release_without_the_gzip_sibling_still_parses() {
 }
 
 #[test]
+fn installer_asset_never_replaces_the_portable_update_payload() {
+    use poemercpricer::update::INSTALLER_ASSET;
+    let mut json: serde_json::Value = serde_json::from_slice(FIXTURE).unwrap();
+    let assets = json["assets"].as_array_mut().unwrap();
+    let mut installer = assets[0].clone();
+    installer["name"] = INSTALLER_ASSET.into();
+    installer["browser_download_url"] = "https://example.invalid/setup.exe".into();
+    installer["size"] = 1.into();
+    assets.insert(0, installer);
+    let release = parse_release(&serde_json::to_vec(&json).unwrap(), "0.2.0")
+        .unwrap()
+        .unwrap();
+    assert!(release.download.ends_with(ASSET));
+    assert_eq!(release.size, 12_358_656);
+    json["assets"]
+        .as_array_mut()
+        .unwrap()
+        .retain(|a| a["name"] != ASSET);
+    assert!(parse_release(&serde_json::to_vec(&json).unwrap(), "0.2.0").is_err());
+}
+
+#[test]
+fn notices_are_optional_but_must_have_a_bounded_size_and_valid_digest() {
+    use poemercpricer::update::NOTICES_ASSET;
+    let mut json: serde_json::Value = serde_json::from_slice(FIXTURE).unwrap();
+    assert!(parse_release(FIXTURE, "0.2.0")
+        .unwrap()
+        .unwrap()
+        .notices
+        .is_none());
+    let notice = serde_json::json!({"name": NOTICES_ASSET, "size": 123, "digest": format!("sha256:{}", "a".repeat(64)), "browser_download_url": "https://example.invalid/notices"});
+    json["assets"].as_array_mut().unwrap().push(notice);
+    let index = json["assets"].as_array().unwrap().len() - 1;
+    let release = parse_release(&serde_json::to_vec(&json).unwrap(), "0.2.0")
+        .unwrap()
+        .unwrap();
+    assert_eq!(release.notices.unwrap().size, 123);
+    for size in [0, 5_000_001] {
+        json["assets"][index]["size"] = size.into();
+        assert!(parse_release(&serde_json::to_vec(&json).unwrap(), "0.2.0").is_err());
+    }
+    json["assets"][index]["size"] = 123.into();
+    json["assets"][index]["digest"] = "sha256:bad".into();
+    assert!(parse_release(&serde_json::to_vec(&json).unwrap(), "0.2.0").is_err());
+}
+
+#[test]
+fn installer_and_app_share_the_running_mutex_and_registration_identity() {
+    use poemercpricer::installation::{APP_ID, RUNNING_MUTEX, UNINSTALL_KEY};
+    let setup = include_str!("../installer/PoEMercPricer.iss");
+    assert!(setup.contains(&format!("#define AppIdentity \"{APP_ID}\"")));
+    assert!(setup.contains(&format!("AppMutex={RUNNING_MUTEX},")));
+    assert!(UNINSTALL_KEY.ends_with(&format!("\\{APP_ID}_is1")));
+}
+
+#[test]
 fn gunzip_roundtrips_and_is_bounded() {
     use poemercpricer::update::gunzip;
     use std::io::Write;
@@ -159,6 +224,7 @@ fn inflate_verified_accepts_only_the_exact_exe_bytes() {
         compressed: Some(String::new()),
         size: payload.len() as u64,
         sha256: sha256_hex(&payload).unwrap(),
+        notices: None,
     };
     assert_eq!(
         inflate_verified(&gzip(&payload), &release).unwrap(),
