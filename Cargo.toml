@@ -17,7 +17,7 @@ arboard = "3"
 directories = "6"
 flate2 = "1"
 eframe = { version = "0.31", default-features = false, features = ["wgpu", "accesskit"] }
-egui = { version = "0.31", default-features = false }
+egui = { version = "0.36", default-features = false }
 raw-window-handle = "0.6"
 global-hotkey = "0.6"
 image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
