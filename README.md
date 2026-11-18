@@ -145,7 +145,7 @@ Open the pane with the Settings button. Changes take effect as you make them and
 | Assume 150%+ projectile speed for Frost Blades | off | Scores Combatant Frost Blades Return as if the mercenary has the projectile speed it needs to land its return hits |
 | Always on top | on | Keeps the overlay above the game window |
 | Hide the window when Escape is pressed | on | Escape hides the overlay instead of leaving it up. The hotkey brings it back. Turned off automatically when the hotkey could not be registered, so the window cannot become unreachable |
-| League | Covens | The league the trade search targets. A saved league containing Allflame is migrated to its Covens equivalent on load and the config file is rewritten. The dropdown lists the bundled snapshot's league, its Hardcore variant, Standard and Hardcore; pick Custom to type any other name. No network access is involved |
+| League | Covens | The league the trade search targets. A saved league named exactly Allflame or Hardcore Allflame (any letter case) is migrated to Covens or Hardcore Covens on load and the config file is rewritten; every other name is kept as typed. The dropdown lists the bundled snapshot's league, its Hardcore variant, Standard and Hardcore; pick Custom to type any other name. No network access is involved |
 | Search every skill | off | Adds up to four more of the warrant's skills to the trade query, five groups in total. Anonymous searches reject more than one group, so this needs a pathofexile.com login in your browser |
 | Check for updates at startup and every 6 hours | on | The automatic update check. Release builds only; a `cargo run` checkout never self-updates |
 | Install updates automatically | on | Downloads and verifies a newer release as soon as a check finds one. Off, a check only notifies and you get an Update to X button. Either way you choose when to restart |
@@ -252,7 +252,7 @@ Full formulas and the mechanical audit (EDWA more-multipliers, CDR, Return geome
 
 Fast in-game rules:
 
-- Kineticist (premium, 200d top-50 median): stop for KBoC + Return. The jackpot gate is Return + GMP on KBoC. Kinetic Bolt stays a brick.
+- Kineticist (premium, 200d top-50 median): stop for KBoC + Return. The jackpot needs all of: Greater Kinetic Blast on the warrant, Return III and GMP III both on KBoC, and no bricks. Lower tiers score but never jackpot, and Kinetic Bolt stays a brick.
 - Manyshot (premium, 200d): Vaal Ice Shot + Mirror Arrow, with Return bound to Vaal Ice Shot. Icicle Rain is no longer penalised, because the market pays for it, but it never sits beside Mirror Arrow, so it still cannot jackpot.
 - Combatant (premium, 100d): Frost Blades + Static Strike. The jackpot gate is Return III + Chain + Greater EDWA on Frost Blades. Spectral Helix beside Frost Blades or Wild Strike is a brick; Frost Blades + Wild Strike is no longer penalised. Return DPS still depends on roughly 150% projectile speed or favourable walls.
 - Cruel Mistress (premium, 50d) is now a jackpot family: Soulrend of Reaping with GMP + Return.

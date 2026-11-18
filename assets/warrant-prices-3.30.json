@@ -20,7 +20,8 @@
       "p75_chaos": 2.75,
       "median_age_days": 0.14,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUjQ9gYmBAqDKpkSwSp3JcUFX13-vAUjyd7bt7C1RDmyp0C5TRuAh0UClOio9EsAaweaS_75lrvETXV5ThZIbxVSHA4GflzIJW1G2ZNJKgzv0HVVGslTWYs273AE9ORvoFZ4_2u30nOb3Tz-Lo42FtswHirLnEtAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUjQ9gYmBAqDKpkSwSp3JcUFX13-vAUjyd7bt7C1RDmyp0C5TRuAh0UClOio9EsAaweaS_75lrvETXV5ThZIbxVSHA4GflzIJW1G2ZNJKgzv0HVVGslTWYs273AE9ORvoFZ4_2u30nOb3Tz-Lo42FtswHirLnEtAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "kineticist",
@@ -36,10 +37,19 @@
       "median_age_days": 0.139,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA1WOwQqDQAxE_yVnKRSpFG_9gJ566KGIpOsWgusq2WiRZf-9EQvd5jTJPGYSIQjKHKCOME5Co4cagjUz49NZSAXIOtk_90rB3IzqO_ruIoKmD1BAp2emgTzKyIoNlo31yGv7Rmb0soVtZdr1iN_YH6UJL3Jiebepy81D6Mm59liVpwpSk5oMjjBoc5vtmSS3uB3Rz89l2uYDO6iTS_MAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 2838,
       "scanned": 30,
       "passed": 3,
-      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon"
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "partner_require": [
+        "Greater Kinetic Blast"
+      ],
+      "partner_exclude": [
+        "Kinetic Bolt",
+        "Kinetic Rain of Impact",
+        "Power Siphon"
+      ]
     },
     {
       "family": "kineticist",
@@ -64,10 +74,19 @@
       "median_age_days": 0.17,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QwQrCMAyG3yXnIbg5sd58AE8ePMgYsasQ7LqSZoqMvrsdik5Ee0rz_fn_NgMEQekDrAfovFDnYA3B6J7xaA3EDOTmzQfdUtA7neo9umYjgvocIIMmtZlacigdJ1lrWBuHfKuvyIxORrMxLGUdhqftW5UcTmTF8ANTM4WzcCZr6_myKJfJ5hv33ncsdZmr4h9fqMVcQaxiNUkboE1Pryf3SUn2Yh-S9PVVEeO4EcbG_NB7Jm1eA6qc5SqO5w48kzskaAEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 93,
       "scanned": 60,
       "passed": 11,
       "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "partner_require": [
+        "Greater Kinetic Blast"
+      ],
+      "partner_exclude": [
+        "Kinetic Bolt",
+        "Kinetic Rain of Impact",
+        "Power Siphon"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -83,7 +102,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.046,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxgFgYWBAqDKpkSwSp3JcUFX17jiwFE_f-s9-C1RDmyp0C5TRuAh0UClOivdEsAaweaS_9sg1nqPnC8pwMMP4rKfS6ACDd8qZBa2os5k0kqDO_RtVUax9bEYXXm8BHpyM9GvPftpv9k3k9Eo_xP373drmAyejlLq5AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxgFgYWBAqDKpkSwSp3JcUFX17jiwFE_f-s9-C1RDmyp0C5TRuAh0UClOivdEsAaweaS_9sg1nqPnC8pwMMP4rKfS6ACDd8qZBa2os5k0kqDO_RtVUax9bEYXXm8BHpyM9GvPftpv9k3k9Eo_xP373drmAyejlLq5AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "kineticist",
@@ -99,10 +119,19 @@
       "median_age_days": 0.997,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIchwyG4-gF48eJAxYlchrGtHmimj9N1tmWDNKeH7-P8E8IKyeGgDuFnIWWjBa7UwPoyGWIGss_6jZ_LqqtJ-QzucRFCN_uKyXcGQGNNEFsVxcifNSlvktX8jM1rJibkxFd7DN_tnpYQnGdG8YRpKuPMjGdPvm_rQQOxiV8gBptTcF3exknmZTUnvH-uY5wNLJdcy-AAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 1026,
       "scanned": 30,
       "passed": 4,
-      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon"
+      "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "partner_require": [
+        "Greater Kinetic Blast"
+      ],
+      "partner_exclude": [
+        "Kinetic Bolt",
+        "Kinetic Rain of Impact",
+        "Power Siphon"
+      ]
     },
     {
       "family": "kineticist",
@@ -127,10 +156,19 @@
       "median_age_days": 0.147,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QwYrCMBCG32XOItRa2XjzAfTiwYNIGdMsDKZJmEyVUvLum6DsdlnWnCZ8X_4_yQRRUIYI2wl8EPIOthCNHhiv1kBagIzB_KJ7ivqo83xC1-1EUN_iwRd7AV1mTD05FM_Z7Q1r45DH9oHM6KQklsZceJ5e2T9WTvgkK4afmLo5XMYbWdtWm7rZ5Ji_eAjBs7TNStXv-FqtKwXpki6ztgn6fPV2tp-NZO_2qeT3f9QplW9h7Mw_fmDS5vuAapYrlcr6AjZ2VuhtAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 28,
       "scanned": 28,
       "passed": 6,
       "partner_rule": "Require Greater Kinetic Blast/Exclude Kinetic Bolt,Kinetic Rain of Impact,Power Siphon",
+      "partner_require": [
+        "Greater Kinetic Blast"
+      ],
+      "partner_exclude": [
+        "Kinetic Bolt",
+        "Kinetic Rain of Impact",
+        "Power Siphon"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -146,7 +184,8 @@
       "p75_chaos": 2.0,
       "median_age_days": 0.087,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOzQrCMAx-l5x38yK7CXoUQY8iI9YowbQdaToZY-9u6y4zpy_J9zdBMrScoJ0g9sYxQAuJXFa8C8HcgI09_X2PJES70-Fiym_aZxJOdsbwouWSoIEHJ6fsOaBFLRpP6iigjt0HVTFYda7JJfh6a-DJYqS_Fr5Iu9W-giyDLJTSY7uZ63wB1L7PJsEAAAA"
+      "query_id": "H4sIAAAAAAAAA1VOzQrCMAx-l5x38yK7CXoUQY8iI9YowbQdaToZY-9u6y4zpy_J9zdBMrScoJ0g9sYxQAuJXFa8C8HcgI09_X2PJES70-Fiym_aZxJOdsbwouWSoIEHJ6fsOaBFLRpP6iigjt0HVTFYda7JJfh6a-DJYqS_Fr5Iu9W-giyDLJTSY7uZ63wB1L7PJsEAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "combatant",
@@ -162,10 +201,19 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQ3QiyG6CHkXQo4xRtyjBrBtppozS_27HBGtOSd7L-4gHp0YHB4WHrlfqLBTgsB7E3BghZKBjj3_qERlxdzpcVOiJ-wGZnJ6NfeC8cZBBQ64Waska7STetCg1WiNj9TYixuqUPJEj-Oq_jJ8rJtyJFWWWqUnFhXsSc5Xnq-UGQhnKxOyhjeQqmZOW-MWzJb6xXYepPhRVSxQAAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 2838,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix"
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Wild Strike",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ]
     },
     {
       "family": "combatant",
@@ -194,10 +242,19 @@
       "median_age_days": 0.17,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QTWuEMBCG_8ucl6XGWtRbYfdYFrbHIpLqdBk2xjAZW0Ty3xuxtJZlzSnJ834kM4EXLYOHcoLeCfUWSvDYDKzfDULYgYwO_9EXNIjPp-OrMF3xMKAhL2dtL7jceNhBS75h6shq6Tl6OuQGreax_tLM2sqcPDfH4rfpp-NPFRM-yAjygqldw72_kjG1UslDFmNu8eBcz1Jnqki3eBr9akug8sfkCUIVqtVzJuji3-rVebUl82kWSRxUnoYwz491i3f0jqnBX0OR7VUR5vUNidXpuZYBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 36,
       "scanned": 30,
       "passed": 12,
       "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Wild Strike",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -227,10 +284,19 @@
       "median_age_days": 0.08,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QQQuCQBCF_8ucJbS0rFtQxwjqGCKbTjG4rjI7FiL-91YMMoLmtDPv2_dmtwMrShoLmw6qWqgysAGLWcPqqhF6D6St8Us9oEbcHvdnYSpw16AmKydl7jhOLHiQk82YSjJKKnZ3SuQMjeI2fSpmZWRwHpJd8KV7Z3wo53AjLcijTPlUnNmCtE5Dfx2tnM2v3NR1xZLO4zBY_gMiP4yjv8AiCB2Q9Mlknw5K97h00k-OpB96RNxPxYt-qBc0aKoeYwEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 2,
       "scanned": 2,
       "passed": 1,
-      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix"
+      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Frost Blades",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ]
     },
     {
       "family": "combatant",
@@ -245,7 +311,8 @@
       "p75_chaos": 3.75,
       "median_age_days": 0.146,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNxbUDQlGQIIRocoEgyycpHIcUFX13UnoUjz577u7EZKh5QTtCLE3jgFaSOSy4k0IpgZs6Onvuich2hx3Z1N-0TaTcLIThifNm3SIFW3gzskpew5oUQvoSR0F1KH7oCoGq_LVvrhfrg08WIz0F8UXtFvMi5blLfNLCbNeTbW-mfTRUsYAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNxbUDQlGQIIRocoEgyycpHIcUFX13UnoUjz577u7EZKh5QTtCLE3jgFaSOSy4k0IpgZs6Onvuich2hx3Z1N-0TaTcLIThifNm3SIFW3gzskpew5oUQvoSR0F1KH7oCoGq_LVvrhfrg08WIz0F8UXtFvMi5blLfNLCbNeTbW-mfTRUsYAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "combatant",
@@ -261,10 +328,19 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQ3QiyG6CHlXQo4xRtyhhXTvSTBml_92WCc6ckryX9xEPTpQMDgoPtheyBgpwWA-s7hohZCBjj3_qETXi7ny4ClOL-wE1Obko88Rp4042nWbQkKuZOjJKLMfDDrlGo3is3opZGUnxCR_pN_8F_Vwx4UFakCeZmrm4cC1pXeX5armBUIZyZvbQRXI1m2ct6ZeeLPGX7Tqk-gCNcBJ5BQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 1245,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix"
+      "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Wild Strike",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ]
     },
     {
       "family": "combatant",
@@ -293,10 +369,19 @@
       "median_age_days": 0.009,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32Q32vCMBDH_5d7FtF0Feub4B43YT4OKVl7ymGahMt1Q0r-9yV0bB2ieUry-f5IboAgWvoAmwGcF3IWNhCw6Vl_GIQ4A7l6_Edf0CBu988HYbrgrkdDQd60PeN4E15dts6gpdAwdWS1OE7GDrlBq_laf2lmbSXH5_rU_j78FP2pUsKJjCCPmNopnIcLGVMrtVyUKeYW9947lrpUVfGIF8mvHgnU-mm5gniMx8lzBujS3-rJebIl82lGSZrWuogxD5F1i3f0nqnBX0NVzlUV8_oGHrVZKpsBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 12,
       "scanned": 12,
       "passed": 3,
       "partner_rule": "Require Static Strike/Exclude Wild Strike,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Wild Strike",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -326,10 +411,19 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA32QQQvCMAyF_0vOIuo2nbsJelRBjyKjblGCXTvSTJGx_27HBCfCekrzvrzXpgYnSioHSQ22FLIGEnCYVawuGqEZgbxK_FG3qBFX-81RmO64rlCTk4MyN-w6bmfb0RHk5DKmgowSy36wQM7QKH6lT8WsjLT2bbxPP9WfoC_lHa6kBbmTKe-LY3cnrdNwsowW3uZfrsrSsqSzOJzOh4BoEsbRIBBMQw-cm3PvPTUU_nNp794rST90h_h1xUHTnjccIKStaAEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 1,
       "scanned": 1,
       "passed": 0,
-      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix"
+      "partner_rule": "Require Static Strike/Exclude Frost Blades,Spectral Helix of Trarthus,Spectral Helix",
+      "partner_require": [
+        "Static Strike"
+      ],
+      "partner_exclude": [
+        "Frost Blades",
+        "Spectral Helix of Trarthus",
+        "Spectral Helix"
+      ]
     },
     {
       "family": "manyshot",
@@ -344,7 +438,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.293,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCOICrAhVJjXIkuNUjktVVb07CSzlT_7ys98KxdGnAt0KeXTOCh0UipPhQwi2AL6M9Le9CJ3yfEV9kZ0lKxUIMHCJxokVPVuFElkkRVv6Gc1Qvb1qqmq63QM8WZzsq031tN_13cjylh9SxcfD1vIBExFoDbIAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCOICrAhVJjXIkuNUjktVVb07CSzlT_7ys98KxdGnAt0KeXTOCh0UipPhQwi2AL6M9Le9CJ3yfEV9kZ0lKxUIMHCJxokVPVuFElkkRVv6Gc1Qvb1qqmq63QM8WZzsq031tN_13cjylh9SxcfD1vIBExFoDbIAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "manyshot",
@@ -360,10 +455,17 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WO0QqDMAxF_yXPMhBhiI8b-4G9DpFOsxEWW0njREr_fRUH6_KUcA_3JIBXo7OHJoCblJyFBjz2s5g7I8QCdJ3wL70wntxyNfaJcmZn0UMBA_leaCRr1EmCRpQerZG1W4yIsbpVbapkuoVv6Y9KDQ9iRdljGvLw4F_E3JXHqi4htrHN4ABjMnfZna3Eb96R9HddxW0-yfBMNfEAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 2417,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ]
     },
     {
       "family": "manyshot",
@@ -392,10 +494,17 @@
       "median_age_days": 0.294,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QUQuCMBDHv8s9R6CmqI9FX6DXEFl6xdHcxm0mIfvuTYwyovZ04_e_3203gnXC9RbKEbRxpBWUYLHpWZwkgl-Buxv8oHuJWz0chLog76RWaGEFLdmGqSMlnOYQ6pAbVILv9SCYhXKTahoVJh3Hp_SdCoYzSYc8Y2qXcG2vJGUdZUkeBc037o3R7Oo0LpJ_PM43UfZXkESbFHzlq8VzRujC3-rFfVGSvMk5EjaTJ95PC2PR4o-8YWrw1VCk67jw03kAm0uFQ4cBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 10,
       "scanned": 10,
       "passed": 3,
       "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -425,10 +534,17 @@
       "median_age_days": 1.019,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QywrCMBBF_2XWRUgf0rpU_AG3UkJsRwmmSZiklhL676ZUsCI0qwnncm4yAZwXvndwCGCsl0bDARw2PYmbQpgS8KPFH3pWeDTDRegH0kkZjQ4SaKVrSHZSC28ohjqkBrWgkQ-CSGg_q-aq2HQNH-k3FQ13qTzSgmW7hjv3lEpxxvKqiJp_3FtryPMirbItnpY5228KMpbHhnqqV88J0MW_8dV9NUr1UkskbqbMpvm8AWfsxuNTAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 53,
       "scanned": 30,
       "passed": 10,
-      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ]
     },
     {
       "family": "manyshot",
@@ -443,7 +559,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.113,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCGJlYEWoMsEgS45TOS5VVfXuJLAUT7b8_n8LFEcfC3QL5ME5K3RQKI6GdyFYA_g80N_3JHTI0wX1RXaUrFTOubEBHlyicWJFz1bJRBZJ0eZ-QjNUb33NV3XXW4Ani5N93alG-829WVne8kOqfb9b23wAjX-rtrcAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCGJlYEWoMsEgS45TOS5VVfXuJLAUT7b8_n8LFEcfC3QL5ME5K3RQKI6GdyFYA_g80N_3JHTI0wX1RXaUrFTOubEBHlyicWJFz1bJRBZJ0eZ-QjNUb33NV3XXW4Ani5N93alG-829WVne8kOqfb9b23wAjX-rtrcAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "manyshot",
@@ -459,10 +576,17 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGYgwxOPGrjvsOkQ6zUZYbCWtipS--1ocrMsp4f_4v3iwTrnZQuPBTI6MhgYs9rOoByOEAtw24V96YTyZ9ab0C-XMRqO9msQWMJDthUbSyhmJ5IjSo1aydasSUdqlvuSLurv_Nv-o2PAkdih7TEMeHuybmLvyWNUlhDa0GexhjOYuu7OVeOEdic_XVUjzAdSgZBv2AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 1368,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ]
     },
     {
       "family": "manyshot",
@@ -491,10 +615,17 @@
       "median_age_days": 0.154,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QwQrCMAyG3yVnEbY52TwqXj14FRl1ixLs2pJ2jjH67rYoOhHtKeX78qfNCNYJ11lYjaCNI61gBRbrjsVJIvgZuMHgB91KXOt-L9QFeSO1QrvT0Z1BQ7ZmakkJpzmYLXKNSvBQ9YJZKBfz4rww7jA-k99WSDiTdMgPTM0Uzu2VpKySZVYkIeYbd8ZodlWeltk_nhaLZPk3IEsWOfijP06eM0Ib_lZN7pOS5E0-lLCeIvM-bo1Fgz98w1Tjq6HM52np47kD-8EpW4wBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 6,
       "scanned": 6,
       "passed": 3,
       "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ],
       "price_floor_chaos": 95.29
     },
     {
@@ -524,10 +655,17 @@
       "median_age_days": 1.591,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QywqDMBBF_2XWUoiPoi5buu2i2yIh1WkJjYlMYkWC_96IhVoKZjXhXM5NxoN1wvUWSg-mc9JoKMFi3ZO4KYQpAjd2-ENPCg9muAj9QDoqo9GezZyNoJG2JtlKLZyhkGyRatSCRj4IIqHd7Jv7Qt3Vf8zfVDDcpXJIC5bNGu7sUyrFGUuLLGj-cd91hhzP4iLZ4nGesv2mIGFpaKimavUcD234G1_dV6NUL7VEwnryZJrPGyYTwDFYAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 31,
       "scanned": 20,
       "passed": 10,
-      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain"
+      "partner_rule": "Require Mirror Arrow/Exclude Icicle Rain",
+      "partner_require": [
+        "Mirror Arrow"
+      ],
+      "partner_exclude": [
+        "Icicle Rain"
+      ]
     },
     {
       "family": "chaplain_of_the_well",
@@ -542,7 +680,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.028,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUjX9gQ6hyg5EsOQ_ZLiiq-u8ksJQ7-crHPhuYo68G0walOpcMExjFVXERgj2At0p_28vSzFCulKqgQoAHW1ROnNGLdiCRRsqobX6jKmYfb4amW273AE8WJ_0qUz-dD_0wsrzkh3Tp-bSPfAC8IzTBrgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUjX9gQ6hyg5EsOQ_ZLiiq-u8ksJQ7-crHPhuYo68G0walOpcMExjFVXERgj2At0p_28vSzFCulKqgQoAHW1ROnNGLdiCRRsqobX6jKmYfb4amW273AE8WJ_0qUz-dD_0wsrzkh3Tp-bSPfAC8IzTBrgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "chaplain_of_the_well",
@@ -557,7 +696,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.029,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1Ea0I0p13cCdS0naEYGZaklQpw9zdKRUcs0r4j_8SQQ1tVmgijJPRGKABdf0s2LGDVIEtk_tLL92iinx1fmIUqGAg7YU8BbRRMuCd9C6gLO0bRTDYWrNqsuUWv4U_Kjc8iM3JFtNQhjt9EnN72h_qGtI93Qs4gs_mtriLlfjFG5J_Ph_TOh9bY5Cz7QAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1Ea0I0p13cCdS0naEYGZaklQpw9zdKRUcs0r4j_8SQQ1tVmgijJPRGKABdf0s2LGDVIEtk_tLL92iinx1fmIUqGAg7YU8BbRRMuCd9C6gLO0bRTDYWrNqsuUWv4U_Kjc8iM3JFtNQhjt9EnN72h_qGtI93Qs4gs_mtriLlfjFG5J_Ph_TOh9bY5Cz7QAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "chaplain_of_the_well",
@@ -581,7 +721,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.089,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32PywrCMBBF_2XWRWpLtXbnP7iTEtI2QnDyYJIqJeTfTalgRHBWGc7l3EkA57mfHXQBjPXSaOjAiXEmPqCAWIBfrPii52FxjuNFKIucoIBJupGkkpp7QymgBI1Cc1rYkxNx7VfNWpNaruEt_KSS4SbRC9qwnHK4c3eJyJpyX1VJ84tnaw151lSn-h9vD-URYh_7rCyASpezbM-eEh-4RdKf2zqu8wK3-lNgLQEAAA"
+      "query_id": "H4sIAAAAAAAAA32PywrCMBBF_2XWRWpLtXbnP7iTEtI2QnDyYJIqJeTfTalgRHBWGc7l3EkA57mfHXQBjPXSaOjAiXEmPqCAWIBfrPii52FxjuNFKIucoIBJupGkkpp7QymgBI1Cc1rYkxNx7VfNWpNaruEt_KSS4SbRC9qwnHK4c3eJyJpyX1VJ84tnaw151lSn-h9vD-URYh_7rCyASpezbM-eEh-4RdKf2zqu8wK3-lNgLQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "thunderquiver",
@@ -596,7 +737,8 @@
       "p75_chaos": 2.0,
       "median_age_days": 0.071,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiMTGxIpQZVITLCVO5bhUVdW7k8BS_uQvP_utUAxtKtCtkEfjLNBBIT8pPiLB5sCWkf6250inPF9RAumFw8uEJYCDgYtXTixoWSuXSD0J6tLPqIpi7VuzVdnt7uDJ0Ui_5lRP-13fjRzf8YdU9_GwtXwA5OjUh7UAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiMTGxIpQZVITLCVO5bhUVdW7k8BS_uQvP_utUAxtKtCtkEfjLNBBIT8pPiLB5sCWkf6250inPF9RAumFw8uEJYCDgYtXTixoWSuXSD0J6tLPqIpi7VuzVdnt7uDJ0Ui_5lRP-13fjRzf8YdU9_GwtXwA5OjUh7UAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "thunderquiver",
@@ -611,7 +753,8 @@
       "p75_chaos": 2.0,
       "median_age_days": 0.071,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQ4VZEfBmyevMkrd4gx27Ugzxyh9dzsmWHNK-D_-LwG8aBk9VAHcIOQsVOCxGVnfDUIsQOYB_9KzwZObrtp2yBfqnmLJdlBAS75h6slqcZy4HrlBq3lWk2bWVpa2xZZkt_Dt_VGp4UFGkNeY2jzc-BcZo_bl9lBCrGOdwQH6ZFbZna1k3mZF0uvHXVzmA3v6BJv0AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQ4VZEfBmyevMkrd4gx27Ugzxyh9dzsmWHNK-D_-LwG8aBk9VAHcIOQsVOCxGVnfDUIsQOYB_9KzwZObrtp2yBfqnmLJdlBAS75h6slqcZy4HrlBq3lWk2bWVpa2xZZkt_Dt_VGp4UFGkNeY2jzc-BcZo_bl9lBCrGOdwQH6ZFbZna1k3mZF0uvHXVzmA3v6BJv0AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "thunderquiver",
@@ -636,10 +779,15 @@
       "median_age_days": 0.664,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32PwQqCQBCG32XOEpkK6THo1qlriGy62dC6K7NjIrLv3opBG0Fz2uH7-f7ZGSwLHiwUM5ie0WgowMp6IHFVElwEPPXyix6VPJjxLHQr6YTtnTXqFiJo0NaEHWrBhnyuk1RLLWiqRkEkNC-2pc2XXea395PyhhsqlrRibEK4sQ9UqkrjbRZ7zS8e-t4QV9kuT_7xNE_jHFzpyqBths6fXgV78ET1VGvE_32fuGVeFDd8wzUBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 209,
       "scanned": 30,
       "passed": 9,
-      "partner_rule": "Require /Exclude Galvanic Arrow"
+      "partner_rule": "Require /Exclude Galvanic Arrow",
+      "partner_require": [],
+      "partner_exclude": [
+        "Galvanic Arrow"
+      ]
     },
     {
       "family": "sniper",
@@ -654,7 +802,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.228,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNwQrCMAyG3yXn3rzIjoJXEa8iI9aogTYdabZRxt7dVi_zP-UnX_ItkA1tzNAtkAbjJNBBJj8q3gPB6sDKQH_bU5JjoEOaLygv0vO7ZHDw4OyVIwta0kpFUk-CWvoZVVGs_WquqrreHDw5GOnXG-tpv-mbkcMUfkg173drywd-6Mi2swAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNwQrCMAyG3yXn3rzIjoJXEa8iI9aogTYdabZRxt7dVi_zP-UnX_ItkA1tzNAtkAbjJNBBJj8q3gPB6sDKQH_bU5JjoEOaLygv0vO7ZHDw4OyVIwta0kpFUk-CWvoZVVGs_WquqrreHDw5GOnXG-tpv-mbkcMUfkg173drywd-6Mi2swAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sniper",
@@ -669,7 +818,8 @@
       "p75_chaos": 3.75,
       "median_age_days": 0.496,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIYNdhkfBq4hXGSNuUYNdO9LMMUrf3Y4J1pwS_o__SwCvqJOHfQA3KjsLe_DUTYI3QxAL0GWkv_Tk7NHQwc0XtA-S83PxUEDPvhMe2KI6SdRA0pFFWdoZRdDq2rW6kuoavq0_KjXc2SjJFnOfhzv_YmPauqxKiE1sMjbAkMRtdmcrm7fZkPR3XcV1PjOur03xAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIYNdhkfBq4hXGSNuUYNdO9LMMUrf3Y4J1pwS_o__SwCvqJOHfQA3KjsLe_DUTYI3QxAL0GWkv_Tk7NHQwc0XtA-S83PxUEDPvhMe2KI6SdRA0pFFWdoZRdDq2rW6kuoavq0_KjXc2SjJFnOfhzv_YmPauqxKiE1sMjbAkMRtdmcrm7fZkPR3XcV1PjOur03xAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sniper",
@@ -698,10 +848,16 @@
       "median_age_days": 0.666,
       "fresh_share": 1.0,
       "query_id": "H4sIAAAAAAAAA32QQQvCMAyF_0vOQzZXodtR8CriVUapW9Vi15a0c4yx_27HBCvCckp4H-8lGcF57jsH5QjGemk0lOBE3SG_KgFTAn6w4kc9Gn1QYm_6M9d3gafH4CCBRroaZSs19wYD1QqsheY4sJ4jcu1nrzkrRF3Gj-uXCg43qbzARZZNLG7cUyrFaJqnweVf7aw16FlGSVGsATtKtqsAKUgWgGqqonVGaMNtLJqjVqqXWpDwGppPc70BlryRgVQBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 4,
       "scanned": 4,
       "passed": 3,
-      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality",
+      "partner_require": [],
+      "partner_exclude": [],
+      "partner_exclude_supports": [
+        "brutality"
+      ]
     },
     {
       "family": "sniper",
@@ -716,7 +872,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.295,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNwQrCMAyG3yXn3rzIjoLXIV5FRqxRA20z0sxRxt7dVi8zp4R8__8tkA1tytAtIKOxJOggk58Ub4FgdWBlpL9vL-kY6CDzGdOT9PQquZcGO7hz9sqRE5poRSOpp4RahhlVMVkrbMLqu1wdPDgY6Vcea3TY3JuVwzv8kKrf79Y2H0-_LvK4AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNwQrCMAyG3yXn3rzIjoLXIV5FRqxRA20z0sxRxt7dVi8zp4R8__8tkA1tytAtIKOxJOggk58Ub4FgdWBlpL9vL-kY6CDzGdOT9PQquZcGO7hz9sqRE5poRSOpp4RahhlVMVkrbMLqu1wdPDgY6Vcea3TY3JuVwzv8kKrf79Y2H0-_LvK4AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sniper",
@@ -731,7 +888,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.519,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGYIX8TjYVcauQ6TTbAurraRxIqXvvhYH63JK-D_-Lx6cKFkcNB7sLGQNNOBwWFjdNEIoQLYZ_9LWmpPGo10vyjyQz8_NtTbBBYzkBqaJjBLLEZ2QBzSKt35VzMpIKkzC6Lv6b_WPig130oK8xzTm4cG9SOu-LqsSQhe6jPUwRXGf3dlK-q13JD5fVyHNBzpxjfv2AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGYIX8TjYVcauQ6TTbAurraRxIqXvvhYH63JK-D_-Lx6cKFkcNB7sLGQNNOBwWFjdNEIoQLYZ_9LWmpPGo10vyjyQz8_NtTbBBYzkBqaJjBLLEZ2QBzSKt35VzMpIKkzC6Lv6b_WPig130oK8xzTm4cG9SOu-LqsSQhe6jPUwRXGf3dlK-q13JD5fVyHNBzpxjfv2AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sniper",
@@ -760,10 +918,16 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA32QQQuDMAyF_0vOMnTroHoc7Cpj1yHSabeV1VbSOBHxv6_FwRwDc0p4H-8lGcGRoM5BNoJtSVkDGThZdSiuWsIUAQ2t_FFza45aHmx_FuYu8fQYXG4DHEGtXIWqUUaQRY82EitpBA5lLxCFoWAYAn3eZfxYfynvcFOaJM6yqpfixj2V1iWPd7F3-Ve7trVIZcJZmq4Be862qwBLWeKBYioW64zQ-NvKxbxolX7pGfH_4bsp1Bv7DlRdWQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 1,
       "scanned": 1,
       "passed": 0,
-      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+      "partner_rule": "Require /Exclude /ExcludeSupport brutality",
+      "partner_require": [],
+      "partner_exclude": [],
+      "partner_exclude_supports": [
+        "brutality"
+      ]
     },
     {
       "family": "cruel_mistress",
@@ -778,7 +942,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.193,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqysLCzIBQZYJRLSVO5bigqurdccpSPPnpf_stUA1tqtAtUEbjItBBpTgpPhLBGsDmkf7S04ClXlicrmxx2PjMBgGeXKNyZkEr6tVMGklQ5_6DqijWHjah-273AC9ORrrJs5_2O96tnN7pV3H98bC2-QJW21djuAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqysLCzIBQZYJRLSVO5bigqurdccpSPPnpf_stUA1tqtAtUEbjItBBpTgpPhLBGsDmkf7S04ClXlicrmxx2PjMBgGeXKNyZkEr6tVMGklQ5_6DqijWHjah-273AC9ORrrJs5_2O96tnN7pV3H98bC2-QJW21djuAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cruel_mistress",
@@ -793,7 +958,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.313,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOzQrCMBCE32XPRfwDpVcvXjx7KKWsaaSLaVI2W6WEvLupFYx72mE-ZiaAF5TRQxnADULOQgleq5HxZjTEAmQa9J976tD5C9mkriSq--gzCRTQkldMPVkUxwntNSttkafmhcxoZQ6cC1NfFb7RPyol3MmI5sWmNjdX_kHGNJv1Yb-FWMc6gwP0qbnJdPaSeZoFSeuPuzjfG8Xsjv33AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOzQrCMBCE32XPRfwDpVcvXjx7KKWsaaSLaVI2W6WEvLupFYx72mE-ZiaAF5TRQxnADULOQgleq5HxZjTEAmQa9J976tD5C9mkriSq--gzCRTQkldMPVkUxwntNSttkafmhcxoZQ6cC1NfFb7RPyol3MmI5sWmNjdX_kHGNJv1Yb-FWMc6gwP0qbnJdPaSeZoFSeuPuzjfG8Xsjv33AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cruel_mistress",
@@ -817,7 +983,8 @@
       "p75_chaos": 1900.0,
       "median_age_days": 0.159,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32PzQrCMBCE32XPReyPaHv14sWzBykhtpEupknYbJVS-u6mVrAiuKcdvmFmdwDPkjsPxQDWMVoDBXhVdSQvWsEYAfdOfdF9I60_ognqhFw1L31Ahghq9BVhi0aypWBtFVXKSOrFQxJJw1PgVBj6zsM7-uMKCVfUrGjGWC_hyt9QaxGvt1kSYn5x55wlFlmexfk_wybJUxjLsVy0DdCG08VCL1bUdz1bwvu7dJzmCdp6iJU4AQAA"
+      "query_id": "H4sIAAAAAAAAA32PzQrCMBCE32XPReyPaHv14sWzBykhtpEupknYbJVS-u6mVrAiuKcdvmFmdwDPkjsPxQDWMVoDBXhVdSQvWsEYAfdOfdF9I60_ognqhFw1L31Ahghq9BVhi0aypWBtFVXKSOrFQxJJw1PgVBj6zsM7-uMKCVfUrGjGWC_hyt9QaxGvt1kSYn5x55wlFlmexfk_wybJUxjLsVy0DdCG08VCL1bUdz1bwvu7dJzmCdp6iJU4AQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cruel_mistress",
@@ -832,7 +999,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.459,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNpaqKwsLXRkQqkwwqqX8VI5LVVV9d5yyFE_-5DvfrVAUdSrQrpBH5ZyghUJ-EnwGgs2BLiP9Xc8D5nLlZHRj9cPOF9YuV4eDFxcvHDmhZjF9JPGUUJZ-RhFMWr_WVAu9Pxy8OSjJ3iCatT_wYeXwCT-JdWhOW50vUkIB670AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNpaqKwsLXRkQqkwwqqX8VI5LVVV9d5yyFE_-5DvfrVAUdSrQrpBH5ZyghUJ-EnwGgs2BLiP9Xc8D5nLlZHRj9cPOF9YuV4eDFxcvHDmhZjF9JPGUUJZ-RhFMWr_WVAu9Pxy8OSjJ3iCatT_wYeXwCT-JdWhOW50vUkIB670AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cruel_mistress",
@@ -847,7 +1015,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.433,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPzQrCMBCE32XPRfwDpVcvXvTqQUqIaaSLaVI2W6WEvLuJFYx72mG-nWEDeJY8eqgDuIHRWajBazWSvBkNsQKeBv3nHjrp_AltUhdk1X30Efns8kUFLXpF2KOV7CjxvSalraRJvCSRtJxTc2sqvYZv_o9KCXc0rGm2sS3NhX-gMWK13G3XEJvYFHCAPjWLQhcrmqeZkfTCfhPzvAFyG7f9_AAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPzQrCMBCE32XPRfwDpVcvXvTqQUqIaaSLaVI2W6WEvLuJFYx72mG-nWEDeJY8eqgDuIHRWajBazWSvBkNsQKeBv3nHjrp_AltUhdk1X30Efns8kUFLXpF2KOV7CjxvSalraRJvCSRtJxTc2sqvYZv_o9KCXc0rGm2sS3NhX-gMWK13G3XEJvYFHCAPjWLQhcrmqeZkfTCfhPzvAFyG7f9_AAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cruel_mistress",
@@ -871,7 +1040,8 @@
       "p75_chaos": 6650.0,
       "median_age_days": 0.236,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QwQrCMBBE_2XPRWytaHv14kWvHqSUmEa6mCZls1VK6b-bWsGI4J4yzNuZJQM4Ftw5yAewLaM1kINTsiNx0QrGCLhv1Ze7q4V1BzRenZBl_dJ75KOdNiKo0EnCBo1gS55vFEllBPXlQxAJw1Pq1OpLz8M7_0P5hCtqVjTbWIXmwt1Q6zJebtLEx_zaXdta4jLN0jj7B6yTbAVjMRZB2wCNP70MdPBEfdcz4v9guxqneQJXl7NUPQEAAA"
+      "query_id": "H4sIAAAAAAAAA32QwQrCMBBE_2XPRWytaHv14kWvHqSUmEa6mCZls1VK6b-bWsGI4J4yzNuZJQM4Ftw5yAewLaM1kINTsiNx0QrGCLhv1Ze7q4V1BzRenZBl_dJ75KOdNiKo0EnCBo1gS55vFEllBPXlQxAJw1Pq1OpLz8M7_0P5hCtqVjTbWIXmwt1Q6zJebtLEx_zaXdta4jLN0jj7B6yTbAVjMRZB2wCNP70MdPBEfdcz4v9guxqneQJXl7NUPQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -886,7 +1056,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.182,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUDQEjYmBEqDLBSBZuUjlOUVT130lgKZ7OumffzZAMLSfoZoijcQzQQSKfFe9CsDiwMtKfeyIh2p2PF1N-0SGTcLJ98RIDgYMHJ688cECLWvGB1FNALf0bVTFYe9pCa-b15uDJYqTfAkM97Vf7SrJM8kNqhe1mafMB1gTYA7wAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUDQEjYmBEqDLBSBZuUjlOUVT130lgKZ7OumffzZAMLSfoZoijcQzQQSKfFe9CsDiwMtKfeyIh2p2PF1N-0SGTcLJ98RIDgYMHJ688cECLWvGB1FNALf0bVTFYe9pCa-b15uDJYqTfAkM97Vf7SrJM8kNqhe1mafMB1gTYA7wAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -901,7 +1072,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.189,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPsQrCQAyG3yVzcbAo2k3UURwcpZTzGiE0vZZcqpSj7-6VCp6ZEv6P_yMBvBodPBQBul6pc1CARzuIeTDClIGOPf6lF2TEw_V8U6EGTwMyeT2OljuHkEFN3gq15Ix2EvEWxaIzMlZvI2KczqWzNDrv4Vv_o2LDk1hRlpjqNFz5hpirfL_ebmAqpzKBA7TRXCV3shK_eEHiB7t8mucDlZLy2_sAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPsQrCQAyG3yVzcbAo2k3UURwcpZTzGiE0vZZcqpSj7-6VCp6ZEv6P_yMBvBodPBQBul6pc1CARzuIeTDClIGOPf6lF2TEw_V8U6EGTwMyeT2OljuHkEFN3gq15Ix2EvEWxaIzMlZvI2KczqWzNDrv4Vv_o2LDk1hRlpjqNFz5hpirfL_ebmAqpzKBA7TRXCV3shK_eEHiB7t8mucDlZLy2_sAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -925,7 +1097,8 @@
       "p75_chaos": 5937.5,
       "median_age_days": 0.2,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QzQrCQAyE3yXnIv5g0d5EPYoHj1LK2kYITXdLNlVK6bu7pYIVwZwS5stMSAdejTYekg5creQsJOAxb8TcGKGPQNsav9QTMuLufLyoUImHBpm87tucnUWIoCCfC1VkjToJeIWSozXSZk8jYqwOpkNoyLx2b_sPFRzuxIoyylRMxZkviTlbbZfxOtj8yk1dO9FsMY_nm39A2I8DkPbpJK6DKtyeTeZJS_zgEQk_2Kz6oV6QNmDaPQEAAA"
+      "query_id": "H4sIAAAAAAAAA32QzQrCQAyE3yXnIv5g0d5EPYoHj1LK2kYITXdLNlVK6bu7pYIVwZwS5stMSAdejTYekg5creQsJOAxb8TcGKGPQNsav9QTMuLufLyoUImHBpm87tucnUWIoCCfC1VkjToJeIWSozXSZk8jYqwOpkNoyLx2b_sPFRzuxIoyylRMxZkviTlbbZfxOtj8yk1dO9FsMY_nm39A2I8DkPbpJK6DKtyeTeZJS_zgEQk_2Kz6oV6QNmDaPQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -940,7 +1113,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.339,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUDQEjMDAiVJlgJAsnqRwHFFX9dxJYiqez7Hd3EyRDywn6CeJoHAP0kMhlxZsQzB1YGenveiAh2pz2Z1N-0i6TcLJtcRIDHWOjOrhzcsqeA1rUynhSRwG1DG9UxWDNuSXX4Mu1gweLkX5b-IoOi30hWV7ye6k91qu5zQcVbESrwQAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUDQEjMDAiVJlgJAsnqRwHFFX9dxJYiqez7Hd3EyRDywn6CeJoHAP0kMhlxZsQzB1YGenveiAh2pz2Z1N-0i6TcLJtcRIDHWOjOrhzcsqeA1rUynhSRwG1DG9UxWDNuSXX4Mu1gweLkX5b-IoOi30hWV7ye6k91qu5zQcVbESrwQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -955,7 +1129,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.341,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPTQvCMAyG_0vOw4ND0d1EPaoHjzJGrRHCsnakmTLG_rstE5w5JbwfDxkgqNEuQDGAb5W8gwIC2k7MnRHGDLRv8U89ISPuLserCtV46JAp6L637B2efUpl8KBghRpyRr3ETINi0Rnpq7cRMU5TcyJH8G34Mn6u2PAkVpRJpsdcXISamKt8u1yvYCzHcmYeoInkanbPVuIXT5b4xiYf03wAdXz9hQABAAA"
+      "query_id": "H4sIAAAAAAAAA1WPTQvCMAyG_0vOw4ND0d1EPaoHjzJGrRHCsnakmTLG_rstE5w5JbwfDxkgqNEuQDGAb5W8gwIC2k7MnRHGDLRv8U89ISPuLserCtV46JAp6L637B2efUpl8KBghRpyRr3ETINi0Rnpq7cRMU5TcyJH8G34Mn6u2PAkVpRJpsdcXISamKt8u1yvYCzHcmYeoInkanbPVuIXT5b4xiYf03wAdXz9hQABAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "swiftblade",
@@ -979,7 +1154,8 @@
       "p75_chaos": 7600.0,
       "median_age_days": 0.24,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOItPh0N1EPaoHjyKjbhHCsnakmTLG_rsdCk4Ec2p43o_QDrwabTykHbhayVlIwWPeiLkyQj8BbWv8ontkxPVxd1KhErcNMnndtDk7iwc3uCZQkM-FKrJGnQRPhZKjNdJmDyNirA7JQ3MoPnfvjo8qJNyIFeWFqRjDqS-JOYtX82QRYn5xU9dONJtFSbT8Jwj-JAgu_WVU10EVbs9G--hJfOeXJHzEMu6HeQJFLtXDQgEAAA"
+      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOItPh0N1EPaoHjyKjbhHCsnakmTLG_rsdCk4Ec2p43o_QDrwabTykHbhayVlIwWPeiLkyQj8BbWv8ontkxPVxd1KhErcNMnndtDk7iwc3uCZQkM-FKrJGnQRPhZKjNdJmDyNirA7JQ3MoPnfvjo8qJNyIFeWFqRjDqS-JOYtX82QRYn5xU9dONJtFSbT8Jwj-JAgu_WVU10EVbs9G--hJfOeXJHzEMu6HeQJFLtXDQgEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -994,7 +1170,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.376,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUFVZmBoQqkxrVUhJXjguqqv47DizlJp_ufG-FamhzhW4FmYylQAeV4qz4SARbAFsm-ktPI0q9cHF3ZYvjWQwCDFyjcuaCJuqtTBqpoC79G1WxWNtqLEfd7gGenIz0y83-2u_87uT0Sr-Kk4-HrekDRAff77MAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUFVZmBoQqkxrVUhJXjguqqv47DizlJp_ufG-FamhzhW4FmYylQAeV4qz4SARbAFsm-ktPI0q9cHF3ZYvjWQwCDFyjcuaCJuqtTBqpoC79G1WxWNtqLEfd7gGenIz0y83-2u_87uT0Sr-Kk4-HrekDRAff77MAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -1009,7 +1186,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.388,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMBBE_2XPRSjtQXrVq2cPUsqaRrqYJmWzVUrIv5tQwbinHeYxMwG8oKweugBuEXIWOvBarYx3oyFWINui_9zThM5fyCZ1JVHT2QlUMJJXTDNZFMeJmjUrbZG34Y3MaCVn5a5UdQvf1B-VEh5kRPNu01iaB_8kY4a6adsaYh_7Ag4wp-ah0MVL5mV2JA0_NjHfB3WuFRryAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMBBE_2XPRSjtQXrVq2cPUsqaRrqYJmWzVUrIv5tQwbinHeYxMwG8oKweugBuEXIWOvBarYx3oyFWINui_9zThM5fyCZ1JVHT2QlUMJJXTDNZFMeJmjUrbZG34Y3MaCVn5a5UdQvf1B-VEh5kRPNu01iaB_8kY4a6adsaYh_7Ag4wp-ah0MVL5mV2JA0_NjHfB3WuFRryAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -1037,7 +1215,8 @@
       "p75_chaos": 100.0,
       "median_age_days": 1.03,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QwQ6CMAyG36VnYkAQCVe9evZgyDJhhsaxka5oCOHdHcHEGRN7avN_-dptAseSBwflBLZntAZKcKoeSF61gjkCHnv1lR5aad0JjZ_OyHV7tAwRNOhqwg6NZEue6hTVykgaxVMSScOLa9nlV12mt_VDecMNNStaY2zCcOPuqLVI0ixLvOY3HvreEot0n-XxPyCJ87j4B-S7beYN1VwF90zQ-ceJYA5a1A-9Iv5vinRe6gVb6gzXVQEAAA"
+      "query_id": "H4sIAAAAAAAAA32QwQ6CMAyG36VnYkAQCVe9evZgyDJhhsaxka5oCOHdHcHEGRN7avN_-dptAseSBwflBLZntAZKcKoeSF61gjkCHnv1lR5aad0JjZ_OyHV7tAwRNOhqwg6NZEue6hTVykgaxVMSScOLa9nlV12mt_VDecMNNStaY2zCcOPuqLVI0ixLvOY3HvreEot0n-XxPyCJ87j4B-S7beYN1VwF90zQ-ceJYA5a1A-9Iv5vinRe6gVb6gzXVQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -1052,7 +1231,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.545,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCiusDAhVJhjVUhJXjguqqt4dB5biyV__2W-BamhThW4BGY2lQAeV4qR4TwRrAJtH-msPA0o9cfF0YYvDUewsDQ7w4BqVMxc0UUczaaSCOvdvVMVi7WETuu96C_DkZKRfefbTfpM3K6dX-iGu3-_WNh_uHbPluAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqCiusDAhVJhjVUhJXjguqqt4dB5biyV__2W-BamhThW4BGY2lQAeV4qR4TwRrAJtH-msPA0o9cfF0YYvDUewsDQ7w4BqVMxc0UUczaaSCOvdvVMVi7WETuu96C_DkZKRfefbTfpM3K6dX-iGu3-_WNh_uHbPluAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -1067,7 +1247,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.798,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMBBE_2XPIpT2IL3qVa8epJQ1jXQxTcpmq5SQfzehgnFPO8xjZgJ4QVk8tAHcLOQstOC1WhjvRkPcgayz_nOPIzp_JpvUlUSNJycXl-EdDOQV00QWxXFCJ81KW-S1fyMzWsmBuTD13cI3-kelhAcZ0bzZNJTm3j_JmL6qm6aC2MWugANMqbkvdPGSeZkNSesPdcz3Ae7OqWn3AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMBBE_2XPIpT2IL3qVa8epJQ1jXQxTcpmq5SQfzehgnFPO8xjZgJ4QVk8tAHcLOQstOC1WhjvRkPcgayz_nOPIzp_JpvUlUSNJycXl-EdDOQV00QWxXFCJ81KW-S1fyMzWsmBuTD13cI3-kelhAcZ0bzZNJTm3j_JmL6qm6aC2MWugANMqbkvdPGSeZkNSesPdcz3Ae7OqWn3AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "withertouch",
@@ -1095,7 +1276,8 @@
       "p75_chaos": 95.0,
       "median_age_days": 0.849,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEpqbide61rVDiGy64dC6K7NjIeK7t2KQETinGf6Pb2Z3AMeSOwfZALZltAYycKrsSN60gjEA7lv1kx5qad0JjZ8uyGV9tHy2ExxAha4kbNBItuTRRlGpjKS-eEkiaXgSTgv9vuvwUX8pb7ijZkVzjNUy3LgHal1EsRCR1_zHXdta4iLeiyRcA6IwCdM1INlthTfkY764Z4DGP65YzIsW9VPPiP-gNB6negMVPXn4WgEAAA"
+      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEpqbide61rVDiGy64dC6K7NjIeK7t2KQETinGf6Pb2Z3AMeSOwfZALZltAYycKrsSN60gjEA7lv1kx5qad0JjZ8uyGV9tHy2ExxAha4kbNBItuTRRlGpjKS-eEkiaXgSTgv9vuvwUX8pb7ijZkVzjNUy3LgHal1EsRCR1_zHXdta4iLeiyRcA6IwCdM1INlthTfkY764Z4DGP65YzIsW9VPPiP-gNB6negMVPXn4WgEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladebitter",
@@ -1110,7 +1292,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.311,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNPwvCQAzFv0vmW8RFurp0FBxFSrymGLg_JZdaSul3b06XmunlvZf8ViiKOhVoVsijck7QQCE_Cb4CweZAl5H-0quwntr7G_s83zIXMx30XLxw5ISaxUqRxFNCWboZRTBpfVVRRno8HQwclOSLjXbaHfaD5PAJv4qBL-etzg4PC9oGsgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNPwvCQAzFv0vmW8RFurp0FBxFSrymGLg_JZdaSul3b06XmunlvZf8ViiKOhVoVsijck7QQCE_Cb4CweZAl5H-0quwntr7G_s83zIXMx30XLxw5ISaxUqRxFNCWboZRTBpfVVRRno8HQwclOSLjXbaHfaD5PAJv4qBL-etzg4PC9oGsgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladebitter",
@@ -1125,7 +1308,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.675,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOzQrCQAyE3yXnInQFkV69eBQ8SimxXTG4PyWbWsqy7-6WCq45JTMfM4kQBGUK0ETwo5B30EDQ_cR4NxpSBbKM-s89MUl9vj5x8PPFU8hiBQOFnsmSQ_GcIau51w556WZkRidr1FqVm27xG_qjcsKDjGjebBpKcxdeZExXK3VQkNrUFnAEm5u74i5WMm-zIfnv4z6t8wE5xq6Y8QAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOzQrCQAyE3yXnInQFkV69eBQ8SimxXTG4PyWbWsqy7-6WCq45JTMfM4kQBGUK0ETwo5B30EDQ_cR4NxpSBbKM-s89MUl9vj5x8PPFU8hiBQOFnsmSQ_GcIau51w556WZkRidr1FqVm27xG_qjcsKDjGjebBpKcxdeZExXK3VQkNrUFnAEm5u74i5WMm-zIfnv4z6t8wE5xq6Y8QAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladebitter",
@@ -1140,20 +1324,17 @@
         {
           "canonical": "chance_to_poison",
           "tier": 3
-        },
-        {
-          "canonical": "ailment_effect",
-          "tier": 3
         }
       ],
-      "listings": 0,
-      "sampled": 0,
-      "lowest_chaos": 0.0,
-      "median_chaos": 0.0,
-      "p75_chaos": 0.0,
-      "median_age_days": 0.0,
-      "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QQQvCMAyF_0vOQ1zndHr14lHwKGPUrWKwa0eaOUbZf7djghNhOSX9Hu-l8eBYcuvg4ME2jNbAAZwqW5I3rWCIgPtG_dAjIceny0NWtjtbdOExggpdSVijkWwpiGpFpTKS-qKTRNLwaDVGhaSr_5h-VcHhjpoVTRirOVy5J2pdxEJsRbD5x23TWOIiXW-ydEmwT5d5kohdSMiHfLaOhzr8rZjNsxb1S0-ScJksGcZ6A0C-zpNTAQAA"
+      "listings": 13,
+      "sampled": 10,
+      "lowest_chaos": 10.0,
+      "median_chaos": 17.5,
+      "p75_chaos": 78.968,
+      "median_age_days": 0.662,
+      "fresh_share": 1.0,
+      "query_id": "H4sIAAAAAAAAA32PQQvCMAyF_0vOQ9x0Mnf14lHwKKPUrWKwW0eaOUbZf7dlghXBnJJ8j_cSB5YlDxZKB6ZnNB2UYFU9kLxqBXMCPPXqix4IOT2e77Ix48mg9csEGrQ1YYudZENe1CqqVSdpEqMkkh0HqxDlky7ubfpReYcbala0YGxiuLIP1FqkWbbLvM0vHvreEIt8vS3yf4J9Hng1V1Gag9afLqI5alE_9SLxjxebOdQL4oZ0CjIBAAA",
+      "sampled_at": "2026-11-18T08:32:50Z"
     },
     {
       "family": "bladebitter",
@@ -1168,7 +1349,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.854,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNsQrCQAyG3yXzLeIiXV06ieAoUuI1YuDuUnKppZS-e-90qZkS8v3_t0A2tDFDs4AMxpKggUx-VHwGgtWBzQP9fc_Kdmhvb-xlugpnSReprIOes1eOnNBECxlJPSXUuZtQFZPVvuoruvvDwYuDkX7dsUS73b1bOXzCDyn203GtswFAQTEJtwAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNsQrCQAyG3yXzLeIiXV06ieAoUuI1YuDuUnKppZS-e-90qZkS8v3_t0A2tDFDs4AMxpKggUx-VHwGgtWBzQP9fc_Kdmhvb-xlugpnSReprIOes1eOnNBECxlJPSXUuZtQFZPVvuoruvvDwYuDkX7dsUS73b1bOXzCDyn203GtswFAQTEJtwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladebitter",
@@ -1183,7 +1365,8 @@
       "p75_chaos": 8.0,
       "median_age_days": 0.852,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIWyCjF29eBLBo4wRt4rBrh1p5hil727LBGtOCf_H_8WDE5TZQePBTkLWQANO9TPjXSsIBcg6qb_0yCTl6frEwS4XS86as01sAQO5nmkkg2I5kqPiXhnktVuQGY2kvuSLupv_Nv-o2PAgLYq3mIY83LkXad2VVXWoILShzWAPYzR32Z2tpN96Q-Lz9T6k-QD_u54J9gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIWyCjF29eBLBo4wRt4rBrh1p5hil727LBGtOCf_H_8WDE5TZQePBTkLWQANO9TPjXSsIBcg6qb_0yCTl6frEwS4XS86as01sAQO5nmkkg2I5kqPiXhnktVuQGY2kvuSLupv_Nv-o2PAgLYq3mIY83LkXad2VVXWoILShzWAPYzR32Z2tpN96Q-Lz9T6k-QD_u54J9gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladebitter",
@@ -1198,20 +1381,17 @@
         {
           "canonical": "chance_to_poison",
           "tier": 3
-        },
-        {
-          "canonical": "ailment_effect",
-          "tier": 3
         }
       ],
-      "listings": 0,
-      "sampled": 0,
-      "lowest_chaos": 0.0,
-      "median_chaos": 0.0,
-      "p75_chaos": 0.0,
-      "median_age_days": 0.0,
-      "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEqlZ5rVLpwg6hsimGw2tu8vsmIj47q0YZATuaZbv4_93pwfHghsHWQ_GMhoNGThZNiRuSsIQAHdW_tADIYfHy0NUpj0bdEafzOgGUKErCWvUgg15s5ZUSi2oK1pBJDSPeWOfr7v2n-Sv5RPuqFjShLGaw5V7olJFGEXbyMf848ZaQ1wk602aLAn7ZJnHcbTzDfmQz57TQ-3_VszusxHVS02KX08aD-N5AwZD65BYAQAA"
+      "listings": 7,
+      "sampled": 7,
+      "lowest_chaos": 25.0,
+      "median_chaos": 95.29,
+      "p75_chaos": 192.935,
+      "median_age_days": 1.039,
+      "fresh_share": 1.0,
+      "query_id": "H4sIAAAAAAAAA32PwQrCMAyG3yXnIW46mV69eBLBo4xRt4rBrh1p5hhl727LBCuCOTV8H_-fOrAsuLewc2A6RqNhB1bWPYmrkjAlwGMnv-iekNPD-S4aM5wMWqOPJrgJNGhrwha1YEPebCXVUgsaq0EQCc0hL_T5uot7J38sn3BDxZJmjE0MF_aBSlVplm0yH_OL-64zxFW-XBf5P2GbB15OZdTmoPWnV9EePVE91az43xerKcwL33JOkjcBAAA",
+      "sampled_at": "2026-11-18T08:32:53Z"
     },
     {
       "family": "blade_ambusher",
@@ -1226,7 +1406,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.696,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNOw7CQAwF7-J6OxqUjgNQhQ6hyGyMsNifbIcoinJ3dqEJr_KTx54V1NAmhW6FXIxzgg6U_CR4DwSbA1sK_W0vgkXPnEj7J455Ppmhf4GDkdULR05oWSoYSTwllGWYUQSTtXdNV23Xm4MHByP5qmM9HXZ9N3J4hx9S5cfD1vIBIkWuCLYAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNOw7CQAwF7-J6OxqUjgNQhQ6hyGyMsNifbIcoinJ3dqEJr_KTx54V1NAmhW6FXIxzgg6U_CR4DwSbA1sK_W0vgkXPnEj7J455Ppmhf4GDkdULR05oWSoYSTwllGWYUQSTtXdNV23Xm4MHByP5qmM9HXZ9N3J4hx9S5cfD1vIBIkWuCLYAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "blade_ambusher",
@@ -1241,7 +1422,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.631,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIZQdlN18AE96kzFiVzGsa0eaOUbpu9sxwZpTwv_xf4kQBGUO0ETwk5B30EAwemZ8WAOpAlkn85feGKdwIWfC9YW9X84iqAeooKegmUZyKJ4zOBrWxiGv3YLM6GSr23TZdo_f4h-VG55kxfAeU1-GhzCQtZ2qj0pBalNbwBHGbO6Ku1jJvu2O5N9PddrmA3Alahb1AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIZQdlN18AE96kzFiVzGsa0eaOUbpu9sxwZpTwv_xf4kQBGUO0ETwk5B30EAwemZ8WAOpAlkn85feGKdwIWfC9YW9X84iqAeooKegmUZyKJ4zOBrWxiGv3YLM6GSr23TZdo_f4h-VG55kxfAeU1-GhzCQtZ2qj0pBalNbwBHGbO6Ku1jJvu2O5N9PddrmA3Alahb1AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "blade_ambusher",
@@ -1261,7 +1443,8 @@
       "p75_chaos": 37.5,
       "median_age_days": 1.289,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIZQ5FW8-gCe9yRhxqxjWtSXNHGPs3e2YYMWcEr6fL8kEQVD6AMcJnBdyFo4QdN0z3o2GOQMZvf6hV0YfzmR1uDyxccNJBOsWMmgo1EwdWRTHMdhprrVFHqsBmdHKolvWxW236SP-pqLhQUY0r5iaFG5CS8ZUKt8rFTX_uPfesVTFVhU7mMu5TGwTdPG0KpmTlszLrJH43CGfl3oDnxesmBYBAAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIZQ5FW8-gCe9yRhxqxjWtSXNHGPs3e2YYMWcEr6fL8kEQVD6AMcJnBdyFo4QdN0z3o2GOQMZvf6hV0YfzmR1uDyxccNJBOsWMmgo1EwdWRTHMdhprrVFHqsBmdHKolvWxW236SP-pqLhQUY0r5iaFG5CS8ZUKt8rFTX_uPfesVTFVhU7mMu5TGwTdPG0KpmTlszLrJH43CGfl3oDnxesmBYBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "blade_ambusher",
@@ -1276,7 +1459,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.417,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOvw7CQAiH34X5NhfTzQfQRTdjGrxiJN6_ALVpmr67d7pUJsjvg48F1NBGhW6BXIxzgg6U_Ch4DwSrA5sL_aUXwaJHTqTnJw55Opihf51y4x0MrF44ckLLUulI4imhzP2EIpis3WzOqrzeHDw4GMnXH-tqv5k3LYd3-CH1g_1ubfUB-WjQhrsAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvw7CQAiH34X5NhfTzQfQRTdjGrxiJN6_ALVpmr67d7pUJsjvg48F1NBGhW6BXIxzgg6U_Ch4DwSrA5sL_aUXwaJHTqTnJw55Opihf51y4x0MrF44ckLLUulI4imhzP2EIpis3WzOqrzeHDw4GMnXH-tqv5k3LYd3-CH1g_1ubfUB-WjQhrsAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "blade_ambusher",
@@ -1291,7 +1475,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 1.206,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPwQrCMAyG3yXnIQwPym4-gF70JmPErmJY1440c4zSd7dlgjWnhP_j_0gALyizhyaAm4SchQa8VjPjw2iIFcg66b_0xjj5M1ntry_s3XISQTVcXOYr6MkrppEsiuNEj5qVtshrtyAzWsmd2ZmU9_Bt_1Gp4UlGNG8x9WW48wMZ09X7Q11DbGNbwAHGZO6Ku1jJvM2GpAeO-5jnAwwyCqr6AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPwQrCMAyG3yXnIQwPym4-gF70JmPErmJY1440c4zSd7dlgjWnhP_j_0gALyizhyaAm4SchQa8VjPjw2iIFcg66b_0xjj5M1ntry_s3XISQTVcXOYr6MkrppEsiuNEj5qVtshrtyAzWsmd2ZmU9_Bt_1Gp4UlGNG8x9WW48wMZ09X7Q11DbGNbwAHGZO6Ku1jJvM2GpAeO-5jnAwwyCqr6AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "blade_ambusher",
@@ -1311,7 +1496,8 @@
       "p75_chaos": 23.75,
       "median_age_days": 1.141,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIYw5ld18AL3oTUaJW8Wwri1p5hhj727HBCfmlPB_fElGCILSBShGcF7IWSgg6KpjvBsNUwIyeP2TXhl9OJHV4fLE2vVHEayas5v5BGoKFVNLFsVxpFvNlbbIg-qRGa3MznlnXHkbP_YvFQ0PMqJ5ialeh5vQkDEqzfZpGjX_cee9Y1H5Ns13MJVTubKN0MbT1GpetWReZkHih4dsmusNPbd7ixsBAAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIYw5ld18AL3oTUaJW8Wwri1p5hhj727HBCfmlPB_fElGCILSBShGcF7IWSgg6KpjvBsNUwIyeP2TXhl9OJHV4fLE2vVHEayas5v5BGoKFVNLFsVxpFvNlbbIg-qRGa3MznlnXHkbP_YvFQ0PMqJ5ialeh5vQkDEqzfZpGjX_cee9Y1H5Ns13MJVTubKN0MbT1GpetWReZkHih4dsmusNPbd7ixsBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1326,7 +1512,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.275,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqCGJlYEWoMsGApcSuHLdVVfXuJLCUP_nLz34LZEcfMrQLaO-sAi1kCoPhPRKsDfjc09_2rHKKdNDpgvIiO75RMzTw4ByMEwu6WsESWSBBm7sJzVC8Pquy4rreGnhydLKvOJXTbtM3I8cx_pCi3u_Wmg_zcL2vtAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqCGJlYEWoMsGApcSuHLdVVfXuJLCUP_nLz34LZEcfMrQLaO-sAi1kCoPhPRKsDfjc09_2rHKKdNDpgvIiO75RMzTw4ByMEwu6WsESWSBBm7sJzVC8Pquy4rreGnhydLKvOJXTbtM3I8cx_pCi3u_Wmg_zcL2vtAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1341,7 +1528,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.314,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnITIRxo6KVw9eZZS4RQ127Ug7xyh9dzsmWHNK-D_-LwGcRz86qAPYwbM1UIOjdhS8aYJYgJ8H-kvP1pw0Hex0QfMgOT7ROiigY9cK92zQW0lYT9KSQZnVhCJo_FK2yJLrGr61Pyo13Fl7kjXmLg837sVaq7Lab0uITWwyOECfzCq7s5X1W69I-rzaxWU-eXX7IPMAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnITIRxo6KVw9eZZS4RQ127Ug7xyh9dzsmWHNK-D_-LwGcRz86qAPYwbM1UIOjdhS8aYJYgJ8H-kvP1pw0Hex0QfMgOT7ROiigY9cK92zQW0lYT9KSQZnVhCJo_FK2yJLrGr61Pyo13Fl7kjXmLg837sVaq7Lab0uITWwyOECfzCq7s5X1W69I-rzaxWU-eXX7IPMAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1373,7 +1561,8 @@
       "p75_chaos": 190.0,
       "median_age_days": 0.412,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QQQ-CMAyF_0vPxMAEGRw1Xj14NYRMmLo4tqUbEkL4745gIsaEntq8L--1HcA65loL-QDaOKEV5GB51SK7Sg5jAK43_Ec9aXWUfK-7M1N3jocH0xYCqIWtUDRCMafRYw3HiiuGfdkxRKbcZDaF-azL8LH9Ut7hJqTjOMuiXoob-xRSloQmIfE2_3JrjEZXkjDZ0TUgzuIoWwO2aUrSNSChJIphLMZisfAAjb--XMyLVsiXnBH_Pbodp3oDD17KFXcBAAA"
+      "query_id": "H4sIAAAAAAAAA32QQQ-CMAyF_0vPxMAEGRw1Xj14NYRMmLo4tqUbEkL4745gIsaEntq8L--1HcA65loL-QDaOKEV5GB51SK7Sg5jAK43_Ec9aXWUfK-7M1N3jocH0xYCqIWtUDRCMafRYw3HiiuGfdkxRKbcZDaF-azL8LH9Ut7hJqTjOMuiXoob-xRSloQmIfE2_3JrjEZXkjDZ0TUgzuIoWwO2aUrSNSChJIphLMZisfAAjb--XMyLVsiXnBH_Pbodp3oDD17KFXcBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1388,7 +1577,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.752,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqCGLtwIpQZYIBS4ldOS5VVfXuJLAUT7b8_n8LZEcfM7QL6OCsAi1kCqPhLRKsDfg80N-3UzlFOuh0RnmSHV-oudNKN3DnHIwTC7paYRNZIEGb-wnNULw2VmMRXq4NPDg62deeSrTf3JuV4zv-kOLf79Y6H4QBlgq5AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqCGLtwIpQZYIBS4ldOS5VVfXuJLAUT7b8_n8LZEcfM7QL6OCsAi1kCqPhLRKsDfg80N-3UzlFOuh0RnmSHV-oudNKN3DnHIwTC7paYRNZIEGb-wnNULw2VmMRXq4NPDg62deeSrTf3JuV4zv-kOLf79Y6H4QBlgq5AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1403,7 +1593,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.668,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnITIRxo6KVw9eZYy4RQ127Ug7xyh9d1smWHNK-D_-Lx6sQzdZqD2Y0bHRUIOlbhK8KYJQgFtG-kvPRp8UHcx8Qf0gOT7R2LNJdAE92054YI3OSGQHko40ytLOKILapcZkjMKr_3b_qNhwZ-VI1pj7PNzYFyvVltV-W0JoQpPBHoZobrM7W1m91YrE96tdSPMBq_nBgPgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnITIRxo6KVw9eZYy4RQ127Ug7xyh9d1smWHNK-D_-Lx6sQzdZqD2Y0bHRUIOlbhK8KYJQgFtG-kvPRp8UHcx8Qf0gOT7R2LNJdAE92054YI3OSGQHko40ytLOKILapcZkjMKr_3b_qNhwZ-VI1pj7PNzYFyvVltV-W0JoQpPBHoZobrM7W1m91YrE96tdSPMBq_nBgPgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "toxicologist",
@@ -1435,7 +1626,8 @@
       "p75_chaos": 475.0,
       "median_age_days": 0.412,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32QQQuDMAyF_0vOMrTqrB43dvWw6xDptNvKaitpnYj431dxMMfAnBLex3tJRjCW2c5ANoJurdAKMjC86pBdJYfJAzu0_EfNtTpJftD9mak7x-ODaZPrmfagFqZC0QjFrEbHNhwrrhgOZc8QmbKz45zoAi_jx_tLOYebkJbjIot6Le7MU0hZEhr7xNn8y13barQl8eM93QKiNArSLSBMEpJsATElQQRTMRWrhUdo3PXlal61Qr7kgrgX0nCa6w0uWnZLfAEAAA"
+      "query_id": "H4sIAAAAAAAAA32QQQuDMAyF_0vOMrTqrB43dvWw6xDptNvKaitpnYj431dxMMfAnBLex3tJRjCW2c5ANoJurdAKMjC86pBdJYfJAzu0_EfNtTpJftD9mak7x-ODaZPrmfagFqZC0QjFrEbHNhwrrhgOZc8QmbKz45zoAi_jx_tLOYebkJbjIot6Le7MU0hZEhr7xNn8y13barQl8eM93QKiNArSLSBMEpJsATElQQRTMRWrhUdo3PXlal61Qr7kgrgX0nCa6w0uWnZLfAEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1450,7 +1642,8 @@
       "p75_chaos": 2.75,
       "median_age_days": 0.067,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiAQHYEWoMqlBlhynclyqqurdSWApf_KXn_1WKI4-FehWyKNzVuigUJwMH0KwBfBlpL_tWeiU5yvqi-zCRhBg4BKNEyt6tookskiKtvQzmqF6e9RE1XO7B3iyONlXmuppv-u7keUtP6Rqj4et5QMsJyvWsAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiAQHYEWoMqlBlhynclyqqurdSWApf_KXn_1WKI4-FehWyKNzVuigUJwMH0KwBfBlpL_tWeiU5yvqi-zCRhBg4BKNEyt6tookskiKtvQzmqF6e9RE1XO7B3iyONlXmuppv-u7keUtP6Rqj4et5QMsJyvWsAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1465,7 +1658,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.351,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ5ShyB4F_QBfZYy4RQlm7Ug7xyj9dzsmWPOUcA_3JIDz6EcHVQA7eLYGKnDUjop3IYgF-Hmgv_QsdLLTFc2T9MJKUEDHrlXu2aC3mpCetCWDOjcTqqLxS9EiSp5b-Fb-qNTwYPGka8xdHm7ci0Wacn_YbSHWsc7gAH0yN9mdrSxvWZH09bGMy3wATTd3E-8AAAA"
+      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ5ShyB4F_QBfZYy4RQlm7Ug7xyj9dzsmWPOUcA_3JIDz6EcHVQA7eLYGKnDUjop3IYgF-Hmgv_QsdLLTFc2T9MJKUEDHrlXu2aC3mpCetCWDOjcTqqLxS9EiSp5b-Fb-qNTwYPGka8xdHm7ci0Wacn_YbSHWsc7gAH0yN9mdrSxvWZH09bGMy3wATTd3E-8AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1497,7 +1691,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32Q0QqCQBBF_2WeJdzUzB6D-oBeQ2TTKYbWXZldExH_vRWDjMB5muEe7p2ZAayTrrVwGMA0joyGA1gsW5Y3hTAG4PoGf9STwqPpLlI_kM_ECAFUZEummrR0hj1SI5eoJfdFJ5mldpPRFORzrsPH8kt5hzsphzzLVC3FjX2SUkWU7ETobf7ltmkMu2KbhKFYA0QaZukqkAkRrQFJHGcxjPmYLxYeoPbXF4t50ZJ6qRnxn9tH41Rv9Vw_xXMBAAA"
+      "query_id": "H4sIAAAAAAAAA32Q0QqCQBBF_2WeJdzUzB6D-oBeQ2TTKYbWXZldExH_vRWDjMB5muEe7p2ZAayTrrVwGMA0joyGA1gsW5Y3hTAG4PoGf9STwqPpLlI_kM_ECAFUZEummrR0hj1SI5eoJfdFJ5mldpPRFORzrsPH8kt5hzsphzzLVC3FjX2SUkWU7ETobf7ltmkMu2KbhKFYA0QaZukqkAkRrQFJHGcxjPmYLxYeoPbXF4t50ZJ6qRnxn9tH41Rv9Vw_xXMBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1512,7 +1707,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.35,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNsQrCQAyG3yXzbS7SUdDRwVWkxDNKIJcrudRSSt_dO11qpoR8__8tUBx9LNAtkAfnrNBBoTga3oVgDeDzQH_fo9AhTxfUF9mJjc65kQEeXKJxYkXPVrlEFknR5n5CM1Rvbc1WZddbgCeLk33NqUb7zb1ZWd7yQ6p7v1vbfADq2IpQtQAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNsQrCQAyG3yXzbS7SUdDRwVWkxDNKIJcrudRSSt_dO11qpoR8__8tUBx9LNAtkAfnrNBBoTga3oVgDeDzQH_fo9AhTxfUF9mJjc65kQEeXKJxYkXPVrlEFknR5n5CM1Rvbc1WZddbgCeLk33NqUb7zb1ZWd7yQ6p7v1vbfADq2IpQtQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1527,7 +1723,8 @@
       "p75_chaos": 9.75,
       "median_age_days": 0.637,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIcpQZEdBjx68jjHqFiXYtSPNHKP03W2ZYM0p4f_4v3hwomRyUHmwo5A1UIHDbmJ11wihAFlG_EvPGk92vinzRL4Q49UmsoCeXMc0kFFiOXIDcodG8dLOilkZSW3JFmW1__b-qNjwIC3Ia0x9Hm7ci7Ruy_1ht4XQhCaDPQzR3GZ3tpJ-6xWJrx_LkOYD7RW8XfQAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIcpQZEdBjx68jjHqFiXYtSPNHKP03W2ZYM0p4f_4v3hwomRyUHmwo5A1UIHDbmJ11wihAFlG_EvPGk92vinzRL4Q49UmsoCeXMc0kFFiOXIDcodG8dLOilkZSW3JFmW1__b-qNjwIC3Ia0x9Hm7ci7Ruy_1ht4XQhCaDPQzR3GZ3tpJ-6xWJrx_LkOYD7RW8XfQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamequiver",
@@ -1559,7 +1756,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QQQvCMAyF_0vOIq3b1O0o6NGDVxmjblGCXTvSThlj_90OBSfCckp4H-8l6cF55VsHWQ-28WQNZOCwbFldNMKwAN81-KPuNe7s86TMDflAjEc7kguoyJVMNRnlLQeuRi7RKO6Kp2JWxo9uY1oIO_cf3y8VHK6kPfJbpmoqLt2dtC6iZC1FsPmX26ax7ItVIoScA-RGpJtZIJUymgOSOE5jGPIhnyzcQx2uLybzpCX90G8kvG8bDWO9AJk_HJ54AQAA"
+      "query_id": "H4sIAAAAAAAAA32QQQvCMAyF_0vOIq3b1O0o6NGDVxmjblGCXTvSThlj_90OBSfCckp4H-8l6cF55VsHWQ-28WQNZOCwbFldNMKwAN81-KPuNe7s86TMDflAjEc7kguoyJVMNRnlLQeuRi7RKO6Kp2JWxo9uY1oIO_cf3y8VHK6kPfJbpmoqLt2dtC6iZC1FsPmX26ax7ItVIoScA-RGpJtZIJUymgOSOE5jGPIhnyzcQx2uLybzpCX90G8kvG8bDWO9AJk_HJ54AQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1574,7 +1772,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.193,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNywrCQAxF_yXr2bmR_kNBcClS4jRicB4lyShD6b87o5t6V7nkJGcFNbSiMKyQF-OcYAAlXwRvgWBzYHWhv-1Igehswk_SEQXnQnJ6VAUHM6sXjpzQsjQ0knhKKHV6owgm6w-7sPkuVwd3Dkbylcd2Ou36buTwCj-k6Y-HrecDQ80gm7gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNywrCQAxF_yXr2bmR_kNBcClS4jRicB4lyShD6b87o5t6V7nkJGcFNbSiMKyQF-OcYAAlXwRvgWBzYHWhv-1Igehswk_SEQXnQnJ6VAUHM6sXjpzQsjQ0knhKKHV6owgm6w-7sPkuVwd3Dkbylcd2Ou36buTwCj-k6Y-HrecDQ80gm7gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1589,7 +1788,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 1.201,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EbQI0jsUBJciJbYRQ6fTkqRKGebuTqngmFXCf_yXAGpos0IVYJyMRw8VKLWz4N0RxAJsmegvrckRXUy4J61RsJtJzs9FoYCOtRUe2KONktCBpCWPsjRvFEFva-EqTL5r-Fb_qNTwYGckW8xdHu60Z-eaw748QrzFW8YGGJK4ye5sZfdyG5KeP5VxnQ-LbLdw9gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EbQI0jsUBJciJbYRQ6fTkqRKGebuTqngmFXCf_yXAGpos0IVYJyMRw8VKLWz4N0RxAJsmegvrckRXUy4J61RsJtJzs9FoYCOtRUe2KONktCBpCWPsjRvFEFva-EqTL5r-Fb_qNTwYGckW8xdHu60Z-eaw748QrzFW8YGGJK4ye5sZfdyG5KeP5VxnQ-LbLdw9gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1613,7 +1813,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQ9BtOP2HgeCjjFK3iGFdO9JMGWP_bscEK4J5ajiXc9MJvGgZPBwncL2Qs3AEj_XA-moQ5gRk7PGLlmgQz8LUoi8162ZAPt1HDwk05GumjqwWxyHaIddoNY_qqZm1lUW4FIa-y_RWf1LBcCMjyCumJoYb35IxardN82D5pUPfOxaVFfu0-BfID2kWDNVcRW0TdOF0Fe3Rk8zDrJHw_SKdl3kB5XdOLTgBAAA"
+      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQ9BtOP2HgeCjjFK3iGFdO9JMGWP_bscEK4J5ajiXc9MJvGgZPBwncL2Qs3AEj_XA-moQ5gRk7PGLlmgQz8LUoi8162ZAPt1HDwk05GumjqwWxyHaIddoNY_qqZm1lUW4FIa-y_RWf1LBcCMjyCumJoYb35IxardN82D5pUPfOxaVFfu0-BfID2kWDNVcRW0TdOF0Fe3Rk8zDrJHw_SKdl3kB5XdOLTgBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1628,7 +1829,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.328,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOSwrCQAy9S9azcyO9Q0VwKVJiGzE4n5JkLEPp3Z3RTc3qhfddQQ0tK3QrpNk4RehAacyCd0-wObAy0x_bkye6mPCLtEfBKZOcn0VPqTkcTKyjcOCIlqTqA8lIEaUMC4pgtJbaWmvp9ebgwd5IvgtCtQ67fwfZv_1PUjccD1u7D4NHqLu9AAAA"
+      "query_id": "H4sIAAAAAAAAA1VOSwrCQAy9S9azcyO9Q0VwKVJiGzE4n5JkLEPp3Z3RTc3qhfddQQ0tK3QrpNk4RehAacyCd0-wObAy0x_bkye6mPCLtEfBKZOcn0VPqTkcTKyjcOCIlqTqA8lIEaUMC4pgtJbaWmvp9ebgwd5IvgtCtQ67fwfZv_1PUjccD1u7D4NHqLu9AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1643,7 +1845,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.44,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WP0QrCMAxF_yXPQ9AhyP5hIvgoY8QtYljXjjRTxui_2zLBmqeEe3IvdwWvqLOHagU3KTsLFXjqZsG7IQgF6DLRn1qTIbqq8EC-RsF-Jrk8F3926aOAnn0nPLJFdRL5kaQji7K0bxRBq8k1pcbQ2_r1_1HR4cFGSTaZ-1zc-YGNaQ_78gihCU3GrjDG4Da7s5XNy2xIbHAqQ5oP5wngcfsAAAA"
+      "query_id": "H4sIAAAAAAAAA1WP0QrCMAxF_yXPQ9AhyP5hIvgoY8QtYljXjjRTxui_2zLBmqeEe3IvdwWvqLOHagU3KTsLFXjqZsG7IQgF6DLRn1qTIbqq8EC-RsF-Jrk8F3926aOAnn0nPLJFdRL5kaQji7K0bxRBq8k1pcbQ2_r1_1HR4cFGSTaZ-1zc-YGNaQ_78gihCU3GrjDG4Da7s5XNy2xIbHAqQ5oP5wngcfsAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "striker",
@@ -1667,7 +1870,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QYQuCQAyG_8s-S1Aqmf_BCPoYcly6aHh6stsVIv73TgwygvZp4333vGMjONHiHeQj2F7IdpCDw8qzvhqEKQIZevxSCzSIZ2Fq0BWade2RT_fBHe28EUFNrmJqqdNiOfhb5Ao7zYN6ambdyUydU0PoZXzzP65AuJER5EWmei1uXEPGqN02TgPlV_V9b1lUku3j7J8hPcRJIJRTuUoboQ2nq9W8ask8zGIJP8jiaa4Xm6_UCD0BAAA"
+      "query_id": "H4sIAAAAAAAAA32QYQuCQAyG_8s-S1Aqmf_BCPoYcly6aHh6stsVIv73TgwygvZp4333vGMjONHiHeQj2F7IdpCDw8qzvhqEKQIZevxSCzSIZ2Fq0BWade2RT_fBHe28EUFNrmJqqdNiOfhb5Ao7zYN6ambdyUydU0PoZXzzP65AuJER5EWmei1uXEPGqN02TgPlV_V9b1lUku3j7J8hPcRJIJRTuUoboQ2nq9W8ask8zGIJP8jiaa4Xm6_UCD0BAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1682,7 +1886,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.455,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqzsbOgFBlgmktOU7luKCq6t1JYCl_8pef_VYojj4X6FbIk3NW6KBQnA3vQrAF8GWiv-1JKJE6yoU9jmceRlfWAQI8uETjxIqerZKJLJKiLf0bzVC9_Wu-qrveAjxZnOzrTvW03_XdyPKSH1Ltx8PW8gE9TJBrtwAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqzsbOgFBlgmktOU7luKCq6t1JYCl_8pef_VYojj4X6FbIk3NW6KBQnA3vQrAF8GWiv-1JKJE6yoU9jmceRlfWAQI8uETjxIqerZKJLJKiLf0bzVC9_Wu-qrveAjxZnOzrTvW03_XdyPKSH1Ltx8PW8gE9TJBrtwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1697,7 +1902,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.363,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQMZ6O7evHuQMWoXt2DaSZopo_Td7ZjgzCnh__i_RAhqdApQRxifSqOHGgLaScyNEVIBOj_xLz0xOvRq-EJqhzP1g3ryPRTQUbBCjrzRUTLpUCx6I3P7NiLG69K3-LLuGr_NPyo33IkVZY2p24a78CDmtjqWZQWpSc0GjuCyud3cm5X4xSuSnz_s0zIfo7l5gvYAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQMZ6O7evHuQMWoXt2DaSZopo_Td7ZjgzCnh__i_RAhqdApQRxifSqOHGgLaScyNEVIBOj_xLz0xOvRq-EJqhzP1g3ryPRTQUbBCjrzRUTLpUCx6I3P7NiLG69K3-LLuGr_NPyo33IkVZY2p24a78CDmtjqWZQWpSc0GjuCyud3cm5X4xSuSnz_s0zIfo7l5gvYAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1729,7 +1935,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTwuCQBDFv8ucJfyb1r1b9w4hsummQ7urzI6FiN-9FYOMwDnN8H68NzMjWBbcWziO0HaMrYEjWFn2JG5KwuQBD538UU9KamlYqAty2ZyxbtigqcGDCm1JqNEIbsmRWlIpjaCheAkiYXj2m_Nc3HX8OH8p53BHxZIWGau1uLMPVKpIDr6fOJt_ue-6lriIAj8Jt4EkDbaAMI7iaAvI9n4KUz7lq31H0O74YjWvWlRPtSDuf1k0zfUGvguBEnkBAAA"
+      "query_id": "H4sIAAAAAAAAA32QTwuCQBDFv8ucJfyb1r1b9w4hsummQ7urzI6FiN-9FYOMwDnN8H68NzMjWBbcWziO0HaMrYEjWFn2JG5KwuQBD538UU9KamlYqAty2ZyxbtigqcGDCm1JqNEIbsmRWlIpjaCheAkiYXj2m_Nc3HX8OH8p53BHxZIWGau1uLMPVKpIDr6fOJt_ue-6lriIAj8Jt4EkDbaAMI7iaAvI9n4KUz7lq31H0O74YjWvWlRPtSDuf1k0zfUGvguBEnkBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1744,7 +1951,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.274,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOvQrCQAx-l8zdXKS7m7g6iJR4xjaQy5Vcaiml7-6dLjXTF77fFbKjTxnaFdLonBRayBQmw4cQbA34MtIfexKKpI5yZQ_DmfvBlbW_pGpo4Mk5GEdW9GRFHskCKdrSzWiG6jW0lpbO272BF4uTfQfEYu12_w6yvOUnKROOh63eB97XTXm8AAAA"
+      "query_id": "H4sIAAAAAAAAA1VOvQrCQAx-l8zdXKS7m7g6iJR4xjaQy5Vcaiml7-6dLjXTF77fFbKjTxnaFdLonBRayBQmw4cQbA34MtIfexKKpI5yZQ_DmfvBlbW_pGpo4Mk5GEdW9GRFHskCKdrSzWiG6jW0lpbO272BF4uTfQfEYu12_w6yvOUnKROOh63eB97XTXm8AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1759,7 +1967,8 @@
       "p75_chaos": 20.0,
       "median_age_days": 0.404,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQwYy0N29iVcPMkbt6hZM29Fmyij977ZMsOaU8L68xwvgWfDioQ1gZ0ZroAWv5OLEnRTECnid1Z96IqWVYUFXZDmdcZzYoBkvNj9UMKCXDjUawdYlXCsnlRFu7d_COWE4m-bQlHkLX_sflRweSKzcJuNQijv_RKK-OdZ1A7GLXQEH0Cm5L-5iRXrRhqQGh33M8wEXOesH-wAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQwYy0N29iVcPMkbt6hZM29Fmyij977ZMsOaU8L68xwvgWfDioQ1gZ0ZroAWv5OLEnRTECnid1Z96IqWVYUFXZDmdcZzYoBkvNj9UMKCXDjUawdYlXCsnlRFu7d_COWE4m-bQlHkLX_sflRweSKzcJuNQijv_RKK-OdZ1A7GLXQEH0Cm5L-5iRXrRhqQGh33M8wEXOesH-wAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "stormhand",
@@ -1791,7 +2000,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QywrCQAxF_yXrItV2fO3diVsXUso4jhqcR8mkSin9d6dUsCI0q4R7cvNoIbDkOsC2BV8xegdbCFrVJM9GQ5cAN5X-UXdGW-1YmiOyuu_xdmeH7nbwfUMCFwyK0KKT7CniVpPSTlJTviSRdNyb9kPjzFP7sf9S0eGKhjUNMl7G4iw80JhSbNJURJt_ua4qT1xm81QspgGxmk8BizzLsylgvUxX0BVdMdq3BRuPL0f1KEXzNAMSn7jOuj7eCqVehH4BAAA"
+      "query_id": "H4sIAAAAAAAAA32QywrCQAxF_yXrItV2fO3diVsXUso4jhqcR8mkSin9d6dUsCI0q4R7cvNoIbDkOsC2BV8xegdbCFrVJM9GQ5cAN5X-UXdGW-1YmiOyuu_xdmeH7nbwfUMCFwyK0KKT7CniVpPSTlJTviSRdNyb9kPjzFP7sf9S0eGKhjUNMl7G4iw80JhSbNJURJt_ua4qT1xm81QspgGxmk8BizzLsylgvUxX0BVdMdq3BRuPL0f1KEXzNAMSn7jOuj7eCqVehH4BAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1806,7 +2016,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.245,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUjgNQQYdQZDZGsrQ_2Q4oinJ3vNCEqTya8bwV1NBmhWGF2oxrgQGU4iz4SARbAFsa_aUnz_TMxZ1eKbeEcslsBAEm1iicuaBV8WomiVRQlvGNIlisD3ag8273AE9ORvKFZ38dd353cnqlX8Xxx8PW9QH2vRo-uAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUjgNQQYdQZDZGsrQ_2Q4oinJ3vNCEqTya8bwV1NBmhWGF2oxrgQGU4iz4SARbAFsa_aUnz_TMxZ1eKbeEcslsBAEm1iicuaBV8WomiVRQlvGNIlisD3ag8273AE9ORvKFZ38dd353cnqlX8Xxx8PW9QH2vRo-uAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1821,7 +2032,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.304,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIbh5kN18AE96kzFqFyHYdiPNlFH67mZMsOaU8H38fxJEMTJHaBOMk9AYoIWIdmZzdwi5Alkm_KMnZfFMQa94RT85wxdPglDBQNEyeQpGRlbVI1sMhpf-bZhNkDVwLdS-W_pG_yxNeJAT5A3TUMJdfJJzfXOo9zXkLneFnMBrc1_cxUru5TZFvz82eZ0P9YMhVvcAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIbh5kN18AE96kzFqFyHYdiPNlFH67mZMsOaU8H38fxJEMTJHaBOMk9AYoIWIdmZzdwi5Alkm_KMnZfFMQa94RT85wxdPglDBQNEyeQpGRlbVI1sMhpf-bZhNkDVwLdS-W_pG_yxNeJAT5A3TUMJdfJJzfXOo9zXkLneFnMBrc1_cxUru5TZFvz82eZ0P9YMhVvcAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1853,7 +2065,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QywqDMBBF_2XWUohG-9j1A7pqd0Uk1RSGJjFMxhYR_70RC7UUzCrDOdw7yQCBFXcBDgO0nrF1cICg647UzWgYE-De6x96jCyc0MUpXLT1RtHZImtIoMFQE1p0iluKqtVUa6eor16KSDmeAqfC2HcdPtFfKybc0bCmGWOzhJvwQGOqTKYijTH_uPO-Ja7yVG5XhUJKUawJYi9Etlqxz2QOYzmWi4UHsPH11WJeXNE8zazEH9xl43TehX9dq3sBAAA"
+      "query_id": "H4sIAAAAAAAAA32QywqDMBBF_2XWUohG-9j1A7pqd0Uk1RSGJjFMxhYR_70RC7UUzCrDOdw7yQCBFXcBDgO0nrF1cICg647UzWgYE-De6x96jCyc0MUpXLT1RtHZImtIoMFQE1p0iluKqtVUa6eor16KSDmeAqfC2HcdPtFfKybc0bCmGWOzhJvwQGOqTKYijTH_uPO-Ja7yVG5XhUJKUawJYi9Etlqxz2QOYzmWi4UHsPH11WJeXNE8zazEH9xl43TehX9dq3sBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1868,7 +2081,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 1.82,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOuw7CQAz7l8y3saBufAAssCFUhSNIke6lJAVVVf-dHCwlky3bsRdQQ5sUhgVqM64FBlCKk-A9EawBbG70px5c0yMXZ3qh3BLKObPRqfZEgAdrFM5c0Kq4P5NEKijz-EYRLNa_9lYvvd4CPDkZyXdB9ui44RvI6ZV-Ft-w3639PpFIPPK9AAAA"
+      "query_id": "H4sIAAAAAAAAA1VOuw7CQAz7l8y3saBufAAssCFUhSNIke6lJAVVVf-dHCwlky3bsRdQQ5sUhgVqM64FBlCKk-A9EawBbG70px5c0yMXZ3qh3BLKObPRqfZEgAdrFM5c0Kq4P5NEKijz-EYRLNa_9lYvvd4CPDkZyXdB9ui44RvI6ZV-Ft-w3639PpFIPPK9AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1883,7 +2097,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 1.689,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPzQrCQAyE3yXnIth6kN58AL3oTUpZ2wjB_SnZtFKWfXd3qeCaU4b5MkMCeFEye2gDuEnIWWjB4zCzemiEWIGsE_65p-T5M9mk_A3NpBVfDQleXL6oYCQ_MBmyShwn3iAPaBWv_VsxKys5Nbem0nv45v-olPAkLcibTWNp7vyLtO6bQ72vIXaxK-AAJjX3hS5W0ovekPTCsYl5PkwA6-L8AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPzQrCQAyE3yXnIth6kN58AL3oTUpZ2wjB_SnZtFKWfXd3qeCaU4b5MkMCeFEye2gDuEnIWWjB4zCzemiEWIGsE_65p-T5M9mk_A3NpBVfDQleXL6oYCQ_MBmyShwn3iAPaBWv_VsxKys5Nbem0nv45v-olPAkLcibTWNp7vyLtO6bQ72vIXaxK-AAJjX3hS5W0ovekPTCsYl5PkwA6-L8AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest",
@@ -1915,7 +2130,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QywrCMBBF_2XWRUib1sfOD9CN7kRKrBEG82IyVaT0302pYEVoVhnOyb1JOoisuI2w6cAHRu9gA1E3LamL0dBnwK-gf-g2sbhDl6Z41DYYRQeLrPd-OJHBFWNDaNEp9pR8q6nRTtGrfioi5XhIHVpT6an75H-tlHBDw5pGjNcpXMQ7GlMXMhd5ivnHbQieuC5zuZwVKilFNSeItRDFbMW6kCX05_48uXAHNr2-nsyTLZqHGZX0jauiH9YbNRtCkIABAAA"
+      "query_id": "H4sIAAAAAAAAA32QywrCMBBF_2XWRUib1sfOD9CN7kRKrBEG82IyVaT0302pYEVoVhnOyb1JOoisuI2w6cAHRu9gA1E3LamL0dBnwK-gf-g2sbhDl6Z41DYYRQeLrPd-OJHBFWNDaNEp9pR8q6nRTtGrfioi5XhIHVpT6an75H-tlHBDw5pGjNcpXMQ7GlMXMhd5ivnHbQieuC5zuZwVKilFNSeItRDFbMW6kCX05_48uXAHNr2-nsyTLZqHGZX0jauiH9YbNRtCkIABAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "smoulderstrike",
@@ -1930,7 +2146,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.526,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUA9ClokQoMomRLPYTzXpBUZS7ZxeaMJVHfvZbKRtbydStlGbTFKmjLGMBP7zQ5siWWf62vXiRq0FfknsGl0lwUQg5mjSP0KCRLaGiQTBKZCzDhwGO1h42YfXd7o6e6k3wlYd6Ohz6YVT_9j-k6s-nrWUH0Y7K67gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUA9ClokQoMomRLPYTzXpBUZS7ZxeaMJVHfvZbKRtbydStlGbTFKmjLGMBP7zQ5siWWf62vXiRq0FfknsGl0lwUQg5mjSP0KCRLaGiQTBKZCzDhwGO1h42YfXd7o6e6k3wlYd6Ohz6YVT_9j-k6s-nrWUH0Y7K67gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "smoulderstrike",
@@ -1945,7 +2162,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.884,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQqDQAxF75K1dNEiVA_QnasuS5FUUwjGUTKxRYa5e0csdJpVwn_8lwDe0BYPdYBpNp4c1OCpWxQfQhALsHWmv7QhIbqa8kC-QcWlJ72wEhTQs--UR3ZokyZ0JO3Ioa7tG1XR2Va4CZPvFr7VPyo1PFmMdI-5z8ODH1ikLatjWUG8x3sGBxiTuc3ubGV5yY6k78-nuM0H-ETh0PcAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQqDQAxF75K1dNEiVA_QnasuS5FUUwjGUTKxRYa5e0csdJpVwn_8lwDe0BYPdYBpNp4c1OCpWxQfQhALsHWmv7QhIbqa8kC-QcWlJ72wEhTQs--UR3ZokyZ0JO3Ioa7tG1XR2Va4CZPvFr7VPyo1PFmMdI-5z8ODH1ikLatjWUG8x3sGBxiTuc3ubGV5yY6k78-nuM0H-ETh0PcAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "smoulderstrike",
@@ -1969,7 +2187,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.605,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32PywqDMBBF_2XWUlBR1A_ozlWXRSTVKQzGB5NJiwT_vRELTSl0VhnO4d6JAyNKrIHKwbwIzRNUYLCzrG4aYYtA1gW_aI0a8SJMA5pasbI98pkYIYKeTMc00qRkZq-OyB1Oitf2qZjVJHvgXuj7ru4d_bF8wp20IB-Y-hCezEBat1mZZKWP-cV2WWaWNi7jOP0nJHmWF7A1WxPUORj97W2wB0_SD30o_v9Fuu3zAu8DFIY5AQAA"
+      "query_id": "H4sIAAAAAAAAA32PywqDMBBF_2XWUlBR1A_ozlWXRSTVKQzGB5NJiwT_vRELTSl0VhnO4d6JAyNKrIHKwbwIzRNUYLCzrG4aYYtA1gW_aI0a8SJMA5pasbI98pkYIYKeTMc00qRkZq-OyB1Oitf2qZjVJHvgXuj7ru4d_bF8wp20IB-Y-hCezEBat1mZZKWP-cV2WWaWNi7jOP0nJHmWF7A1WxPUORj97W2wB0_SD30o_v9Fuu3zAu8DFIY5AQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "fallen_reverend",
@@ -1984,7 +2203,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.439,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOOw7CQAxE7-J6OxqUjgNQQYdQZDZGsrQ_2Q4oinJ3vNAEVx7N2G9WUEObFYYVajOuBQZQirPgIxFsAWxp9Oee3NMzF1d6pdwSyqVRNCGFABNrFM5c0Kp4OpNEKijL-EYRLNZ_dqYjb_cAT05G8uVnPx13erdyeqVfxBscD1ufDytFbrK7AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOOw7CQAxE7-J6OxqUjgNQQYdQZDZGsrQ_2Q4oinJ3vNAEVx7N2G9WUEObFYYVajOuBQZQirPgIxFsAWxp9Oee3NMzF1d6pdwSyqVRNCGFABNrFM5c0Kp4OpNEKijL-EYRLNZ_dqYjb_cAT05G8uVnPx13erdyeqVfxBscD1ufDytFbrK7AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "fallen_reverend",
@@ -2000,10 +2220,19 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXn4WUexm4-gCe9yRi1ixBsu5Jkyih9dzsmWHNK-D7-PwlEjS4CfYI5Ks0BehC0C5u7Q8gN6Brxj54KkzOFcskVfXSGLxGtMgo0MJFYJk_B6MzF9sgWg-F1fBtmE3TL3DpL5S19039WSXiQU-Qd01TDgzzJufHYdi3kIQ-Vm8CX4rG6q5Xcy-1K-b9r8zYf8-FTfvkAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 137,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry,Frostblink"
+      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry,Frostblink",
+      "partner_require": [
+        "Wrath",
+        "Zealotry"
+      ],
+      "partner_exclude": [
+        "Battlemage's Cry",
+        "Frostblink"
+      ]
     },
     {
       "family": "fallen_reverend",
@@ -2018,7 +2247,8 @@
       "p75_chaos": 25.0,
       "median_age_days": 0.277,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOvQoCQQyE3yX1djZynQ-gjXYiR1wjBPaPJKccx727WW3OVBkmX2YWUEObFIYFajOuBQZQipPgPRGsAWxu9Oce3NMjF1d6odwSyrlRNCE91Q4FeLBG4cwFrYojmSRSQZnHN4pgsf64B3vu9RbgyclIviWyo-NGb1ZOr_Q78Rr73drnA_raRQTAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvQoCQQyE3yX1djZynQ-gjXYiR1wjBPaPJKccx727WW3OVBkmX2YWUEObFIYFajOuBQZQipPgPRGsAWxu9Oce3NMjF1d6odwSyrlRNCE91Q4FeLBG4cwFrYojmSRSQZnHN4pgsf64B3vu9RbgyclIviWyo-NGb1ZOr_Q78Rr73drnA_raRQTAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "fallen_reverend",
@@ -2034,10 +2264,19 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA1WPzQrCMAzH3yXn4WUehjcfQC96kzFqFyHYL9JMGaXvbssEa04Jv_8HSRBFyRLhkMAHIe_gABH1wupuEHIHsgb8o8fC4olcueIVbTCKLwG1MMazr6YOZoqayZJT4rlYLLJGp3id3opZOanBtbj03tK34qcqCQ8ygrxhmlu4i08yZtr3Qw95zGOjTWBL8dTczUrmZTZJeWLoc50P8x3Mvv4AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z",
       "search_total": 58,
       "scanned": 30,
       "passed": 0,
-      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry,Frostblink"
+      "partner_rule": "Require Wrath,Zealotry/Exclude Battlemage's Cry,Frostblink",
+      "partner_require": [
+        "Wrath",
+        "Zealotry"
+      ],
+      "partner_exclude": [
+        "Battlemage's Cry",
+        "Frostblink"
+      ]
     },
     {
       "family": "bladecaster",
@@ -2052,7 +2291,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.419,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNuwrDMAxF_0Wzl9KlZO2SsZCxlKA6KhH4haw0mJB_r90u6Z100ZHOBllRlwzdBjEpxwAdZLKL4NMR7Aa0JPrbXoX11A8zTnG9zSUPiZwDAxNnK-w5oEapnCexFFDKuKIIBm3fmq3K7g8DL3ZK8jX7ejoe-mFk93Y_pLov573lAyTwrBS1AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNuwrDMAxF_0Wzl9KlZO2SsZCxlKA6KhH4haw0mJB_r90u6Z100ZHOBllRlwzdBjEpxwAdZLKL4NMR7Aa0JPrbXoX11A8zTnG9zSUPiZwDAxNnK-w5oEapnCexFFDKuKIIBm3fmq3K7g8DL3ZK8jX7ejoe-mFk93Y_pLov573lAyTwrBS1AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladecaster",
@@ -2067,7 +2307,8 @@
       "p75_chaos": 8.75,
       "median_age_days": 0.877,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGcgOc1532XHgcUjptMOw2EoaJ1L67qs4WJdTwv_xfwngRcvsoQ7gJkFnoQZvupn1gwzEAmSdzF96YZTy2gy6d8ttWH0zGSIooEffMY5otThO3Gi4M1bzqhbNrK1sbZstye7h2_ujUsMTSQzvMfZ5ePAvJFLlqTxXENvYZnCAMZlVdmcr0pt2JL1eHeM2H3468sv0AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGcgOc1532XHgcUjptMOw2EoaJ1L67qs4WJdTwv_xfwngRcvsoQ7gJkFnoQZvupn1gwzEAmSdzF96YZTy2gy6d8ttWH0zGSIooEffMY5otThO3Gi4M1bzqhbNrK1sbZstye7h2_ujUsMTSQzvMfZ5ePAvJFLlqTxXENvYZnCAMZlVdmcr0pt2JL1eHeM2H3468sv0AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladecaster",
@@ -2099,7 +2340,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32Q0QqCMBSG3-VcRzRNy2676TLwMkSWLjo0t3F2TER89yYFGYG72vg_vv-cDeBZcuvhMIB1jNbAAbyqWpJXrWBcAfdO_aRHQhan_C5r253vvc-d0hpWUKOvCBs0ki0FrlFUKSOpLztJJA1PtqktlF2Gj_dLBcMNNSt6x1jPw7V_oNal2IlsHzT_ceucJS6TJE2yJSCNomizaMjibbIEiEyIGMZiLGYDD9CE7cvZe3ZF_dRvJHzfPh6n8wKxwibAeAEAAA"
+      "query_id": "H4sIAAAAAAAAA32Q0QqCMBSG3-VcRzRNy2676TLwMkSWLjo0t3F2TER89yYFGYG72vg_vv-cDeBZcuvhMIB1jNbAAbyqWpJXrWBcAfdO_aRHQhan_C5r253vvc-d0hpWUKOvCBs0ki0FrlFUKSOpLztJJA1PtqktlF2Gj_dLBcMNNSt6x1jPw7V_oNal2IlsHzT_ceucJS6TJE2yJSCNomizaMjibbIEiEyIGMZiLGYDD9CE7cvZe3ZF_dRvJHzfPh6n8wKxwibAeAEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladecaster",
@@ -2114,7 +2356,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.4,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOPQvCQAyG_0vmW8RFuro4idBRpMRrpIH7IpdajtL_7p0uNVPC-yRPVsiKOmfoVohJOQboIJOdBZ-OYDOgJdFfehbWw6WfcIzLbSq5T-TcNTbcwMjZCnsOqFEq7EksBZQyLCiCQdvJpqzG-8PAi52SfPW-rg67edeye7sfUh84HbdWH8Kqz8a6AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOPQvCQAyG_0vmW8RFuro4idBRpMRrpIH7IpdajtL_7p0uNVPC-yRPVsiKOmfoVohJOQboIJOdBZ-OYDOgJdFfehbWw6WfcIzLbSq5T-TcNTbcwMjZCnsOqFEq7EksBZQyLCiCQdvJpqzG-8PAi52SfPW-rg67edeye7sfUh84HbdWH8Kqz8a6AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladecaster",
@@ -2129,7 +2372,8 @@
       "p75_chaos": 20.0,
       "median_age_days": 1.136,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQwP6q5ePImwo4xRt8qCWTvSzDFK392WCdacEv6P_4sHJ0pmB5UHOwlaAxU43c2sHqQhFCDrpP_SM6OUl3pQvV1uw-rqSRNdbcIL6NF1jCMaJZYjPGrutFG8totiVkZSZVJG491_y39UbHgiieYtxj4Pd-6FRG15KE9HCE1oMtjDGM1tdmcr0ps2JP5_3Ic0H6A4a9z5AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIQwP6q5ePImwo4xRt8qCWTvSzDFK392WCdacEv6P_4sHJ0pmB5UHOwlaAxU43c2sHqQhFCDrpP_SM6OUl3pQvV1uw-rqSRNdbcIL6NF1jCMaJZYjPGrutFG8totiVkZSZVJG491_y39UbHgiieYtxj4Pd-6FRG15KE9HCE1oMtjDGM1tdmcr0ps2JP5_3Ic0H6A4a9z5AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bladecaster",
@@ -2161,7 +2405,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEa1mqdcunSLwGCGbbji0usvsWIj47q0YZATuaZf_4_tntgfHklsHaQ_GMpoGUnCqaEnetIJhBdxZ9ZMeCFkcs0qW5nWuOpdZpfXJjPgKSnQFYY2NZEMerhUVqpHU5S9JJBselWOlb7z0H_mX8oY7alY0xVjOw7V7oNa52Isk9pr_uLXWEOdRtIuSJWAXBMFm0ZCE22gJEIkQIQzX4TobuIfab5_P3rMr6qeeEP-HcTiM5w2GTGN0fQEAAA"
+      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEa1mqdcunSLwGCGbbji0usvsWIj47q0YZATuaZf_4_tntgfHklsHaQ_GMpoGUnCqaEnetIJhBdxZ9ZMeCFkcs0qW5nWuOpdZpfXJjPgKSnQFYY2NZEMerhUVqpHU5S9JJBselWOlb7z0H_mX8oY7alY0xVjOw7V7oNa52Isk9pr_uLXWEOdRtIuSJWAXBMFm0ZCE22gJEIkQIQzX4TobuIfab5_P3rMr6qeeEP-HcTiM5w2GTGN0fQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2176,7 +2421,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.496,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUjgNQQYdQZIJXsrQ_2Q4oinJ3vNCEqTya8bwV1NBmhWGF2oxrgQGUplnwkQi2ALY0-ktPnumZizu9Um4J5WIYIwR4sk7CmQtaFa9mkokKyjK-UQSL9cEOdN7tHiByMpIvPPvruPO7k9Mr_SqOPx62rg-cxeL5uAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNOw7CQAxE7-J6OxqUjgNQQYdQZIJXsrQ_2Q4oinJ3vNCEqTya8bwV1NBmhWGF2oxrgQGUplnwkQi2ALY0-ktPnumZizu9Um4J5WIYIwR4sk7CmQtaFa9mkokKyjK-UQSL9cEOdN7tHiByMpIvPPvruPO7k9Mr_SqOPx62rg-cxeL5uAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2191,7 +2437,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.357,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EaEb7c4DuNKdSIltCsGZaUlSpQxzd6dUcMwq4T3-TwQ1tFmhiTBOxmOABpS6WfDhCFIFtkz0R0-Z6ZlDvvRKfnIoF8NhgAp61k7Yc0AbJauepKOAsrRvFMFga-BamPtu8Rv9s3LCwM5INsx9CXf6ZOfaen-sId3TvXAj-FzcFnexsnu5TcnPH-q0zgd2gzmK9gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EaEb7c4DuNKdSIltCsGZaUlSpQxzd6dUcMwq4T3-TwQ1tFmhiTBOxmOABpS6WfDhCFIFtkz0R0-Z6ZlDvvRKfnIoF8NhgAp61k7Yc0AbJauepKOAsrRvFMFga-BamPtu8Rv9s3LCwM5INsx9CXf6ZOfaen-sId3TvXAj-FzcFnexsnu5TcnPH-q0zgd2gzmK9gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2219,7 +2466,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEppJ6q0H6FS3ENl0haF1XWbHQsR3b8QgI3BPO3w_3z-7I3hW3HvIR-gcY2chB6-rntTdaJgC4MHpH3oS5s9oZfJX3Tqj6MKqaSCAGn1F2KJV3JFEW02VtoqG8qWIlOVZOBdK3238qL8pMTRoWNOCsV7DnX-gMWUcZrFY_mnvXEdcRuEx3W8FkvCQJpuGLIqkopiK1TojtPK2cjWvrmieZonI_6TxNJ83qZXT_VkBAAA"
+      "query_id": "H4sIAAAAAAAAA32QwQqCQBCG32XOEppJ6q0H6FS3ENl0haF1XWbHQsR3b8QgI3BPO3w_3z-7I3hW3HvIR-gcY2chB6-rntTdaJgC4MHpH3oS5s9oZfJX3Tqj6MKqaSCAGn1F2KJV3JFEW02VtoqG8qWIlOVZOBdK3238qL8pMTRoWNOCsV7DnX-gMWUcZrFY_mnvXEdcRuEx3W8FkvCQJpuGLIqkopiK1TojtPK2cjWvrmieZonI_6TxNJ83qZXT_VkBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2234,7 +2482,8 @@
       "p75_chaos": 7.25,
       "median_age_days": 1.245,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOuw7CQAz7l8y3saBufAAssCFUhSMnRbqXcimoqvrvzcFSMtmyHXuBpqhTg2GBUpVLhgEa-UnwGQlWBzpX-lNPprUzZ2PtRqlGlKtiCJfSEw5e3Lxw4oxaxPyJxFNGmccPimDW_rW3Wun94SBwVJLvgmTRccd3kOM7_iy24XhY-23vzFmwvQAAAA"
+      "query_id": "H4sIAAAAAAAAA1VOuw7CQAz7l8y3saBufAAssCFUhSMnRbqXcimoqvrvzcFSMtmyHXuBpqhTg2GBUpVLhgEa-UnwGQlWBzpX-lNPprUzZ2PtRqlGlKtiCJfSEw5e3Lxw4oxaxPyJxFNGmccPimDW_rW3Wun94SBwVJLvgmTRccd3kOM7_iy24XhY-23vzFmwvQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2249,7 +2498,8 @@
       "p75_chaos": 8.75,
       "median_age_days": 1.178,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPzQrCQAyE3yXnIkIv2psPoBe9SVliu4Xg_pRsqpRl391dKrjmlGG-zJAIQVCWAF0EPwt5Bx0EPSyMD6MhNSDrrP_cU_bCmVxW4abtbJCvgtN08eWigZHCwGTJoXjOvNU8aIe8qjcyo5OSWlpz6T1-839UTpjIiObNprE2d-FJxqh2f2wh9amv2Ag2F6tKVyuZl9mQ_MGhTWU-2lmps_sAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPzQrCQAyE3yXnIkIv2psPoBe9SVliu4Xg_pRsqpRl391dKrjmlGG-zJAIQVCWAF0EPwt5Bx0EPSyMD6MhNSDrrP_cU_bCmVxW4abtbJCvgtN08eWigZHCwGTJoXjOvNU8aIe8qjcyo5OSWlpz6T1-839UTpjIiObNprE2d-FJxqh2f2wh9amv2Ag2F6tKVyuZl9mQ_MGhTWU-2lmps_sAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "cardinal",
@@ -2277,7 +2527,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32Q0QqCMBSG3-VcS2gWqXc9QN3UXYQsnXBobuPsWIj47h0xyAja1Q7fv-_fNkBgxV2AYgDnGZ2FAoKuOlI3o2GMgHuvv-heWDiglSmcdeuNohOrpjm66UQENYaKsEWr2JHkW02Vtor68qmIlOXJOrVK6WV4-z8pMTRoWNOMsV7CVbijMWUa56lYfmnnvSMuk3iXrf8FtvEm2_415EkiFdfxurjOAK28rVzMiy2ah5kj8klZOk7rBW78VwpeAQAA"
+      "query_id": "H4sIAAAAAAAAA32Q0QqCMBSG3-VcS2gWqXc9QN3UXYQsnXBobuPsWIj47h0xyAja1Q7fv-_fNkBgxV2AYgDnGZ2FAoKuOlI3o2GMgHuvv-heWDiglSmcdeuNohOrpjm66UQENYaKsEWr2JHkW02Vtor68qmIlOXJOrVK6WV4-z8pMTRoWNOMsV7CVbijMWUa56lYfmnnvSMuk3iXrf8FtvEm2_415EkiFdfxurjOAK28rVzMiy2ah5kj8klZOk7rBW78VwpeAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2292,7 +2543,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.554,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqijhDB4QqkxrVkuNUjguqqt6dBJbyJ3_52W-D4uhLgW6DPDtnhQ4KxcXwIQR7AF9n-ttehRKpo_TscbpkGSHAyCUaJ1b0bBVKZJEUbR3eaIbq7VVTVdPtHuDJ4mRfbaqnw6EfRpaX_JAqPp_2lg88HpKwsgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqijhDB4QqkxrVkuNUjguqqt6dBJbyJ3_52W-D4uhLgW6DPDtnhQ4KxcXwIQR7AF9n-ttehRKpo_TscbpkGSHAyCUaJ1b0bBVKZJEUbR3eaIbq7VVTVdPtHuDJ4mRfbaqnw6EfRpaX_JAqPp_2lg88HpKwsgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2307,7 +2559,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.683,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WO3QrCMAxG3yXXQxDFn92Kz-CFjFG7iMG0HWmmjNJ3t2OCM1cJ3-E7SRDV6BChThB6peChhoh2EHNjhFyBjj3-pWdGh14NX0jt4xS4gwo6ilbIkTcapEAOxaI3MrZvI2K8TlWTqpiu6Vv6o0rDnVhR5pi6ZbiKT2Jud-vtcQ-5yc0CTuCKuV3ci5X4xTNS_j5s8jQfg4z2f_EAAAA"
+      "query_id": "H4sIAAAAAAAAA1WO3QrCMAxG3yXXQxDFn92Kz-CFjFG7iMG0HWmmjNJ3t2OCM1cJ3-E7SRDV6BChThB6peChhoh2EHNjhFyBjj3-pWdGh14NX0jt4xS4gwo6ilbIkTcapEAOxaI3MrZvI2K8TlWTqpiu6Vv6o0rDnVhR5pi6ZbiKT2Jud-vtcQ-5yc0CTuCKuV3ci5X4xTNS_j5s8jQfg4z2f_EAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2335,7 +2588,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTQqDQAyF75K1lPqDVrelZ-iiiEx1SkPjjGRii4h374iFWgpmlfA-3ksyghMlvYNiBNsJWgMFOF33rK6kYQpAhk7_qCfSrTai6IxS34-WGgigQVcztmiUWPZQq7nWRvFQvRSzMjJbzVE-6TJ-TL-Ud7ghieZFxmYt7twDiao0TPLM2_zLfddZlirMojDeAqJ0nydbQBxHWQRTOZWrfUZo_XHVal61SE9aEP-aQzzN9QZyyBRdVAEAAA"
+      "query_id": "H4sIAAAAAAAAA32QTQqDQAyF75K1lPqDVrelZ-iiiEx1SkPjjGRii4h374iFWgpmlfA-3ksyghMlvYNiBNsJWgMFOF33rK6kYQpAhk7_qCfSrTai6IxS34-WGgigQVcztmiUWPZQq7nWRvFQvRSzMjJbzVE-6TJ-TL-Ud7ghieZFxmYt7twDiao0TPLM2_zLfddZlirMojDeAqJ0nydbQBxHWQRTOZWrfUZo_XHVal61SE9aEP-aQzzN9QZyyBRdVAEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2350,7 +2604,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.197,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqilhZGRCqTGqEJcepHBdUVb17E1iKJ1t-_78FiqNPBboF8uicFTooFCfDhxCsAXwe6e97FkqkjnJlj69TluGSGxtg4BKNEyt6tkomskiKNvcfNEP11td8VXe7B3iyONnXnWq03927leUtP6Taj4e1zQb98WFEtwAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqilhZGRCqTGqEJcepHBdUVb17E1iKJ1t-_78FiqNPBboF8uicFTooFCfDhxCsAXwe6e97FkqkjnJlj69TluGSGxtg4BKNEyt6tkomskiKNvcfNEP11td8VXe7B3iyONnXnWq03927leUtP6Taj4e1zQb98WFEtwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2365,7 +2620,8 @@
       "p75_chaos": 20.0,
       "median_age_days": 0.562,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOTQvCMAyG_0vOQxDFr6t49epBxqhdxWDajjRTRul_t2WCNaeE9-F9EiGIkjHAIYIfBL2DAwSjR1Y3MpAakGkwf-mJjDVOFF1Q9OPoqT_7wjbQY9CMFp0Sz5m0hrVxiqfurZiVk9JXfFl3jd_mH5Ub7khieI6xr8NFeCJRt1mu91tIbWorOILN5q66qxXpRTOSn9-tUpkP3sBSD_YAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOTQvCMAyG_0vOQxDFr6t49epBxqhdxWDajjRTRul_t2WCNaeE9-F9EiGIkjHAIYIfBL2DAwSjR1Y3MpAakGkwf-mJjDVOFF1Q9OPoqT_7wjbQY9CMFp0Sz5m0hrVxiqfurZiVk9JXfFl3jd_mH5Ub7khieI6xr8NFeCJRt1mu91tIbWorOILN5q66qxXpRTOSn9-tUpkP3sBSD_YAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frosthand",
@@ -2393,7 +2649,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTwuCQBDFv8ucJfIPml6ja9cOIbLpRkPjrsyOhYjfvRWDjKA5zfB-vDczIzhR0jsoRrCdoDVQgNN1z-pCGqYAZOj0l3og3Wojik4o9W1vqTnamQ2gQVcztmiUWPZkq7nWRvFQPRWzMjL7zXk-7jy-nT-Ud7giieZFxmYtbtwdiao0TPLM2_zKfddZlirMojD-B0TpNk_-AXEcZRFM5VSu9hmh9cdVq3nVIj1oQfx_dvE01wtJYnlLWQEAAA"
+      "query_id": "H4sIAAAAAAAAA32QTwuCQBDFv8ucJfIPml6ja9cOIbLpRkPjrsyOhYjfvRWDjKA5zfB-vDczIzhR0jsoRrCdoDVQgNN1z-pCGqYAZOj0l3og3Wojik4o9W1vqTnamQ2gQVcztmiUWPZkq7nWRvFQPRWzMjL7zXk-7jy-nT-Ud7giieZFxmYtbtwdiao0TPLM2_zKfddZlirMojD-B0TpNk_-AXEcZRFM5VSu9hmh9cdVq3nVIj1oQfx_dvE01wtJYnlLWQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bastion",
@@ -2408,7 +2665,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.351,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqzAGQGBGqTGpUS05S2Q4oqnr3prCUP_nLz34LmKMXg36BPDvnBD0YhaL4FIK1A68z_W2vUzUOKJdCwua3iUlGgw5GtqAcOaFnbWAkDZRQ6_BBVUy-v9t1zXZ_dPBicdKvOrbT4dAPI8tbfkiTn0_rng3YWuTwtgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-K5GwvqzAGQGBGqTGpUS05S2Q4oqnr3prCUP_nLz34LmKMXg36BPDvnBD0YhaL4FIK1A68z_W2vUzUOKJdCwua3iUlGgw5GtqAcOaFnbWAkDZRQ6_BBVUy-v9t1zXZ_dPBicdKvOrbT4dAPI8tbfkiTn0_rng3YWuTwtgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bastion",
@@ -2423,7 +2681,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.378,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1caEVtGsPILiUUsZpxGA6LUmqlDJ3d0oFx6wS_uO_zKDmbFSoZugHoz5ABYp-FHdjhFiATQP-pefHpOQdn0ZkUrs8CLlVKKAl9UIdBWe9JLBD8RicTM3bibhgS92iS7br_C3-UanhTmwoa0xtHm70SczNflseS4h1rDN4hi6Zm-zOVuIXr0j6_bCLy3wAXOLGOPUAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1caEVtGsPILiUUsZpxGA6LUmqlDJ3d0oFx6wS_uO_zKDmbFSoZugHoz5ABYp-FHdjhFiATQP-pefHpOQdn0ZkUrs8CLlVKKAl9UIdBWe9JLBD8RicTM3bibhgS92iS7br_C3-UanhTmwoa0xtHm70SczNflseS4h1rDN4hi6Zm-zOVuIXr0j6_bCLy3wAXOLGOPUAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bastion",
@@ -2438,7 +2697,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.107,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yXzbS7S2VkER5ESr5EG0ruS5JRS-u7e6VIzJfxf8mUFc_Ri0K2QZ-ecoAOjWBQfQrAF8GWmv_QyLsYR5VRI2Pw6Mslg59z4AANbVJ44oWet9EQaKaEu_RtVMXm72ZxVebsHeLI46dc_1dV-N-9alpf8kPrB8bC1-gBvBEYtuwAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yXzbS7S2VkER5ESr5EG0ruS5JRS-u7e6VIzJfxf8mUFc_Ri0K2QZ-ecoAOjWBQfQrAF8GWmv_QyLsYR5VRI2Pw6Mslg59z4AANbVJ44oWet9EQaKaEu_RtVMXm72ZxVebsHeLI46dc_1dV-N-9alpf8kPrB8bC1-gBvBEYtuwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bastion",
@@ -2453,7 +2713,8 @@
       "p75_chaos": 18.75,
       "median_age_days": 0.202,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPwQrCMAyG3yXn4UEn6M6eRfAoY9QusmDWjrRTRum72zLBmlPC__F_JIDzys8OmgB28mQNNOBQz6LujBAr8MuEf-llWBxpxacZmZy_DoTcu7PNfAU9OS00klHeSqJHFI1GydK9lYgyPndmZ1Lewrf9R6WGB7FHWWPqy3DjnsTc7bf1sYbYxraAA4zJ3BV3sRK_eEXSA4ddzPMBXqe7SfoAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPwQrCMAyG3yXn4UEn6M6eRfAoY9QusmDWjrRTRum72zLBmlPC__F_JIDzys8OmgB28mQNNOBQz6LujBAr8MuEf-llWBxpxacZmZy_DoTcu7PNfAU9OS00klHeSqJHFI1GydK9lYgyPndmZ1Lewrf9R6WGB7FHWWPqy3DjnsTc7bf1sYbYxraAA4zJ3BV3sRK_eEXSA4ddzPMBXqe7SfoAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2468,7 +2729,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.452,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqGWAqG0KVSU1rKXEix6Wqqt6dFJbyJ3_52W-FYmhTgWaFlI2TQAOF_KT4DASbA1sy_W1virlcWai0I_ZpvvAwmrAM4KDn4pUjC1rSykZST4K6dDOqotj-cTdW4f3h4MXBSL_2WE-7Qz-MHN7hh1T_-bTt-QBsV85SuQAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqGWAqG0KVSU1rKXEix6Wqqt6dFJbyJ3_52W-FYmhTgWaFlI2TQAOF_KT4DASbA1sy_W1virlcWai0I_ZpvvAwmrAM4KDn4pUjC1rSykZST4K6dDOqotj-cTdW4f3h4MXBSL_2WE-7Qz-MHN7hh1T_-bTt-QBsV85SuQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2483,7 +2745,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.501,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WO3QrCMAxG3yXXQ_APdM-gV3o3xohb3YJdO9LMMUrf3Y4J1lwlfIfvxIMTlNFB7sEOQtZADk7VI-NDKwgZyDyov_TOOLgrGeVuHTZ2ulDbiSHTQgYNuZqpJ4NiObK94loZ5LmakBmNLI2LMQoL_-3-UbHhSVoUrzE1abhxL9K62h23hzOEMpQJ7KGP5iq5k5X0W69IfP-0D8t8AJxLGyX4AAAA"
+      "query_id": "H4sIAAAAAAAAA1WO3QrCMAxG3yXXQ_APdM-gV3o3xohb3YJdO9LMMUrf3Y4J1lwlfIfvxIMTlNFB7sEOQtZADk7VI-NDKwgZyDyov_TOOLgrGeVuHTZ2ulDbiSHTQgYNuZqpJ4NiObK94loZ5LmakBmNLI2LMQoL_-3-UbHhSVoUrzE1abhxL9K62h23hzOEMpQJ7KGP5iq5k5X0W69IfP-0D8t8AJxLGyX4AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2503,7 +2766,8 @@
       "p75_chaos": 47.5,
       "median_age_days": 1.32,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQ6CMAyG36VnYlQgUZ5BT3ozhEyY0Di2pSsSsvDujmDijD21-f58bT04Fjw4KDwYy2g0FOBkPZC4KwlzAjxZ-UOvJKw7o5bu0onGjCdsO9aoW0igQVcT9qgFGwrZXlIttaCpGgWR0LwYl41h4c1_3N9UMDxQsaQVYxPDjXuiUtU-32XHoPnHg7WGuMq2eZrCXM5lZPPQh9OqaI5aVC-1RsJ_h3Re6g3xWB3uGQEAAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQ6CMAyG36VnYlQgUZ5BT3ozhEyY0Di2pSsSsvDujmDijD21-f58bT04Fjw4KDwYy2g0FOBkPZC4KwlzAjxZ-UOvJKw7o5bu0onGjCdsO9aoW0igQVcT9qgFGwrZXlIttaCpGgWR0LwYl41h4c1_3N9UMDxQsaQVYxPDjXuiUtU-32XHoPnHg7WGuMq2eZrCXM5lZPPQh9OqaI5aVC-1RsJ_h3Re6g3xWB3uGQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2518,7 +2782,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.729,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUbwAW2BCqTGpaS4kTOS5VVfXfSWApns6y392tkA1tytCuEJNxFGghk5sUn55ga8CWRH_Xm2LKZxbK1xH7OJ94GE1YhkusSAM9Z6ccWNCiFiCQOhLUpZtRFcWqbY0tqfdHAy_2RvqtEAra7fadZP_2v5dS4njY6nwAO2-Ak74AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUbwAW2BCqTGpaS4kTOS5VVfXfSWApns6y392tkA1tytCuEJNxFGghk5sUn55ga8CWRH_Xm2LKZxbK1xH7OJ94GE1YhkusSAM9Z6ccWNCiFiCQOhLUpZtRFcWqbY0tqfdHAy_2RvqtEAra7fadZP_2v5dS4njY6nwAO2-Ak74AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2533,7 +2798,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.804,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WP2wrCMAyG3yXXQ_AEumdQb_ROxohb3YJdO9LMMUrf3ZYJzlwl_IePeHCCMjjIPdheyBrIwalqYHxoBSEDmXr1p94Ye3cmo9y1xdqOJ2paMWSai02RDGpyFVNHBsVyDHSKK2WQp3JEZjSSahM2Uu_-C_i5YsOTtCieZaqX4sq9SOtys1_vjhCKUCzMHrpILhf3YiX91rMl_nDYhjQflMELl_0AAAA"
+      "query_id": "H4sIAAAAAAAAA1WP2wrCMAyG3yXXQ_AEumdQb_ROxohb3YJdO9LMMUrf3ZYJzlwl_IePeHCCMjjIPdheyBrIwalqYHxoBSEDmXr1p94Ye3cmo9y1xdqOJ2paMWSai02RDGpyFVNHBsVyDHSKK2WQp3JEZjSSahM2Uu_-C_i5YsOTtCieZaqX4sq9SOtys1_vjhCKUCzMHrpILhf3YiX91rMl_nDYhjQflMELl_0AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shock_ambusher",
@@ -2553,7 +2819,8 @@
       "p75_chaos": 50.0,
       "median_age_days": 1.072,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WP0QrCMAxF_yXPQ9RtoPsG9UXfZIy61Rns2pJmjlH673ZMcGKeEk7uvYkHx4J7B4UHYxmNhgKcrHsSNyUhJMCjlT_0QsK6I2rpzg_RmOGA7YM16vZkJkkCDbqasEMt2FAUdJJqqQWN1SCIhObJdoqNqVf_CfhuRYc7KpY0Y2yWcOWeqFS1zTfZPtr8495aQ1xl6zxNIZShXLh56OJp1WJetKheal6JT-7SMNUbtXTqhR4BAAA"
+      "query_id": "H4sIAAAAAAAAA2WP0QrCMAxF_yXPQ9RtoPsG9UXfZIy61Rns2pJmjlH673ZMcGKeEk7uvYkHx4J7B4UHYxmNhgKcrHsSNyUhJMCjlT_0QsK6I2rpzg_RmOGA7YM16vZkJkkCDbqasEMt2FAUdJJqqQWN1SCIhObJdoqNqVf_CfhuRYc7KpY0Y2yWcOWeqFS1zTfZPtr8495aQ1xl6zxNIZShXLh56OJp1WJetKheal6JT-7SMNUbtXTqhR4BAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2568,7 +2835,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.525,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNvQoCQQyE3yX1djZyta0gWIoccY0Y2J8jySnLce9uVpsz1SSZmW8BNbRZYVigTsa1wABKcRa8JYI1gLWJ_r5H1niOrk_PpodqEODuJ-HMBa2KWzJJpILSxjeKYLFe1EHOuVwDPDgZyReaPTpu9o3k9Eo_i2P3u7XPB_Uw1kKwAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNvQoCQQyE3yX1djZyta0gWIoccY0Y2J8jySnLce9uVpsz1SSZmW8BNbRZYVigTsa1wABKcRa8JYI1gLWJ_r5H1niOrk_PpodqEODuJ-HMBa2KWzJJpILSxjeKYLFe1EHOuVwDPDgZyReaPTpu9o3k9Eo_i2P3u7XPB_Uw1kKwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2583,7 +2851,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 1.12,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOTwvCMAzFv0vOQxgijJ29CoJHGaV2FYP9M9JMGaXf3YwJ1pxe8n68lwyJNc8J-gxxYowBekjWzKRvzkJpgJfJ_rknTOZiRJ8fSzpGhgZGORF6DJojCeItGRs0LeqtiXTgNWgtkp5r_kb-KEm4o2NLm41jbe7SE51TbdsdoAxlqNgMXopVtVcS3cttiDzd7cs6H_YvH3DuAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOTwvCMAzFv0vOQxgijJ29CoJHGaV2FYP9M9JMGaXf3YwJ1pxe8n68lwyJNc8J-gxxYowBekjWzKRvzkJpgJfJ_rknTOZiRJ8fSzpGhgZGORF6DJojCeItGRs0LeqtiXTgNWgtkp5r_kb-KEm4o2NLm41jbe7SE51TbdsdoAxlqNgMXopVtVcS3cttiDzd7cs6H_YvH3DuAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2611,7 +2880,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOQzbnPtjZqyB4lFFqV7HYtSPNlFH63-2Y4EQwpyTvw5sPD444jQ4aD3YgZQ004KQYkV-0hJAATYP8Ug_KiZOI-fE2ub0lSKCLLVS9MpwsRqSXKKThOLEnR-SGZqN5UJxz9m_LDxUdrkqTxEVW3VrcuLvSmmVZXUSXX3UcBovEinRb5f-AvNqV6T8gS8u0htCGdrWOhz7exlb1KlX6oRck_qXOwxwvBqlXilEBAAA"
+      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOQzbnPtjZqyB4lFFqV7HYtSPNlFH63-2Y4EQwpyTvw5sPD444jQ4aD3YgZQ004KQYkV-0hJAATYP8Ug_KiZOI-fE2ub0lSKCLLVS9MpwsRqSXKKThOLEnR-SGZqN5UJxz9m_LDxUdrkqTxEVW3VrcuLvSmmVZXUSXX3UcBovEinRb5f-AvNqV6T8gS8u0htCGdrWOhz7exlb1KlX6oRck_qXOwxwvBqlXilEBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2626,7 +2896,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.47,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNPQvCQAyG_0vm21xKZ1el4ChS4hkxcB8ll1qO0v9uTpea6U3yJM8KRVHnAv0KeVLOCXoo5GfBeyDYHGid6G974uIv3vLwquWY9Zwb6eBhc-HICTWLcZHEU0Kp44IimLR9azaTXW8OnhyU5GuOdjru-l3k8A4_xNzdYWv1AXkFkLG1AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNPQvCQAyG_0vm21xKZ1el4ChS4hkxcB8ll1qO0v9uTpea6U3yJM8KRVHnAv0KeVLOCXoo5GfBeyDYHGid6G974uIv3vLwquWY9Zwb6eBhc-HICTWLcZHEU0Kp44IimLR9azaTXW8OnhyU5GuOdjru-l3k8A4_xNzdYWv1AXkFkLG1AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2641,7 +2912,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.63,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQvCMAyF_0vOQxgijJ29KoJHGaN2FYNdO9JsMkr_uykTrDm95H28lwiBFc8B2gh-YvQOWghGz6Tu1kCqgNfJ_LknDPqqRV-eazh6PvtMVjDInXBEp9iTcKMhbZyitX8rIuU4p-U2KbvFb-6PkoQHWja02TiU5i680Nq-rpsDpC51BRthlOK-2AuJdrEbIp83-5TnA44RTNzzAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQvCMAyF_0vOQxgijJ29KoJHGaN2FYNdO9JsMkr_uykTrDm95H28lwiBFc8B2gh-YvQOWghGz6Tu1kCqgNfJ_LknDPqqRV-eazh6PvtMVjDInXBEp9iTcKMhbZyitX8rIuU4p-U2KbvFb-6PkoQHWja02TiU5i680Nq-rpsDpC51BRthlOK-2AuJdrEbIp83-5TnA44RTNzzAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "sanguimancer",
@@ -2669,7 +2941,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOQzrnPtjZqyJ4lFHqVrHYrSPNlDH63-2YYEVYTknehzcfE1gSNFgoJzA9KdNBCVbWA4qrluAioLGXP-pB2fpc-_x0H-3e0NHMZASN76NqVSfIoOdaibXsBI78JRBFR7PbPM0Pu0wf3y_lHW5Kk8RFVk0obuxDac3juEi9y7869L1B4inb5skakOS7jK0BMctYAa5yVbDOBK2_jQd1kCr91Avin1Mkbo438W6GeFYBAAA"
+      "query_id": "H4sIAAAAAAAAA32QTQvCMAyG_0vOQzrnPtjZqyJ4lFHqVrHYrSPNlDH63-2YYEVYTknehzcfE1gSNFgoJzA9KdNBCVbWA4qrluAioLGXP-pB2fpc-_x0H-3e0NHMZASN76NqVSfIoOdaibXsBI78JRBFR7PbPM0Pu0wf3y_lHW5Kk8RFVk0obuxDac3juEi9y7869L1B4inb5skakOS7jK0BMctYAa5yVbDOBK2_jQd1kCr91Avin1Mkbo438W6GeFYBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2684,7 +2957,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.295,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiDgAO0KVSY2w5CSV7YCqqncngaX8yV9-9lvBHL0aDCuU2blkGMAoVsW7EGwBfJnpb3t5LsYR5VxJ2PwkRBMEmNiicuKMXrRhiTRSRl3GN6pi9v6sy5rregvwYHHSrzi103HXdyPLS35IUx8PW88HZ8l3n7QAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiDgAO0KVSY2w5CSV7YCqqncngaX8yV9-9lvBHL0aDCuU2blkGMAoVsW7EGwBfJnpb3t5LsYR5VxJ2PwkRBMEmNiicuKMXrRhiTRSRl3GN6pi9v6sy5rregvwYHHSrzi103HXdyPLS35IUx8PW88HZ8l3n7QAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2699,7 +2973,8 @@
       "p75_chaos": 3.75,
       "median_age_days": 0.306,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EbQI0qV4APciZZxGDKbTkqRKGebuTqngmFXCf_yXCGrOJoUmwjAaDQEaUPSTuBsjpApsHvEvPT9mJe_4NCGT2pERO6igI_VCPQVng2SsR_EYnMzt24m4YEvZIsuuS_zW_qjccCc2lDWmrgw3-iTmdret95Cu6VqwEfosbou7WIlfvCL58UOdlvkA1rz4VvIAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOQQrCQAxF75J1EbQI0qV4APciZZxGDKbTkqRKGebuTqngmFXCf_yXCGrOJoUmwjAaDQEaUPSTuBsjpApsHvEvPT9mJe_4NCGT2pERO6igI_VCPQVng2SsR_EYnMzt24m4YEvZIsuuS_zW_qjccCc2lDWmrgw3-iTmdret95Cu6VqwEfosbou7WIlfvCL58UOdlvkA1rz4VvIAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2723,7 +2998,8 @@
       "p75_chaos": 40.0,
       "median_age_days": 0.356,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQ9RtWHwUP8B3GaNuEYPZVtJMGWP_bscEK4J5ajiXc9MRvFrtPexH6JxS18IePFa92AsjTAno4PCLnm6Dp8rysUcmrwdGrCGBmnwl1FBrtZMQa1AqbK0M5dOK2FZn2VwWus7jW_tJBcOVWFEWTHUMV_5OzOV2k-bB8kt75zrRMjO71PwL5OvMBEMxFVHbCE04vYz26En84CUSvm7SaZ4XxUwP7zQBAAA"
+      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQ9RtWHwUP8B3GaNuEYPZVtJMGWP_bscEK4J5ajiXc9MRvFrtPexH6JxS18IePFa92AsjTAno4PCLnm6Dp8rysUcmrwdGrCGBmnwl1FBrtZMQa1AqbK0M5dOK2FZn2VwWus7jW_tJBcOVWFEWTHUMV_5OzOV2k-bB8kt75zrRMjO71PwL5OvMBEMxFVHbCE04vYz26En84CUSvm7SaZ4XxUwP7zQBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2738,7 +3014,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.511,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiJgRO0KVSY2w5CSV44CiqndvAkvxZMvv_7dANrSSYVggzcYpwgCZfFF8CMHqwOpMf9_rq2b2KOdCwtlOQjRdUqcdTJy9cuCIlrSxgdRTRK3jB1UxWm_sxia83R08WYz0aw8tOu7u3crylh_S_MfD2mcDIaQUDbkAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqiJgRO0KVSY2w5CSV44CiqndvAkvxZMvv_7dANrSSYVggzcYpwgCZfFF8CMHqwOpMf9_rq2b2KOdCwtlOQjRdUqcdTJy9cuCIlrSxgdRTRK3jB1UxWm_sxia83R08WYz0aw8tOu7u3crylh_S_MfD2mcDIaQUDbkAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2753,7 +3030,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.553,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIegQZEfxLN5ljNpFDGbtSDNllL67HROsOSX8H_-XCEGNTgGaCH5U8g4aCGgnMTdGSBXoPOJfennMgazh04RMQY-M2J_9QlfQU7BCAzmjXjI7oFh0RububUSM06VxMWbhNX67f1RuuBMryhpTX4ab8CTmbret95Da1BZshCGLu-IuVuIXr0j-_lCnZT7d8i8v9wAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIegQZEfxLN5ljNpFDGbtSDNllL67HROsOSX8H_-XCEGNTgGaCH5U8g4aCGgnMTdGSBXoPOJfennMgazh04RMQY-M2J_9QlfQU7BCAzmjXjI7oFh0RububUSM06VxMWbhNX67f1RuuBMryhpTX4ab8CTmbret95Da1BZshCGLu-IuVuIXr0j-_lCnZT7d8i8v9wAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "bloodletter",
@@ -2777,7 +3055,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32PwQqCQBCG32XOEpVK4jE6R_cQ2XSiodFdZsdCxHdvxSAjaE47_B_fPzuAV6Odh3wA65RsCzl4rDoxF0YYI9De4Vd6uvWeKsOHDpm87hmxPtqJjqAmXwk11Bq1EtgGpcLWSF8-jYhpdTJOjaHwPLzdHyoYrsSKMsdUL8OVvxNzud3EabD8pp1zVrRMsl2c_QPSdZIFQzEWi7YBmnB6udgXT-IHz0j4fxaP07wADej9GzkBAAA"
+      "query_id": "H4sIAAAAAAAAA32PwQqCQBCG32XOEpVK4jE6R_cQ2XSiodFdZsdCxHdvxSAjaE47_B_fPzuAV6Odh3wA65RsCzl4rDoxF0YYI9De4Vd6uvWeKsOHDpm87hmxPtqJjqAmXwk11Bq1EtgGpcLWSF8-jYhpdTJOjaHwPLzdHyoYrsSKMsdUL8OVvxNzud3EabD8pp1zVrRMsl2c_QPSdZIFQzEWi7YBmnB6udgXT-IHz0j4fxaP07wADej9GzkBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2792,7 +3071,8 @@
       "p75_chaos": 4.5,
       "median_age_days": 0.419,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUlZWBgQ2hygTTWkqcyHGLqqr_TgJLucnWnf1uhWJoU4FuhZSNk0AHhfyk-AgEmwNbMv25l3EppyQzqV0p5oB65mE0YRnAwZOLV44saElrOpJ6EtSlf6MqirWfjVmRt7uDFwcj_fJjPe13-27kMIdfpDY4HramD6XWU5O7AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUlZWBgQ2hygTTWkqcyHGLqqr_TgJLucnWnf1uhWJoU4FuhZSNk0AHhfyk-AgEmwNbMv25l3EppyQzqV0p5oB65mE0YRnAwZOLV44saElrOpJ6EtSlf6MqirWfjVmRt7uDFwcj_fJjPe13-27kMIdfpDY4HramD6XWU5O7AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2807,7 +3087,8 @@
       "p75_chaos": 9.5,
       "median_age_days": 0.582,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOywrCQAxF_yXrIohYpFu3Lly4k1LGNrbBeZRMWinD_LtTKjhmlXAP9ySAFyWThyqAG4WchQo8thOrh0aIBcgy4l96HRZ_dnZGlhuaUSu-UD-IJdtDAR35lsmQVeI40Qa5Rat4ad6KWVlZO1dnUt7Dt_1HpYYnaUHeYurycOdfpHVTlsc9xDrWGRvAJHGT3dlKetYbkv4_HeI6H7D007v5AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOywrCQAxF_yXrIohYpFu3Lly4k1LGNrbBeZRMWinD_LtTKjhmlXAP9ySAFyWThyqAG4WchQo8thOrh0aIBcgy4l96HRZ_dnZGlhuaUSu-UD-IJdtDAR35lsmQVeI40Qa5Rat4ad6KWVlZO1dnUt7Dt_1HpYYnaUHeYurycOdfpHVTlsc9xDrWGRvAJHGT3dlKetYbkv4_HeI6H7D007v5AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2839,7 +3120,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QywrCMBBF_2XWIkZtrW7dunDhTkqJNepgXkymlVL676ZUsCI0q4R7OHcmLQSWXAXYteA8o7Owg6DKiuRFK-hmwI1XP-nx0YS9s7UiPinjtaQD3h9s0d5hBlcMJaFBK9lRpI2iUllJTfGSRNJy7-w7Y-W5_di_VDTcULOiIcbrOJyHJ2pdpGkiouU_rbx3xMVaCJFNAWKz2G6mgGWapNOGrRAr6PIuH83bgonLF6P36Iq61gMS_zBbdf15A510ksR9AQAA"
+      "query_id": "H4sIAAAAAAAAA32QywrCMBBF_2XWIkZtrW7dunDhTkqJNepgXkymlVL676ZUsCI0q4R7OHcmLQSWXAXYteA8o7Owg6DKiuRFK-hmwI1XP-nx0YS9s7UiPinjtaQD3h9s0d5hBlcMJaFBK9lRpI2iUllJTfGSRNJy7-w7Y-W5_di_VDTcULOiIcbrOJyHJ2pdpGkiouU_rbx3xMVaCJFNAWKz2G6mgGWapNOGrRAr6PIuH83bgonLF6P36Iq61gMS_zBbdf15A510ksR9AQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2854,7 +3136,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.214,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUlRUhBjaEKhNMaylxIsdtVVX9dxJYiqez7Hd3K2RDGzO0K8RkHAVayORGxacn2BqwJdHf9Tos-RRlIrUbheRRz9wPJiz9JVaogRdnpxxY0KIWJJA6EtSlm1EVxapxDS6590cDb_ZG-i0RCtrt9p1kP_nfS6lxPGx1PmP5SgXAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNxbUlRUhBjaEKhNMaylxIsdtVVX9dxJYiqez7Hd3K2RDGzO0K8RkHAVayORGxacn2BqwJdHf9Tos-RRlIrUbheRRz9wPJiz9JVaogRdnpxxY0KIWJJA6EtSlm1EVxapxDS6590cDb_ZG-i0RCtrt9p1kP_nfS6lxPGx1PmP5SgXAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2869,7 +3152,8 @@
       "p75_chaos": 4.75,
       "median_age_days": 0.21,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPTQvCMAyG_0vOQxBxyK5eRTx4kzHqFl2wHyPNJmP0v9sywZpTwvvxkAW8KBk9VAu4QchZqMBjO7K6a4RQgMwD_qmXfvZHZydkuaIZtOITPXuxZJ9nl0IFdORbJkNWieMYMcgtWsVz81bMykoqTuDIvS1fxM8VGx6kBXmVqcvFjX-R1k1Z7rcQ6lBn3gVMBDfZna2kJ71a4hOHXUjzAS91RdL-AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPTQvCMAyG_0vOQxBxyK5eRTx4kzHqFl2wHyPNJmP0v9sywZpTwvvxkAW8KBk9VAu4QchZqMBjO7K6a4RQgMwD_qmXfvZHZydkuaIZtOITPXuxZJ9nl0IFdORbJkNWieMYMcgtWsVz81bMykoqTuDIvS1fxM8VGx6kBXmVqcvFjX-R1k1Z7rcQ6lBn3gVMBDfZna2kJ71a4hOHXUjzAS91RdL-AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "storming_zealot",
@@ -2901,7 +3185,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA31QzQrCMAx-l5xFrD-b29WriAdvMkadVYNdW9JsMsbe3Y4JToTllPD9JWnBs-TKQ9qCdYzWQApeFRXJi1bQzYAbp37Q46PxO2tqRXxSpdOS9nh_sEFzP9heNIMr-oKwRCPZUpCUigplJDX5SxJJw71xHxxyz-0n4ssKDjfUrGiA8ToG5_6JWudRtBHB5R-tnLPE-VoIsZ0iiHiRxFOEZbSJph0SIVbQZV022reFMhyfj-ZRi7rWAyU8crvq-noDCVRqv4IBAAA"
+      "query_id": "H4sIAAAAAAAAA31QzQrCMAx-l5xFrD-b29WriAdvMkadVYNdW9JsMsbe3Y4JToTllPD9JWnBs-TKQ9qCdYzWQApeFRXJi1bQzYAbp37Q46PxO2tqRXxSpdOS9nh_sEFzP9heNIMr-oKwRCPZUpCUigplJDX5SxJJw71xHxxyz-0n4ssKDjfUrGiA8ToG5_6JWudRtBHB5R-tnLPE-VoIsZ0iiHiRxFOEZbSJph0SIVbQZV022reFMhyfj-ZRi7rWAyU8crvq-noDCVRqv4IBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shattersword",
@@ -2916,7 +3201,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.429,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqzAGQGBGqTDDCkpNUtgOqqt69CSzlT_7ys98C5ujVYFigTM4lwwBGsSrehWAN4PNEf9vzazaOKKdKwuYXJxII8GCLyokzetGGJdJIGXUeP6iK2fuzLmuu6y3Ak8VJv-LUTsdd340sb_khTX08rD0brJYb27QAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqzAGQGBGqTDDCkpNUtgOqqt69CSzlT_7ys98C5ujVYFigTM4lwwBGsSrehWAN4PNEf9vzazaOKKdKwuYXJxII8GCLyokzetGGJdJIGXUeP6iK2fuzLmuu6y3Ak8VJv-LUTsdd340sb_khTX08rD0brJYb27QAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shattersword",
@@ -2931,7 +3217,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.429,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXn4cGh6M4-gOBRRqldxGDWjTRTRum72zHBmlPC__F_iRDU6hSgiTCMSoOHBgK6SeyNEVIFOo_4l54fcyBn-TQhU9CLIjJU0FFwQj15q4NkrEdx6K3M5m1FrNelbJFl1zV-a39UbrgTK8oaU1eGm_AkZlMft_sdpDa1BRyhz2ZT3MVK_OIVyZ8f6rTMB80sDJXzAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXn4cGh6M4-gOBRRqldxGDWjTRTRum72zHBmlPC__F_iRDU6hSgiTCMSoOHBgK6SeyNEVIFOo_4l54fcyBn-TQhU9CLIjJU0FFwQj15q4NkrEdx6K3M5m1FrNelbJFl1zV-a39UbrgTK8oaU1eGm_AkZlMft_sdpDa1BRyhz2ZT3MVK_OIVyZ8f6rTMB80sDJXzAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "shattersword",
@@ -2951,7 +3238,8 @@
       "p75_chaos": 23.75,
       "median_age_days": 1.207,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXn4cHhmDv7AIJHkVK3iMFsK2mmjNJ3t2OCFXNK-H6-JAG8Wp08NAFGpzQO0IDHdhJ7ZYRYgM4Of-jxPntqLR8mZPJ6UkSGAjryrVBPg9VRUqxHaXGwMpuXFbGDLrJlWdp1Dh_tN5UMN2JFWTF1Odz4BzGbcr-tdknzjyfnRlGTcFVDvMRLZgvQp9NMNmct8ZPXSHqtLuNSb7t8TvMUAQAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXn4cHhmDv7AIJHkVK3iMFsK2mmjNJ3t2OCFXNK-H6-JAG8Wp08NAFGpzQO0IDHdhJ7ZYRYgM4Of-jxPntqLR8mZPJ6UkSGAjryrVBPg9VRUqxHaXGwMpuXFbGDLrJlWdp1Dh_tN5UMN2JFWTF1Odz4BzGbcr-tdknzjyfnRlGTcFVDvMRLZgvQp9NMNmct8ZPXSHqtLuNSb7t8TvMUAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -2966,7 +3254,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.468,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxsBYgcSIUGVSIyw5aeU4oKjq3UlgKX_yl5_9FkiGlhN0C0yz8RShg0Q-K96FYHVgZaa_bU9CdDgde1TMI-n5WdJFMICDkZNXDhzRJq1oIPUUUcvwRlWM1h42YfVdbw4eLEb6lYd6Omz6ZmR5yQ-p-v1ubfkAvSyrWLgAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxsBYgcSIUGVSIyw5aeU4oKjq3UlgKX_yl5_9FkiGlhN0C0yz8RShg0Q-K96FYHVgZaa_bU9CdDgde1TMI-n5WdJFMICDkZNXDhzRJq1oIPUUUcvwRlWM1h42YfVdbw4eLEb6lYd6Omz6ZmR5yQ-p-v1ubfkAvSyrWLgAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -2981,7 +3270,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.548,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yVzcbCIpZuDY1FwlFJiGzGYa0vuqpTj3t0rFTwzJfwf_xcP1qGbLJQehtHx0EMJltpJ8SYEIQM3j_SXViREh9OxQsWpIz0_ZnsRNJBBx7ZVNtyjGzSihrSlHnVu3qiKvVsKF2H0Xf23-kfFhjuLI11j7tJwY58s0uzy_baAUIc6gT2YaG6SO1lZXrIi8fsiD8t8ABviGFT3AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yVzcbCIpZuDY1FwlFJiGzGYa0vuqpTj3t0rFTwzJfwf_xcP1qGbLJQehtHx0EMJltpJ8SYEIQM3j_SXViREh9OxQsWpIz0_ZnsRNJBBx7ZVNtyjGzSihrSlHnVu3qiKvVsKF2H0Xf23-kfFhjuLI11j7tJwY58s0uzy_baAUIc6gT2YaG6SO1lZXrIi8fsiD8t8ABviGFT3AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -3001,7 +3291,8 @@
       "p75_chaos": 21.5,
       "median_age_days": 0.606,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIeh0jt08eBQFjzJG3CIWs3akrTJG392OCU7MKeH7-ZIMYB06b6EYwHROGQ0FWKq94JUJQgKu7-iHHoiJdsf9AQV9Q3K69_bM2EICjbK1qFZpdEZitCWpSaP01QtFULtROC6M-y7DR_1NRcNNsSOZsGrmcGEfirnapNtVHjX_2HedEVelyyxbQyhDObMN0MbTqtk8axU_eYrE9_I0jPUGABofrhgBAAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnIeh0jt08eBQFjzJG3CIWs3akrTJG392OCU7MKeH7-ZIMYB06b6EYwHROGQ0FWKq94JUJQgKu7-iHHoiJdsf9AQV9Q3K69_bM2EICjbK1qFZpdEZitCWpSaP01QtFULtROC6M-y7DR_1NRcNNsSOZsGrmcGEfirnapNtVHjX_2HedEVelyyxbQyhDObMN0MbTqtk8axU_eYrE9_I0jPUGABofrhgBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -3016,7 +3307,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.321,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOvQrCMBB-l5uzuUg3B8eq4ChSzvTEwCUpl0sllL67iS71pu_4fhdIipoTdAvESV0M0EEimwUfTLAa0DLRH9sTEx3Oxx4F80hyeZV0ZfSn2BwGRpesOO8CapSq9ySWAkoZ3iiCQVtqa62lt7uBp2Ml-S7w1Tps_g10PPNPUjfsd2u7Dw7_2C-9AAAA"
+      "query_id": "H4sIAAAAAAAAA1VOvQrCMBB-l5uzuUg3B8eq4ChSzvTEwCUpl0sllL67iS71pu_4fhdIipoTdAvESV0M0EEimwUfTLAa0DLRH9sTEx3Oxx4F80hyeZV0ZfSn2BwGRpesOO8CapSq9ySWAkoZ3iiCQVtqa62lt7uBp2Ml-S7w1Tps_g10PPNPUjfsd2u7Dw7_2C-9AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -3031,7 +3323,8 @@
       "p75_chaos": 28.75,
       "median_age_days": 0.321,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPTwvCMAzFv0vOw4NDHLt58Ogf8ChjxC1iMV1H2imj9LvbMsGaU8L75T2eB-vQTRZqD2Z0ygxQg6VuErwxQSjAzSP9qQdiot1pf0DBqSc5P2Z7YdRHkz4K6JXtRGk1oDMSeU3S0YAyt28UwcEl15QaQ6_-6_-josNdsSNZZNXn4so-FXO7KbfrCkITmgz2oGNym93ZqvjFCxIrVGVI8wHQ55Jw_AAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPTwvCMAzFv0vOw4NDHLt58Ogf8ChjxC1iMV1H2imj9LvbMsGaU8L75T2eB-vQTRZqD2Z0ygxQg6VuErwxQSjAzSP9qQdiot1pf0DBqSc5P2Z7YdRHkz4K6JXtRGk1oDMSeU3S0YAyt28UwcEl15QaQ6_-6_-josNdsSNZZNXn4so-FXO7KbfrCkITmgz2oGNym93ZqvjFCxIrVGVI8wHQ55Jw_AAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "earthshaker",
@@ -3051,7 +3344,8 @@
       "p75_chaos": 95.0,
       "median_age_days": 1.227,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPQQvCMAyF_0vOQ9DpHLt58DgVPMoYcYtY7NqSdsoo_e92THBiTgnv5XuJB-vQ9RYKD9o4oRUUYKnpGa-SICTgBkM_akmSaHfcl8jYt8Sn-2DPEruDHjcSaIVtWHRCodMc_R1xQwp5qF_IjMqN1DE1hl78h_91RcJNSEc8yaKdiwv7EFLWm3S7yiPmX-6N0ezqdJllawhVqGY0D108rZ7Ns1bIp5ws8cc8DWO9AVknBdQdAQAA"
+      "query_id": "H4sIAAAAAAAAA2WPQQvCMAyF_0vOQ9DpHLt58DgVPMoYcYtY7NqSdsoo_e92THBiTgnv5XuJB-vQ9RYKD9o4oRUUYKnpGa-SICTgBkM_akmSaHfcl8jYt8Sn-2DPEruDHjcSaIVtWHRCodMc_R1xQwp5qF_IjMqN1DE1hl78h_91RcJNSEc8yaKdiwv7EFLWm3S7yiPmX-6N0ezqdJllawhVqGY0D108rZ7Ns1bIp5ws8cc8DWO9AVknBdQdAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3066,7 +3360,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.23,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxsBYGBgRqkxqJEtOUjkOVVX17iSwlD_5y89-K2RDKxm6FdJknCJ0kMkXxacQbA5smehv25MQna7nHhXLSHpJ8SYYwMHI2SsHjmhJKxlIPUXUZZhRFaO1f81XdfeHgxeLkX7doZ4Ou74bWd7yQ6r9eNhaPuvmvUq3AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxsBYGBgRqkxqJEtOUjkOVVX17iSwlD_5y89-K2RDKxm6FdJknCJ0kMkXxacQbA5smehv25MQna7nHhXLSHpJ8SYYwMHI2SsHjmhJKxlIPUXUZZhRFaO1f81XdfeHgxeLkX7doZ4Ou74bWd7yQ6r9eNhaPuvmvUq3AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3081,7 +3376,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.35,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIegQZDcPHqcHjzJG3CIE026knTJK392OCdacEv6P_0sA59FPDqoAw-h5sFCBo25SvAtBLMDPI_2lNQnR8XKqUXHqSc-DvQoaKKBn1ykbtugHTaQh7ciizu0bVdH6pW_xJd0tfJt_VGp4sHjSNeY-DzfuySLtblvuITaxydgAJonb7M5WlpesSPr9UMZlPsjxAaT1AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIegQZDcPHqcHjzJG3CIE026knTJK392OCdacEv6P_0sA59FPDqoAw-h5sFCBo25SvAtBLMDPI_2lNQnR8XKqUXHqSc-DvQoaKKBn1ykbtugHTaQh7ciizu0bVdH6pW_xJd0tfJt_VGp4sHjSNeY-DzfuySLtblvuITaxydgAJonb7M5WlpesSPr9UMZlPsjxAaT1AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3109,7 +3405,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QSwuCUBCF_8usJTAfmbsWLa1FyxCZdIJL9yFzr4WI_70rBhmBs5rhfJwzMwNYh66zkA9gWieMhhws1R3jTRKMAbi-pR-1IEl0OB8LZOwa4pPRF4kKAmiErVkoodEZ9qQirkkj99ULmVG7yW_K83HX4eP8pbzDXUhHPMuiWYob-xBSVtswSrzLv9q1rWFXxdkuytaANI7DdA1I9lHsI8qxXKwzgPK3VYt50Qr5lDPi35NF41Rvg-z5MFgBAAA"
+      "query_id": "H4sIAAAAAAAAA32QSwuCUBCF_8usJTAfmbsWLa1FyxCZdIJL9yFzr4WI_70rBhmBs5rhfJwzMwNYh66zkA9gWieMhhws1R3jTRKMAbi-pR-1IEl0OB8LZOwa4pPRF4kKAmiErVkoodEZ9qQirkkj99ULmVG7yW_K83HX4eP8pbzDXUhHPMuiWYob-xBSVtswSrzLv9q1rWFXxdkuytaANI7DdA1I9lHsI8qxXKwzgPK3VYt50Qr5lDPi35NF41Rvg-z5MFgBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3124,7 +3421,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.381,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOOw7CMAy9i-dsLKgbA2PLwIhQZVIjWXKSynFAVdW7k8BSPD3rfVfIhlYydCuk2ThF6CCTL4oPIdgc2DLTH9uTEJ0u5x4Vy0Q6pHgVDENqBgcTZ68cOKIlrfJA6imiLuMbVTFaC22ltfN2d_BkMdLvgFCt4-7fQZaX_CR1wvGwtfsAFmQk4bwAAAA"
+      "query_id": "H4sIAAAAAAAAA1VOOw7CMAy9i-dsLKgbA2PLwIhQZVIjWXKSynFAVdW7k8BSPD3rfVfIhlYydCuk2ThF6CCTL4oPIdgc2DLTH9uTEJ0u5x4Vy0Q6pHgVDENqBgcTZ68cOKIlrfJA6imiLuMbVTFaC22ltfN2d_BkMdLvgFCt4-7fQZaX_CR1wvGwtfsAFmQk4bwAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3139,7 +3437,8 @@
       "p75_chaos": 18.75,
       "median_age_days": 0.86,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQ9AhyG4ePG4ePMoYcYtQTFtJO2WU_ndbJlhzSnhf3uMFcB797KAJYJ9eWQMNOBpnwRsTxAr88qQ_tSUmOp5PLQrOE0lnzYVRdzY_VDApN4rSyqC3knBNMpJBWYY3iqDx2TSHpsxr-Nr_qORwV-xJVllNpbhxD8U87Lb1HmIf-4INoFPwUNzFqvjFK5IKHOqY5wO-kB4F-gAAAA"
+      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOQ9AhyG4ePG4ePMoYcYtQTFtJO2WU_ndbJlhzSnhf3uMFcB797KAJYJ9eWQMNOBpnwRsTxAr88qQ_tSUmOp5PLQrOE0lnzYVRdzY_VDApN4rSyqC3knBNMpJBWYY3iqDx2TSHpsxr-Nr_qORwV-xJVllNpbhxD8U87Lb1HmIf-4INoFPwUNzFqvjFK5IKHOqY5wO-kB4F-gAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "ripper",
@@ -3167,7 +3466,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QTQuCQBCG_8ucJTA_Mm8dOmqHjiEy6QRL-yGzayHif2_FICNoT7O8z7zvzIxgHbreQj6C6ZwwGnKw1PSMV0kwBeCGjr7UgiTR4XQskLFviUujzxJVaeaGAFphGxZKaHSGPa6IG9LIQ_1EZtRuNp1DfeZlfNt_KO9wE9IRL7Jo1-LG3oWU9TaMEu_yq_ZdZ9jVcbaLsn9AGsdh-g9I9lHsI6qpWo0zgvK71av_qhTyIRfE3yiLpvm9AFJLXZ9dAQAA"
+      "query_id": "H4sIAAAAAAAAA32QTQuCQBCG_8ucJTA_Mm8dOmqHjiEy6QRL-yGzayHif2_FICNoT7O8z7zvzIxgHbreQj6C6ZwwGnKw1PSMV0kwBeCGjr7UgiTR4XQskLFviUujzxJVaeaGAFphGxZKaHSGPa6IG9LIQ_1EZtRuNp1DfeZlfNt_KO9wE9IRL7Jo1-LG3oWU9TaMEu_yq_ZdZ9jVcbaLsn9AGsdh-g9I9lHsI6qpWo0zgvK71av_qhTyIRfE3yiLpvm9AFJLXZ9dAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "eruptor",
@@ -3182,7 +3482,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.505,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxgBbxcCIUGVSI1lykspxqKqqdyeBpfzJX372WyEbWsnQrZAm4xShg0y-KD6FYHNgy0R_256E6HQ996hYRtILK90EAzgYOXvlwBEtaUUDqaeIugwzqmK09rAJq-_-cPBiMdKvPNTTYdd3I8tbfkjVHw9bywfMd1MGuAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqxgBbxcCIUGVSI1lykspxqKqqdyeBpfzJX372WyEbWsnQrZAm4xShg0y-KD6FYHNgy0R_256E6HQ996hYRtILK90EAzgYOXvlwBEtaUUDqaeIugwzqmK09rAJq-_-cPBiMdKvPNTTYdd3I8tbfkjVHw9bywfMd1MGuAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "eruptor",
@@ -3197,7 +3498,8 @@
       "p75_chaos": 18.75,
       "median_age_days": 0.549,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yVzcWlR6eagW3FwlFJiGyGYu0ruqpTj3t0rFTwzJfwf_5cAzqOfHNQBxqfn0UINjvpJ8SYEsQA_P-kvbUiIDudjg4rTQHpipYuggQIGdr2yYYt-1IQa0p4s6ty9URWtXwoXYfJdw7f6R6WGO4snXWMe8nDjHizSVbtyW0FsY5vBAUwyd9mdrSwvWZH0_b6My3wAWVSR_PcAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQrCQAyG3yVzcWlR6eagW3FwlFJiGyGYu0ruqpTj3t0rFTwzJfwf_5cAzqOfHNQBxqfn0UINjvpJ8SYEsQA_P-kvbUiIDudjg4rTQHpipYuggQIGdr2yYYt-1IQa0p4s6ty9URWtXwoXYfJdw7f6R6WGO4snXWMe8nDjHizSVbtyW0FsY5vBAUwyd9mdrSwvWZH0_b6My3wAWVSR_PcAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "eruptor",
@@ -3226,10 +3528,7 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA32QTwuCQBDFv8ucJSx1E28d6iYdOobIpBMMrX-YXQsRv3srBhmBc5rh_XhvZgYwFm1nIBmgaS03NSRgqOgEb5pg9MD2Lf2oKWmiw_mYomBXkpxY6KKxAg9KNoVwxTXaRhxakRRUo_T5C0WwtpPhFOjyrsPH-ks5hztrSzLLXC7FjXmw1nm4D1TobP7lrm0bsXmggshfA3YqUvEasPWV74BszBb7DFC54_LFvGhZP_WMuAfFwTjVG_daGcZaAQAA",
-      "search_total": 0,
-      "scanned": 0,
-      "passed": 0,
-      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+      "sampled_at": "2026-11-18T08:32:54Z"
     },
     {
       "family": "eruptor",
@@ -3244,7 +3543,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.302,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1VOOw7CMAy9i-dsLKgbA2yFgRGhyqRGsuQkleOAqqp3J4GleHrW-y6QDa1k6BZIk3GK0EEmXxQfQrA6sHmiP7YnITpcjj0qlpH0xEpXwXBOzeFg5OyVA0e0pFUfSD1F1Hl4oypGa6mttZbe7g6eLEb6XRCqddj8G8jykp-kbtjv1nYfYOyJaL0AAAA"
+      "query_id": "H4sIAAAAAAAAA1VOOw7CMAy9i-dsLKgbA2yFgRGhyqRGsuQkleOAqqp3J4GleHrW-y6QDa1k6BZIk3GK0EEmXxQfQrA6sHmiP7YnITpcjj0qlpH0xEpXwXBOzeFg5OyVA0e0pFUfSD1F1Hl4oypGa6mttZbe7g6eLEb6XRCqddj8G8jykp-kbtjv1nYfYOyJaL0AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "eruptor",
@@ -3259,7 +3559,8 @@
       "p75_chaos": 41.25,
       "median_age_days": 0.501,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOw8uGym4e9DY9eJQx4hYh2HYj7ZRR-t9tmWDNKeF9eY_nwTp0s4Xawzg5Hg3UYKmfBe-KIBTglon-1IYU0eFybFBwHkhOLHRVqM9j-ihgYNsLazboRom8JunJoCzdG0XQuOSaUmPozX_9f1R0eLByJKvMQy5u7JOV6qpdua0gtKHNYA86JnfZna2sXmpFYoV9GdJ8AFnqmUL8AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPQQvCMAyF_0vOw8uGym4e9DY9eJQx4hYh2HYj7ZRR-t9tmWDNKeF9eY_nwTp0s4Xawzg5Hg3UYKmfBe-KIBTglon-1IYU0eFybFBwHkhOLHRVqM9j-ihgYNsLazboRom8JunJoCzdG0XQuOSaUmPozX_9f1R0eLByJKvMQy5u7JOV6qpdua0gtKHNYA86JnfZna2sXmpFYoV9GdJ8AFnqmUL8AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "eruptor",
@@ -3288,10 +3589,7 @@
       "median_age_days": 0.0,
       "fresh_share": 0.0,
       "query_id": "H4sIAAAAAAAAA32QTQuCQBCG_8ucJSx1i24d6mYdOobIpBMMra7MroWI_70Vg4ygOc3wPvPORw_WoWstbHswjWNTwxYsFa3gVRMMAbiuoS81JU20O-1TFGxLkgMLnTVWRzN2BFCyLYQrrtEZ8XxFUlCN0uVPFMHaja7jVD_00r_9P5R3uLF2JJPM5Vxc2DtrncfrSMXe5ldum8aIyyMVJeE_YKUStfkHLEMVeiAbstk-PVT-uHxWz1LWDz0h_kubaBjjBfBYYM5fAQAA",
-      "search_total": 0,
-      "scanned": 0,
-      "passed": 0,
-      "partner_rule": "Require /Exclude /ExcludeSupport brutality"
+      "sampled_at": "2026-11-18T08:32:56Z"
     },
     {
       "family": "reanimator",
@@ -3306,7 +3604,8 @@
       "p75_chaos": 4.0,
       "median_age_days": 0.325,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUlYmBmQGhyg1GtZQ4leOCqqr_jgNL8eTTne95hWpoc4VuhTIZF4EOKsVZcUgEWwBbJvpzTyOWemFxdWWL41m8YuDEtkCAB9eonFnQino6k0YS1KV_oyqKtc7GdOTtHuDJyUi__Oyn_U7vVk6v9Iv4B8fD1uYDWWj-jLsAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOsQ7CMAxE_8VzNhbUlYmBmQGhyg1GtZQ4leOCqqr_jgNL8eTTne95hWpoc4VuhTIZF4EOKsVZcUgEWwBbJvpzTyOWemFxdWWL41m8YuDEtkCAB9eonFnQino6k0YS1KV_oyqKtc7GdOTtHuDJyUi__Oyn_U7vVk6v9Iv4B8fD1uYDWWj-jLsAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "reanimator",
@@ -3321,7 +3620,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.414,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPwQqDMAyG3yVnGZNdnNeddth5hyESa4dhtZU0OqT03VdxsC6nhP_j-0kALyizhzqAm4SchRq8VjNjZzTEAmSd9F96GdD5G9l03UnUcLVJ0ZEhWaGAnrxiGsmiOE70qFlpi7y2b2RGK5tz60yVj_C1_6hkeJIRzXtMfR4e_IuMactzeawgNrHJ4ABjam6zO1vJLGZH0gPVKW7zAaXvUnP6AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPwQqDMAyG3yVnGZNdnNeddth5hyESa4dhtZU0OqT03VdxsC6nhP_j-0kALyizhzqAm4SchRq8VjNjZzTEAmSd9F96GdD5G9l03UnUcLVJ0ZEhWaGAnrxiGsmiOE70qFlpi7y2b2RGK5tz60yVj_C1_6hkeJIRzXtMfR4e_IuMactzeawgNrHJ4ABjam6zO1vJLGZH0gPVKW7zAaXvUnP6AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "reanimator",
@@ -3341,7 +3641,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.893,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPQQvCMAyF_0vOQ9xUnF49efDsQcbousqCXTvSTBll_92MCU7MKY_3-F4SIbDiPsAxgu8YvYMjBKN7UpU1MCbAQ2d-3FOjfLigE3VF1s3ZCaJCizxAAjUGTdiiU-xJ0q0hbZyioXwpIuV4Yk6dUnmLH_o3JYQ7WjY021gvzVV4oLVlekjXuWD-7b7rPHG5y7b7DMZiLBa0CK2cVi70YkX7tHNEPsw34zRvUIUnbxsBAAA"
+      "query_id": "H4sIAAAAAAAAA2WPQQvCMAyF_0vOQ9xUnF49efDsQcbousqCXTvSTBll_92MCU7MKY_3-F4SIbDiPsAxgu8YvYMjBKN7UpU1MCbAQ2d-3FOjfLigE3VF1s3ZCaJCizxAAjUGTdiiU-xJ0q0hbZyioXwpIuV4Yk6dUnmLH_o3JYQ7WjY021gvzVV4oLVlekjXuWD-7b7rPHG5y7b7DMZiLBa0CK2cVi70YkX7tHNEPsw34zRvUIUnbxsBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "reanimator",
@@ -3356,7 +3657,8 @@
       "p75_chaos": 10.0,
       "median_age_days": 0.425,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNhbUlYkBVgaEKjcY1VJ-Kseliqq-Ow4sxZNP9nd3KxRFnQt0K-RJOSfooJCfBYdAsDnQOtHf9TRiLhdOpm6sfjwnsxg4sNZrbpCDJxcvHDmhZjEkknhKKLVfUASTNuMWbLn3h4MXByX5loiG9ju9Wzm8w-_FahwPW5sPO73ZacAAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNhbUlYkBVgaEKjcY1VJ-Kseliqq-Ow4sxZNP9nd3KxRFnQt0K-RJOSfooJCfBYdAsDnQOtHf9TRiLhdOpm6sfjwnsxg4sNZrbpCDJxcvHDmhZjEkknhKKLVfUASTNuMWbLn3h4MXByX5loiG9ju9Wzm8w-_FahwPW5sPO73ZacAAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "reanimator",
@@ -3371,7 +3673,8 @@
       "p75_chaos": 47.5,
       "median_age_days": 0.617,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WPPQvCMBCG_8vNRSwutauTg64OUkKaRnqYJuVyVUrIfzehgvGmO96PhwvgWfLioQ3gZkZnoQWv1UKyNxpiBbzO-k89jdL5C9p03ZDVeLapokeDvF5dDlUwoFeEE1rJjlJk0qS0lbSKtySSlnNxBifuPXwRP1dqeKBhTZuMQynu_BONEfWx3jcQu9gV5gBTIoviLlY0L7NZ0hfNIeb5ANXoVMD_AAAA"
+      "query_id": "H4sIAAAAAAAAA1WPPQvCMBCG_8vNRSwutauTg64OUkKaRnqYJuVyVUrIfzehgvGmO96PhwvgWfLioQ3gZkZnoQWv1UKyNxpiBbzO-k89jdL5C9p03ZDVeLapokeDvF5dDlUwoFeEE1rJjlJk0qS0lbSKtySSlnNxBifuPXwRP1dqeKBhTZuMQynu_BONEfWx3jcQu9gV5gBTIoviLlY0L7NZ0hfNIeb5ANXoVMD_AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "reanimator",
@@ -3391,7 +3694,8 @@
       "p75_chaos": 831.25,
       "median_age_days": 0.579,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPQQ-CMAyF_0vPxAhqRK6ePOjVgyHLgBkax0a6oiFk_90tmIixpzbv9XvtBI4lDw6KCWzPaA0U4FQ9kKy0Ap8Aj736UY-ttO6MJkxX5Lo9mYCoUCOPFxuXEmjQ1YQdGsmWwkqnqFZG0ihekkgajuAYHHJv0yfi6wqEO2pWNMvYLMWVe6DWIj2k6zxg_uWh7y2x2GXbfQa-9OWCNkEXThOLedGifurZEt7MNz7WG3JoFnUgAQAA"
+      "query_id": "H4sIAAAAAAAAA2WPQQ-CMAyF_0vPxAhqRK6ePOjVgyHLgBkax0a6oiFk_90tmIixpzbv9XvtBI4lDw6KCWzPaA0U4FQ9kKy0Ap8Aj736UY-ttO6MJkxX5Lo9mYCoUCOPFxuXEmjQ1YQdGsmWwkqnqFZG0ihekkgajuAYHHJv0yfi6wqEO2pWNMvYLMWVe6DWIj2k6zxg_uWh7y2x2GXbfQa-9OWCNkEXThOLedGifurZEt7MNz7WG3JoFnUgAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamehand",
@@ -3406,7 +3710,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.884,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqDldgQKgywaiWHKdyXFBV9e5N6FL-5C8_-y1QHH0q0C2QR-es0EGhOBk-hWAN4PNIf9uLUCJ1lBt7HK5sBAFeXKJxYkXPVqFEFknR5v6LZqjeXjVVNd0fAd4sTvbTpnraH_phZPnIjlTx-bS2bHJLdNOyAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5GwvqDldgQKgywaiWHKdyXFBV9e5N6FL-5C8_-y1QHH0q0C2QR-es0EGhOBk-hWAN4PNIf9uLUCJ1lBt7HK5sBAFeXKJxYkXPVqFEFknR5v6LZqjeXjVVNd0fAd4sTvbTpnraH_phZPnIjlTx-bS2bHJLdNOyAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamehand",
@@ -3421,7 +3726,8 @@
       "p75_chaos": 15.0,
       "median_age_days": 0.61,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIZNdZHd9BQ8yRu0iBtNupNlklL67HROsOSX8H_-XCEGNzgHaCOOkNHpoIaCdxdwZIVWg64R_6ZnRoVfDV1L7vJAgVDBQsEKOvNFRMuRQLHoja_82IsbrVrWpsukWv6U_Kjc8iBVlj2kow0N4EXPf1MemhtSlroAjuGzui7tYiRfekfz3qUnbfACYRndg8QAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXnIZNdZHd9BQ8yRu0iBtNupNlklL67HROsOSX8H_-XCEGNzgHaCOOkNHpoIaCdxdwZIVWg64R_6ZnRoVfDV1L7vJAgVDBQsEKOvNFRMuRQLHoja_82IsbrVrWpsukWv6U_Kjc8iBVlj2kow0N4EXPf1MemhtSlroAjuGzui7tYiRfekfz3qUnbfACYRndg8QAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flamehand",
@@ -3445,7 +3751,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQzY3cPNdf8EHGaNuEYNdV9JMGaX_bscEJ4J5ajiHe1MPTpSMDvYeBis0GNiDw3ZkddEIIQGZLH7Rg8YejSh9ImlvR2KEBDpyLVNPRsnAUeqRWzSKp-apmJWROWquik1n_w79WDHhSlqQF0zdGm7cnbRu8jTL0xjzi0drB5ZmW-bl7p9QVEVWQahDvarz0Mfbm9W-epJ-6EWJPy_zMM8L5bbYdzMBAAA"
+      "query_id": "H4sIAAAAAAAAA32P0QrCMAxF_yXPQzY3cPNdf8EHGaNuEYNdV9JMGaX_bscEJ4J5ajiHe1MPTpSMDvYeBis0GNiDw3ZkddEIIQGZLH7Rg8YejSh9ImlvR2KEBDpyLVNPRsnAUeqRWzSKp-apmJWROWquik1n_w79WDHhSlqQF0zdGm7cnbRu8jTL0xjzi0drB5ZmW-bl7p9QVEVWQahDvarz0Mfbm9W-epJ-6EWJPy_zMM8L5bbYdzMBAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frost_ambusher",
@@ -3460,7 +3767,8 @@
       "p75_chaos": 3.0,
       "median_age_days": 0.488,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUlZkJNoQqkxhhKS_ZLlVV9d9JYCl38pWPfVZQQ5sUhhVKNS4ZBlDyk-AjEmwObKn0t70KVj1zJr28MJT5VGIAB4HVCyfOaEUalkg8ZZRlnFEEs_VnXdZct7uDJ0cj-YpTOx13fTdyfMcf0tTHw9bzAYsdKI60AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUlZkJNoQqkxhhKS_ZLlVV9d9JYCl38pWPfVZQQ5sUhhVKNS4ZBlDyk-AjEmwObKn0t70KVj1zJr28MJT5VGIAB4HVCyfOaEUalkg8ZZRlnFEEs_VnXdZct7uDJ0cj-YpTOx13fTdyfMcf0tTHw9bzAYsdKI60AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frost_ambusher",
@@ -3475,7 +3783,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.85,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXn4UFB3a6ePelNRolrxGDXjrRzjNJ3t2OCNaeE_-P_EsEHDKOHJoIbAjsLDXjqRsG7IUgVhHmgv_QqOPgzW_KXJ2o3nZzRUIFm3wn3bDE4yVhP0pFFmdWEImjDUrbIsusWv7U_Kjc82ASSNWZdhhv_YmPUflvXB0htags4Qp_NqriLlc3brEj-_LhLy3wAJe8TfPMAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQrCMAyG3yXn4UFB3a6ePelNRolrxGDXjrRzjNJ3t2OCNaeE_-P_EsEHDKOHJoIbAjsLDXjqRsG7IUgVhHmgv_QqOPgzW_KXJ2o3nZzRUIFm3wn3bDE4yVhP0pFFmdWEImjDUrbIsusWv7U_Kjc82ASSNWZdhhv_YmPUflvXB0htags4Qp_NqriLlc3brEj-_LhLy3wAJe8TfPMAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "frost_ambusher",
@@ -3495,7 +3804,8 @@
       "p75_chaos": 76.25,
       "median_age_days": 0.458,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnITJlOq-ePelNRolrxWDXlrRzjNF3t2OCFXNK-H6-JBP4gKH3cJjAukDWwAG8anvGm1YQCwijUz_0wuj8iYzy5wdKOxytllCAJN8ydWQwWE6xTnGrDPIoBmRGE2bZvCztuk4f7TeVDHfSQfGCSeZw5Z-ktajKut4lzT_unbMcRFmt6y3EJjaZbYIunSayOWtJv_QSSa_tN3GuN1NeGSQUAQAA"
+      "query_id": "H4sIAAAAAAAAA2WPwQrCMAyG3yXnITJlOq-ePelNRolrxWDXlrRzjNF3t2OCFXNK-H6-JBP4gKH3cJjAukDWwAG8anvGm1YQCwijUz_0wuj8iYzy5wdKOxytllCAJN8ydWQwWE6xTnGrDPIoBmRGE2bZvCztuk4f7TeVDHfSQfGCSeZw5Z-ktajKut4lzT_unbMcRFmt6y3EJjaZbYIunSayOWtJv_QSSa_tN3GuN1NeGSQUAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "winter_deacon",
@@ -3510,7 +3820,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.612,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUtT_AwIZQZVIjLDkPOW5RVPXfSWApd_KVj302KIa2FBg2SNk4RRigkF8UH0KwO7Ca6W97edUypriS2pVCFtQxyQwOZi5eOXBES9rAQOopotbpjaoYrb_ruma73R08WYz0qw7tdDr0w8iyyg9p8vNp7_kA3BiGSrYAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUtT_AwIZQZVIjLDkPOW5RVPXfSWApd_KVj302KIa2FBg2SNk4RRigkF8UH0KwO7Ca6W97edUypriS2pVCFtQxyQwOZi5eOXBES9rAQOopotbpjaoYrb_ruma73R08WYz0qw7tdDr0w8iyyg9p8vNp7_kA3BiGSrYAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "winter_deacon",
@@ -3525,7 +3836,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 1.38,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGcjGEK--wA67DZFOMxYWW0mjQ0rffRUH63JK-D_-LwG8Gp091AHcpOQs1OCxn8XcGSEWoOuEf-nlufrG2QVFrzhObKRxPEABA_leaCRr1EkCR5QerZG1exsRY3Wr23TJdgvf4h-VGh7EirLHNOThwb-IuStPVXmG2MY2gwOMydxld7YSL7wj6ffqGLf5AAWTovz1AAAA"
+      "query_id": "H4sIAAAAAAAAA1WOwQqDMAyG3yVnGcjGEK--wA67DZFOMxYWW0mjQ0rffRUH63JK-D_-LwG8Gp091AHcpOQs1OCxn8XcGSEWoOuEf-nlufrG2QVFrzhObKRxPEABA_leaCRr1EkCR5QerZG1exsRY3Wr23TJdgvf4h-VGh7EirLHNOThwb-IuStPVXmG2MY2gwOMydxld7YSL7wj6ffqGLf5AAWTovz1AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "winter_deacon",
@@ -3549,7 +3861,8 @@
       "p75_chaos": 72.5,
       "median_age_days": 1.111,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32PywrCMBBF_2XWRaz1Edz2B1y4kxJiO2IwTcJkWimh_25KBSuCs8pwDvdOIgRW3AU4RnCetbNwhIB1R-pqEMYMePD4RU_3IZTO9kh8xtYbRaUzDWTQ6FCTbrVV7CiJLVKNVtEgn4pIWZ7iprrUdonv4I-VEm7aMNKMdbOEq_DQxsh8K_J9ivnFnfeOWO5ysf4r5JtCHGCsxmpRF6FNt8vFvnhq05tZSb8XxTjNC7d_9Tc3AQAA"
+      "query_id": "H4sIAAAAAAAAA32PywrCMBBF_2XWRaz1Edz2B1y4kxJiO2IwTcJkWimh_25KBSuCs8pwDvdOIgRW3AU4RnCetbNwhIB1R-pqEMYMePD4RU_3IZTO9kh8xtYbRaUzDWTQ6FCTbrVV7CiJLVKNVtEgn4pIWZ7iprrUdonv4I-VEm7aMNKMdbOEq_DQxsh8K_J9ivnFnfeOWO5ysf4r5JtCHGCsxmpRF6FNt8vFvnhq05tZSb8XxTjNC7d_9Tc3AQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flaming_charlatan",
@@ -3564,7 +3877,8 @@
       "p75_chaos": 3.75,
       "median_age_days": 0.647,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUFYmZgQ2hyqRGWHIectyiqOq_k8BS7uQrH_usUAxtLjCskLJxijBAIT8rPoRgc2A109_28qrllOJCalcKWVDPrAQOJi5eOXBES9rAQOopotbxjaoYrb_ruma73R08WYz0qw7tdNz13ciyyA9p8uNh6_kAkk1gKbYAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNuw7CMAxF_8VzNhbUFYmZgQ2hyqRGWHIectyiqOq_k8BS7uQrH_usUAxtLjCskLJxijBAIT8rPoRgc2A109_28qrllOJCalcKWVDPrAQOJi5eOXBES9rAQOopotbxjaoYrb_ruma73R08WYz0qw7tdNz13ciyyA9p8uNh6_kAkk1gKbYAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flaming_charlatan",
@@ -3579,7 +3893,8 @@
       "p75_chaos": 5.0,
       "median_age_days": 0.663,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA1WOywrCQAxF_yVrcaEipVvBtQt3UkpsIwbnUTJppQzz706p4JhVwj3ckwhBUccAdQQ_KHsHNQTqRsG7IUgb0Hmgv_TynMPJu4lEr2QHg3JmIdhAz6ETtuxQvWTQknTkUOb2jSLodKlbdNl2i9_iH5UbHmyUZI25L8NteLEx7WFXHSE1qSnYCDaL2-IuVjaTWZH8erVPy3wAaJRsqPQAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOywrCQAxF_yVrcaEipVvBtQt3UkpsIwbnUTJppQzz706p4JhVwj3ckwhBUccAdQQ_KHsHNQTqRsG7IUgb0Hmgv_TynMPJu4lEr2QHg3JmIdhAz6ETtuxQvWTQknTkUOb2jSLodKlbdNl2i9_iH5UbHmyUZI25L8NteLEx7WFXHSE1qSnYCDaL2-IuVjaTWZH8erVPy3wAaJRsqPQAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "flaming_charlatan",
@@ -3603,7 +3918,8 @@
       "p75_chaos": 50.0,
       "median_age_days": 0.826,
       "fresh_share": 1.0,
-      "query_id": "H4sIAAAAAAAAA32PwQrCMAyG3yXnIZvKGLsKnj14kzHqFjHYtSXNJqPs3e2Y4EQwp4bv5_vTAF6U9B7KANYJWQMleGx6VleNMCUgo8MverqP_mDNgCxn7JxWfCRGSKAl3zB1ZJRYjsEOuUGjeKyfilkZmXVzXWy7hLf4k4qGG2lBXjC1a7jxD9K63m-LPFp-ae-cZanzbJv941mapwVM1VStygJ08fJ6ta-epAe9ROLfi900zwt-EJwnNQEAAA"
+      "query_id": "H4sIAAAAAAAAA32PwQrCMAyG3yXnIZvKGLsKnj14kzHqFjHYtSXNJqPs3e2Y4EQwp4bv5_vTAF6U9B7KANYJWQMleGx6VleNMCUgo8MverqP_mDNgCxn7JxWfCRGSKAl3zB1ZJRYjsEOuUGjeKyfilkZmXVzXWy7hLf4k4qGG2lBXjC1a7jxD9K63m-LPFp-ae-cZanzbJv941mapwVM1VStygJ08fJ6ta-epAe9ROLfi900zwt-EJwnNQEAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3618,7 +3934,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUuX-BUGWCQZYcp3KcoqrqvzeBpdx0pzv7bVAcvRYYNsizc1YYoFCshg8h2AP4OtNfO_LC-h4rCReHAE8u0TixomdrfSKLpGjr9EEzVO9fOqVBbvcALxYn-xJTO51O-WRZFvlNGvN62bsOot09fK0AAAA"
+      "query_id": "H4sIAAAAAAAAA1WNsQ7CMAxE_8VzNhbUuX-BUGWCQZYcp3KcoqrqvzeBpdx0pzv7bVAcvRYYNsizc1YYoFCshg8h2AP4OtNfO_LC-h4rCReHAE8u0TixomdrfSKLpGjr9EEzVO9fOqVBbvcALxYn-xJTO51O-WRZFvlNGvN62bsOot09fK0AAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3633,7 +3950,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ3QiyJ73FzJG3aIE03ak2WSU_rsdE6x5SjiXcxMhqNE5QBPBT0reQQMBh1nMnRFSBbpO-EdbWsg92xmZgkIFI4VByJIz6iVzizKgM7L2byNinG6WrSWX3OLX90tlw4NYUXZMYwkP4UXMfV2fjhdIXeqKcASbm_viLlbihfdIfvl6Ttt8AJutxD3sAAAA"
+      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ3QiyJ73FzJG3aIE03ak2WSU_rsdE6x5SjiXcxMhqNE5QBPBT0reQQMBh1nMnRFSBbpO-EdbWsg92xmZgkIFI4VByJIz6iVzizKgM7L2byNinG6WrSWX3OLX90tlw4NYUXZMYwkP4UXMfV2fjhdIXeqKcASbm_viLlbihfdIfvl6Ttt8AJutxD3sAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3661,7 +3979,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32Q3QqDMAyF3yXXMubfcF7vLYaUTrsRVqukqUOK776Kg3UMzFXCdzgniQfLkp2F2sMwMg4GarCqdSRvWsGSAM-j-qEXnNA8Lk5ptAwJdGhbwh6N5IEC7xW1ykiaxUsSScOry5oSQq7-4_dVBYc7ala0YexieLBP1FpkWXosg80_duM4EIusKtLTnqDMzvkuz9MiJDRLE63joQ-3iWiOWtST3iThKVW-rPUGI9WyQ04BAAA"
+      "query_id": "H4sIAAAAAAAAA32Q3QqDMAyF3yXXMubfcF7vLYaUTrsRVqukqUOK776Kg3UMzFXCdzgniQfLkp2F2sMwMg4GarCqdSRvWsGSAM-j-qEXnNA8Lk5ptAwJdGhbwh6N5IEC7xW1ykiaxUsSScOry5oSQq7-4_dVBYc7ala0YexieLBP1FpkWXosg80_duM4EIusKtLTnqDMzvkuz9MiJDRLE63joQ-3iWiOWtST3iThKVW-rPUGI9WyQ04BAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3676,7 +3995,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5Gwvq3JkLIFSZYJClxKlsp6iqencSWIonW37_vw3M0avBsEGZnYvAAEaxKt4TwR7A15n-viMvLK-xUmLzS-lYgAdbVM4s6EUblEkjCeo6vVEVxXtVVzXT9RbgyclJv9rcotPhPqyclvRDmvh82vt8AHurxPuyAAAA"
+      "query_id": "H4sIAAAAAAAAA1WNMQ7CMAxF7-I5Gwvq3JkLIFSZYJClxKlsp6iqencSWIonW37_vw3M0avBsEGZnYvAAEaxKt4TwR7A15n-viMvLK-xUmLzS-lYgAdbVM4s6EUblEkjCeo6vVEVxXtVVzXT9RbgyclJv9rcotPhPqyclvRDmvh82vt8AHurxPuyAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3691,7 +4011,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ3QiyJ737A-IjLpFCWbtSLPJKP13WyZY85RwD_ckgFejs4cmgJuUnIUGPPazmDsjxAp0nfAvbWkh-2xnZPJ6cRmrYCDfC41kjTpJ0IjSozWydm8jYqzmqqxKpmv4lv6o1PAgVpQtpqEMd_5FzF1dH_YniLd4K-AAYzJ3xV2sxAtvSPr7fIx5PtCqWafxAAAA"
+      "query_id": "H4sIAAAAAAAAA1WO0QrCMAxF_yXPQ3QiyJ737A-IjLpFCWbtSLPJKP13WyZY85RwD_ckgFejs4cmgJuUnIUGPPazmDsjxAp0nfAvbWkh-2xnZPJ6cRmrYCDfC41kjTpJ0IjSozWydm8jYqzmqqxKpmv4lv6o1PAgVpQtpqEMd_5FzF1dH_YniLd4K-AAYzJ3xV2sxAtvSPr7fIx5PtCqWafxAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "mysterious_diver",
@@ -3719,7 +4040,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA32QQQqDMBBF7zJrKTVqsa5d9wJFJNW0DI2JTCYWEe_eiIVaCmY14T3-T2YCx5K9g2IC2zNaAwU41XiSN61gjoDHXv3QEgc0j9IrjY4vdtEiaNE1hB0ayZaC1ClqlJE01i9JJA0vUUtVaLpOn9CvFRLuqFnRirHdwoN7ota1EPExCzH_2Pe9Ja5FnsanPSET52SXJ3EaGqq52jxngi78rd7cNyPqQa9K2EyezMt5AzGICLpTAQAA"
+      "query_id": "H4sIAAAAAAAAA32QQQqDMBBF7zJrKTVqsa5d9wJFJNW0DI2JTCYWEe_eiIVaCmY14T3-T2YCx5K9g2IC2zNaAwU41XiSN61gjoDHXv3QEgc0j9IrjY4vdtEiaNE1hB0ayZaC1ClqlJE01i9JJA0vUUtVaLpOn9CvFRLuqFnRirHdwoN7ota1EPExCzH_2Pe9Ja5FnsanPSET52SXJ3EaGqq52jxngi78rd7cNyPqQa9K2EyezMt5AzGICLpTAQAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     },
     {
       "family": "warpriest_of_the_ruckus",
@@ -3734,7 +4056,8 @@
       "p75_chaos": 0.0,
       "median_age_days": 0.0,
       "fresh_share": 0.0,
-      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNhbUjQeAAdgQqkwwkkX-ZDugquq7k8BSPPl0_nw3gxpaVRhmyMU4JxhAyVfBWyBYHNhU6M_dNU_3nJrSM8USUE6RjY7VP6secucc3Fm9cOSElqVRkcRTQpnGN4pgsv67Z7foy9XBg4ORfHvEho4rvVo5vMLvpDXZbpY-Hx4raOrDAAAA"
+      "query_id": "H4sIAAAAAAAAA1WOvQ7CMAyE38VzNhbUjQeAAdgQqkwwkkX-ZDugquq7k8BSPPl0_nw3gxpaVRhmyMU4JxhAyVfBWyBYHNhU6M_dNU_3nJrSM8USUE6RjY7VP6secucc3Fm9cOSElqVRkcRTQpnGN4pgsv67Z7foy9XBg4ORfHvEho4rvVo5vMLvpDXZbpY-Hx4raOrDAAAA",
+      "sampled_at": "2026-11-18T05:49:05Z"
     }
   ]
 }

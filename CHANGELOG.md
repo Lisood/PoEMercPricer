@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to PoEMercPricer are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/). The release workflow publishes the section for the tagged version as the top of the GitHub release notes, so write each section for players.
+All notable changes to PoEMercPricer are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/). The release workflow publishes the section for the tagged version as the whole GitHub release notes, so write each section for players.
 
 ## [0.2.1] - 2026-11-18
 
@@ -14,7 +14,7 @@ Path of Exile 3.30.0 (Covens of Umbra) support.
 
 ### Changed
 
-- The default league is Covens. A saved Allflame league is moved to its Covens equivalent the first time you start this version, and the settings file is rewritten, so your trade searches keep working without a visit to Settings.
+- The default league is Covens. If your saved league is Allflame or Hardcore Allflame, it moves to Covens or Hardcore Covens the first time you start this version, and the settings file is rewritten. Any other league name, including a private league, is left as you typed it.
 - Warrants are scored and priced again from a 3.30 trade-site market survey. 3.30 changed Mercenary scaling and several supports (for example Kinetic Blast's Arcane Might is now 150%, down from 200%), so the 3.29 gates and prices were rebuilt rather than carried over. Scores, verdicts and market ask ranges will differ from 0.2.0:
   - Cruel Mistress is now a jackpot family. Sniper and Thunderquiver move up to premium.
   - Swiftblade and Shattersword lose their jackpot screens.
@@ -33,7 +33,7 @@ Path of Exile 3.30.0 (Covens of Umbra) support.
 - Screen scans no longer read an `Area Level` line as the Mercenary level, which would have given the wrong skill level.
 - Screen scans recognise skills that the OCR pools were missing: Puncture, Frenzy and Haste on Sniper, Proximity Shield on Stormhand, and the nine Chaplain of the Well skills.
 - The generic estimate is capped at its family's price tier (72 for high, 62 for mid, 52 for floor), so a family without a screen cannot outscore one with a screen.
-- Settings are saved atomically, so a crash or power loss while saving cannot leave a half-written settings file. Only the whole word "Allflame" triggers the league migration.
+- Settings are saved atomically, so a crash or power loss while saving cannot leave a half-written settings file.
 
 ### Notes
 

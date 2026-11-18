@@ -160,11 +160,7 @@ pub const SCREENS: &[(&str, Screen)] = &[
                 ), // keep (n<8): n=3 top=1.00 med=5d p75=18d
                 (&["more_duration"], 6.0, "More Duration on Flame Link"), // keep (undecided): n=14 top=0.79 med=4d p75=7d
                 (&["cdr"], 6.0, "Cooldown Recovery on Flame Link"), // keep (undecided): n=19 top=0.68 med=2d p75=5d
-                (
-                    &["brutality"],
-                    -30.0,
-                    "Brutality bricks the Flame Link setup",
-                ), // keep (n<8): n=0 top=0.00 med=- p75=-
+                                                                    // Brutality (3.29 -30) removed: Flame Link cannot roll it in 3.30.
             ],
             skills: &[
                 (&["Herald of Ash"], 5.0, "Herald of Ash"), // added: n=22 top=0.95 med=4d p75=6d
@@ -387,7 +383,9 @@ pub const SCREENS: &[(&str, Screen)] = &[
         "bladebitter",
         Screen {
             money: &["Pestilent Strike"],
-            base: 40.0,
+            // Ailment Effect (3.29 +8) removed: the 3.30 catalog has no Pestilent
+            // Strike tier for it; base 40 -> 48 keeps the high target of 72.
+            base: 48.0,
             gates: &[
                 (
                     &["faster_attacks"],
@@ -395,11 +393,6 @@ pub const SCREENS: &[(&str, Screen)] = &[
                     "Faster Attacks on Pestilent Strike",
                 ), // keep (undecided): n=34 top=0.74 med=10d p75=32d
                 (&["chance_to_poison"], 8.0, "Poison on Pestilent Strike"), // keep (undecided): n=30 top=0.83 med=10d p75=20d
-                (
-                    &["ailment_effect"],
-                    8.0,
-                    "Ailment Effect on Pestilent Strike",
-                ), // keep (n<8): n=0 top=0.00 med=- p75=-
             ],
             skills: &[
                 (&["Malevolence"], 6.0, "Malevolence aura"), // keep (undecided): n=57+1mir top=0.79 med=10d p75=25d

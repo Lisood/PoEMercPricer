@@ -45,6 +45,9 @@ param(
     # mercenarySkills satisfy the rule, and merge the rows into the existing
     # -Out file instead of rebuilding it.
     [switch]$PartnerSweep,
+    # Re-run only the rows selected by -Families/-Packages and merge them into the existing -Out
+    # file by row key (a plain run would replace the whole file). -PartnerSweep implies this.
+    [switch]$Merge,
     [int]$ScanSize = 30,
     # Rows whose cheapest listings are all bricks scan every id the search
     # returns (the API hands back at most 100) instead of -ScanSize.
@@ -61,6 +64,14 @@ $repo = Split-Path -Parent $PSScriptRoot
 $patchShort = ($Patch -split '\.')[0..1] -join '.'
 . (Join-Path $PSScriptRoot 'trade-http.ps1')   # Invoke-TradeRequest, rate limiting, $TradeApi, User-Agent
 $listingStatus = 'securable'
+# Repeated 403s mean we are blocked, not that one row is bad: stop, keep the checkpoint, write no asset.
+$script:consecutive403 = 0
+function Test-Forbidden($response, [string]$what) {
+    # Counted across search AND fetch calls; reset only when a whole row completes (see $rows.Add below).
+    if ($response.Status -eq 403 -and ++$script:consecutive403 -ge 3) {
+        throw "aborting: 3 consecutive HTTP 403 responses (last: $what); the asset was NOT written, the checkpoint is kept"
+    }
+}
 $groupFilterLimit = 6
 
 # Family table: warrant type ids (src/trade.rs warrant_trade_type) and the
@@ -82,7 +93,7 @@ $familyTable = [ordered]@{
     toxicologist      = @{ Types = @('NonEleBowRangerChaos', 'NonEleBowRangerChaosNoble'); Money = @((Pkg 'Scourge Arrow of Menace' @('gilded_additional_pods', 'gmp', 'mirage_archer', 'physical_as_extra_chaos'))) }
     blade_ambusher    = @{ Types = @('TrapsMinesShadowAttack', 'TrapsMinesShadowAttackNoble'); Money = @((Pkg 'Bear Trap' @('trigger_radius'))) }
     striker           = @{ Types = @('MeleeStrikesMaraduerPhys', 'MeleeStrikesMaraduerPhysNoble'); Money = @((Pkg 'Leap Slam' @('gilded_frenzy', 'brutality'))) }
-    bladebitter       = @{ Types = @('Crit1HShadowPoison', 'Crit1HShadowPoisonNoble'); Money = @((Pkg 'Pestilent Strike' @('faster_attacks', 'chance_to_poison', 'ailment_effect'))) }
+    bladebitter       = @{ Types = @('Crit1HShadowPoison', 'Crit1HShadowPoisonNoble'); Money = @((Pkg 'Pestilent Strike' @('faster_attacks', 'chance_to_poison'))) }
     stormhand         = @{ Types = @('ElementalWitchLightning', 'ElementalWitchLightningNoble'); Money = @((Pkg 'Arc' @('chain', 'gilded_chain_distance', 'lucky_lightning_damage', 'faster_casting'))) }
     withertouch       = @{ Types = @('ChaosMinionWitchDot', 'ChaosMinionWitchDotNoble'); Money = @((Pkg 'Scourstorm' @('dot_multiplier', 'cdr', 'swift_affliction'))) }
     mysterious_diver  = @{ Types = @('DivingDuelist', 'DivingDuelistNoble'); Money = @((Pkg 'Frost Blades' @('edwa', 'return', 'hypothermia'))) }
@@ -123,7 +134,6 @@ $partnerRules = @{
     'fallen_reverend|*'        = @{ Require = @('Wrath', 'Zealotry'); Exclude = @('Battlemage''s Cry', 'Frostblink'); SupportExclude = @() }
     'thunderquiver|*'          = @{ Require = @(); Exclude = @('Galvanic Arrow'); SupportExclude = @() }
     'sniper|*'                 = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality') }
-    'eruptor|*'                = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality') }
 }
 # "family|package|money skill" rows scanned to -DeepScanSize: their cheapest 30
 # are brick variants and the real package starts above them.
@@ -191,6 +201,8 @@ foreach ($entry in $stats.entries) {
     }
 }
 
+# SupportExclude semantics (row field partner_exclude_supports): only the MONEY skill's own mercenarySkills entry
+# is checked, and the listing is rejected if any support on it (any tier) is one of the named canonical supports.
 function Test-PartnerRule($listing, $rule, [string]$moneySkill) {
     $item = $listing.item
     $skills = @()
@@ -318,6 +330,12 @@ foreach ($family in $selectedFamilies) {
 }
 Write-Host ("Planned {0} searches across {1} families; {2} rows skipped up front." -f $work.Count, $selectedFamilies.Count, $skipped.Count)
 foreach ($s in $skipped) { Write-Host "  skip: $s" }
+if ($Merge -and -not $PartnerSweep) {
+    $needFilter = @($work | Where-Object { $_.Package -ne 'base' -and $null -ne (Get-PartnerRule $_.Family $_.Skill) -and ($_.Package -eq 'money_gates' -or $moneyRuleFamilies -contains $_.Family) })
+    if ($needFilter.Count) {
+        throw ("-Merge would replace partner-filtered rows with unfiltered ones; use -PartnerSweep for: " + (($needFilter | ForEach-Object { "$($_.Family)/$($_.Package)/$($_.Skill)" }) -join ', '))
+    }
+}
 if ($PlanOnly) {
     $floorTries = 0
     foreach ($w in $work) { $k = "$($w.Family)|$($w.Package)|$($w.Skill)"; if ($PartnerSweep -and $priceFloorRows.ContainsKey($k)) { $floorTries += @($priceFloorRows[$k]).Count - 1 } }
@@ -326,6 +344,31 @@ if ($PlanOnly) {
     Write-Host "network requests made: search=$($script:Counts.search) fetch=$($script:Counts.fetch) other=$($script:Counts.other)"
     exit 0
 }
+
+$outPath = if ([System.IO.Path]::IsPathRooted($Out)) { $Out } else { Join-Path $repo $Out }
+$outDir = Split-Path -Parent $outPath
+# The checkpoint is only valid for the same query plan: hash every planned row plus the sweep knobs.
+$planText = (@($work | ForEach-Object {
+    $pr = if ($PartnerSweep -and $_.Package -ne 'base') { Get-PartnerRule $_.Family $_.Skill } else { $null }
+    $partner = if ($pr) { "req=$($pr.Require -join ',');ex=$($pr.Exclude -join ',');sup=$($pr.SupportExclude -join ',')" } else { '' }
+    "$($_.Family)|$($_.Infamous)|$($_.Type)|$($_.Package)|$($_.Skill)|$($_.Filters -join ',')|$partner|floor=$($priceFloorRows["$($_.Family)|$($_.Package)|$($_.Skill)"] -join '/')"
+}) -join "`n") +
+    "`nscan=$ScanSize/$DeepScanSize deep=$($deepScanRows -join ';') floors=$(($priceFloorRows.Keys | Sort-Object | ForEach-Object { "$_=$($priceFloorRows[$_] -join '/')" }) -join ';')"
+$planHash = [BitConverter]::ToString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($planText))).Replace('-', '').ToLowerInvariant()
+if ($PartnerSweep -or $Merge) {
+    # Validate the snapshot we will merge into before any network call.
+    if (-not (Test-Path -LiteralPath $outPath)) { throw "-PartnerSweep/-Merge merges into an existing file, but $outPath does not exist" }
+    $snapRaw = Get-Content -LiteralPath $outPath -Raw
+    $snap = $snapRaw | ConvertFrom-Json
+    $snapGenerated = [regex]::Match($snapRaw, '"generated_at":\s*"([^"]+)"').Groups[1].Value   # ConvertFrom-Json would turn it into a DateTime
+    $snapWant = [ordered]@{ league = $League; min_level = $MinLevel; patch = $patchShort }
+    foreach ($k in $snapWant.Keys) {
+        if (-not $snap.PSObject.Properties[$k] -or "$($snap.$k)" -ne "$($snapWant[$k])") {
+            throw "snapshot $outPath has $k='$(if ($snap.PSObject.Properties[$k]) { $snap.$k } else { '<missing>' })' but this run has $k='$($snapWant[$k])'; refusing to merge"
+        }
+    }
+}
+if (-not (Test-Path -LiteralPath $outDir)) { New-Item -ItemType Directory -Path $outDir | Out-Null }
 
 # poe.ninja retired /api/data/currencyoverview in mid-2026; the stash overview
 # keeps the same line shape (currencyTypeName / chaosEquivalent / detailsId)
@@ -391,16 +434,21 @@ function ConvertTo-Chaos([double]$amount, [string]$currency) {
     }
 }
 
+if ($PartnerSweep -or $Merge) {
+    # Rows merge into a snapshot priced at its own rate; convert at that same rate so the file stays consistent.
+    $snapRate = [double]$snap.chaos_per_divine
+    if (-not [double]::IsFinite($snapRate) -or $snapRate -le 0) { throw "snapshot $outPath has no valid chaos_per_divine" }
+    Write-Host ("Merging: using the snapshot's chaos_per_divine = {0} (live poe.ninja rate {1} ignored)" -f $snapRate, $chaosPerDivine)
+    $chaosPerDivine = $snapRate
+}
 $searchUri = "$TradeApi/search/$([uri]::EscapeDataString($League))"
 $rows = [System.Collections.Generic.List[object]]::new()
-$outPath = if ([System.IO.Path]::IsPathRooted($Out)) { $Out } else { Join-Path $repo $Out }
-$outDir = Split-Path -Parent $outPath
-if (-not (Test-Path -LiteralPath $outDir)) { New-Item -ItemType Directory -Path $outDir | Out-Null }
+
 if (-not $Checkpoint) { $Checkpoint = "$outPath.checkpoint.json" }
 $done = @{}
 if (Test-Path -LiteralPath $Checkpoint) {
     $cp = Get-Content -LiteralPath $Checkpoint -Raw | ConvertFrom-Json
-    $want = [ordered]@{ league = $League; min_level = $MinLevel; partner_sweep = [bool]$PartnerSweep }
+    $want = [ordered]@{ league = $League; min_level = $MinLevel; partner_sweep = [bool]$PartnerSweep; sample_size = $SampleSize; plan_hash = $planHash }
     foreach ($k in $want.Keys) {
         if (-not $cp.PSObject.Properties[$k] -or "$($cp.$k)" -ne "$($want[$k])") {
             throw "checkpoint $Checkpoint was written with $k='$(if ($cp.PSObject.Properties[$k]) { $cp.$k } else { '<missing>' })' but this run has $k='$($want[$k])'; delete the checkpoint to start over"
@@ -410,6 +458,9 @@ if (Test-Path -LiteralPath $Checkpoint) {
     $storedRate = if ($cp.PSObject.Properties['chaos_per_divine']) { [double]$cp.chaos_per_divine } else { 0.0 }
     if (-not [double]::IsFinite($storedRate) -or $storedRate -le 0) { throw "checkpoint $Checkpoint has no valid chaos_per_divine; delete the checkpoint to start over" }
     Write-Host ("Resuming with the checkpoint's chaos_per_divine = {0} (live poe.ninja rate {1} ignored)" -f $storedRate, $chaosPerDivine)
+    if (($PartnerSweep -or $Merge) -and [math]::Abs($storedRate - $snapRate) -gt 1e-9) {
+        throw "checkpoint rate $storedRate differs from the destination snapshot's chaos_per_divine $snapRate; delete the checkpoint to start over"
+    }
     $chaosPerDivine = $storedRate
     foreach ($r in @($cp.rows)) {
         $ordered = [ordered]@{}
@@ -455,6 +506,7 @@ foreach ($item in $work) {
         $body = $query | ConvertTo-Json -Depth 8 -Compress
         Write-Host "[$index/$($work.Count)] $tag"
         $search = Invoke-TradeRequest POST $searchUri $body 'trade-search-request-limit' 'search'
+        Test-Forbidden $search "search $tag"
         if ($search.Status -ne 200) {
             $rowFailures.Add("$tag`: search HTTP $($search.Status) $($search.Content)")
             $searchFailed = $true
@@ -474,6 +526,7 @@ foreach ($item in $work) {
                 $chunk = @($ids[$offset..([math]::Min($offset + 9, $ids.Count - 1))])
                 $fetchUri = "$TradeApi/fetch/$($chunk -join ',')?query=$($payload.id)"
                 $fetch = Invoke-TradeRequest GET $fetchUri $null 'trade-fetch-request-limit' 'fetch'
+                Test-Forbidden $fetch "fetch $tag"
                 if ($fetch.Status -ne 200) {
                     Write-Host "    fetch failed with HTTP $($fetch.Status); stopping this row at scanned=$scanned"
                     $fetchFailed = $true
@@ -519,6 +572,7 @@ foreach ($item in $work) {
         median_age_days = [double](Round3 (Get-Median $ages))
         fresh_share     = [double](Round3 $(if ($ages.Count) { $fresh.Count / [double]$ages.Count } else { 0.0 }))
         query_id        = [string]$payload.id
+        sampled_at      = [datetime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     }
     if ($PartnerSweep) {
         # listings = search total while at least one scanned listing passes the
@@ -527,11 +581,15 @@ foreach ($item in $work) {
         $row.scanned = $scanned
         $row.passed = $(if ($applyRule) { $passed } else { $scanned })
         $row.partner_rule = $(if ($applyRule) { Format-PartnerRule $rule } else { $null })
+        # Structured copy of the rule for the app: catalog skill names the warrant must / must not also have.
+        if ($applyRule) { $row.partner_require = @($rule.Require); $row.partner_exclude = @($rule.Exclude) }
+        if ($applyRule -and $rule.SupportExclude.Count -gt 0) { $row.partner_exclude_supports = @($rule.SupportExclude) }
         if ($applyRule -and $passed -eq 0) { $row.listings = 0 }
         if ($null -ne $priceFloorChaos) { $row.price_floor_chaos = $priceFloorChaos }
     }
     $rows.Add($row)
-    [System.IO.File]::WriteAllText($Checkpoint, (([ordered]@{ league = $League; min_level = [int]$MinLevel; partner_sweep = [bool]$PartnerSweep; chaos_per_divine = $chaosPerDivine; rows = @($rows) } | ConvertTo-Json -Depth 8)), [System.Text.UTF8Encoding]::new($false))
+    $script:consecutive403 = 0
+    [System.IO.File]::WriteAllText($Checkpoint, (([ordered]@{ league = $League; min_level = [int]$MinLevel; partner_sweep = [bool]$PartnerSweep; sample_size = $SampleSize; plan_hash = $planHash; chaos_per_divine = $chaosPerDivine; rows = @($rows) } | ConvertTo-Json -Depth 8)), [System.Text.UTF8Encoding]::new($false))
     Write-Host ("    => listings={0} sampled={1} low={2}c med={3}c p75={4}c age={5}d fresh={6}{7}" -f $row.listings, $row.sampled, $row.lowest_chaos, $row.median_chaos, $row.p75_chaos, $row.median_age_days, $row.fresh_share, $(if ($applyRule) { " scanned=$scanned passed=$passed" } else { '' }))
 }
 
@@ -540,8 +598,8 @@ if ($rowFailures.Count) {
 }
 if ($rows.Count -ne $work.Count) { throw "expected $($work.Count) rows but have $($rows.Count); the asset was NOT written" }
 $finalRows = $rows
-if ($PartnerSweep) {
-    if (-not (Test-Path -LiteralPath $outPath)) { throw "-PartnerSweep merges into an existing file, but $outPath does not exist" }
+if ($PartnerSweep -or $Merge) {
+    if (-not (Test-Path -LiteralPath $outPath)) { throw "-PartnerSweep/-Merge merges into an existing file, but $outPath does not exist" }
     $base = Get-Content -LiteralPath $outPath -Raw | ConvertFrom-Json
     $byKey = @{}
     foreach ($r in $rows) { $byKey["$($r.family)|$($r.infamous)|$($r.package)|$($r.money_skill)"] = $r }
@@ -558,7 +616,8 @@ if ($PartnerSweep) {
     Write-Host ("Merged {0} re-run rows into {1} existing rows" -f $rows.Count, @($base.rows).Count)
 }
 $document = [ordered]@{
-    generated_at     = [datetime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    # A partial merge must not advance the snapshot-wide timestamp; each row carries its own sampled_at.
+    generated_at     = $(if (($PartnerSweep -or $Merge) -and $snapGenerated) { $snapGenerated } else { [datetime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") })
     league           = $League
     patch            = $patchShort
     source           = "https://www.pathofexile.com/api/trade/search (status $listingStatus, ilvl >= $MinLevel, sort price asc; cheapest $SampleSize fetched; one mercenary stats group per package; listings caps at 10000; chaos rates from poe.ninja stash currency overview)"
@@ -570,7 +629,7 @@ $document = [ordered]@{
 $json = $document | ConvertTo-Json -Depth 8
 $null = $json | ConvertFrom-Json   # must round-trip before it can replace anything
 $tmpPath = Join-Path $outDir ((Split-Path -Leaf $outPath) + ".tmp-$PID")
-[System.IO.File]::WriteAllText($tmpPath, $json + "`n", [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($tmpPath, $json + "`r`n", [System.Text.UTF8Encoding]::new($false))
 Move-Item -LiteralPath $tmpPath -Destination $outPath -Force
 if (Test-Path -LiteralPath $Checkpoint) { Remove-Item -LiteralPath $Checkpoint -Force }
 

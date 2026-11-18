@@ -121,13 +121,16 @@ foreach ($buildName in $buildLinks.Keys) {
   try {
     $html = Get-Page "https://poedb.tw/us/$($buildLinks[$buildName])"
   } catch {
-    Write-Warning "No PoEDB support page for $buildName; continuing"
-    continue
+    # A partial catalog must never replace a full one.
+    throw "PoEDB page for build '$buildName' failed to download ($($_.Exception.Message)); the catalog was NOT written"
   }
   # Placeholder pages (Bladereach: "This really shouldn't be here...") have no
   # support table and no trade warrant type; they are not builds.
   $hasType = $warrantTypes.ContainsKey("Mercenary Warrant ($buildName)") -or $warrantTypes.ContainsKey("Mercenary Warrant (Infamous $buildName)")
-  if (-not $hasType -and -not [regex]::IsMatch($html, $supportPattern)) { Write-Warning "skipping placeholder build $buildName"; continue }
+  if (-not [regex]::IsMatch($html, $supportPattern)) {
+    if ($hasType) { throw "PoEDB page for build '$buildName' has a trade warrant type but no parsable support table (markup change?); the catalog was NOT written" }
+    Write-Warning "skipping placeholder build $buildName"; continue
+  }
   $builds.Add([ordered]@{ name = $buildName; family = ConvertTo-Key $buildName; listings = 0 })
   foreach ($match in [regex]::Matches($html, $supportPattern, [Text.RegularExpressions.RegexOptions]::Singleline)) {
     $name = [Net.WebUtility]::HtmlDecode($match.Groups['name'].Value.Trim())

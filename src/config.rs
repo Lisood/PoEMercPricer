@@ -1,7 +1,9 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::fs;
+use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicU64, Ordering};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(default)]
@@ -110,12 +112,15 @@ impl AppConfig {
             fs::create_dir_all(dir)?;
         }
         // Write a sibling and rename it over the target, so a crash mid-write
-        // never leaves a truncated config behind.
-        let mut tmp = path.as_os_str().to_owned();
-        tmp.push(".tmp");
-        let tmp = PathBuf::from(tmp);
-        let written = fs::write(&tmp, serde_json::to_string_pretty(self)?)
-            .and_then(|()| fs::rename(&tmp, path));
+        // never leaves a truncated config behind. Each save gets its own
+        // sibling, so concurrent saves never write into each other's file.
+        static SAVES: AtomicU64 = AtomicU64::new(0);
+        let json = serde_json::to_string_pretty(self)?;
+        let (tmp, mut file) = create_temp_sibling(path, &SAVES)?;
+        let written = file.write_all(json.as_bytes()).and_then(|()| {
+            drop(file);
+            fs::rename(&tmp, path)
+        });
         if written.is_err() {
             let _ = fs::remove_file(&tmp);
         }
@@ -123,29 +128,71 @@ impl AppConfig {
     }
 }
 
-/// The 3.29 Allflame leagues ended with 3.30; carry a saved choice such as
-/// "HC Ruthless Allflame" over to its Covens equivalent. Only the whole word
-/// is replaced, so a private league such as "Allflamers (PL123)" is kept.
+/// Exclusively create `<path>.<pid>.<n>.tmp`. A crash can leave a stale one
+/// behind for a later process that reuses the pid, so taken names are skipped.
+fn create_temp_sibling(path: &Path, saves: &AtomicU64) -> std::io::Result<(PathBuf, fs::File)> {
+    let mut attempts = 0;
+    loop {
+        let mut tmp = path.as_os_str().to_owned();
+        tmp.push(format!(
+            ".{}.{}.tmp",
+            std::process::id(),
+            saves.fetch_add(1, Ordering::Relaxed)
+        ));
+        let tmp = PathBuf::from(tmp);
+        match fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .open(&tmp)
+        {
+            Ok(file) => return Ok((tmp, file)),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists && attempts < 15 => {
+                attempts += 1;
+            }
+            Err(e) => return Err(e),
+        }
+    }
+}
+
+/// The 3.29 Allflame leagues ended with 3.30. Only the two public leagues
+/// v0.2.0 offered move to their Covens equivalents; any other name, such as a
+/// private league, is the user's own and is kept verbatim.
 fn retired_league_successor(league: &str) -> Option<String> {
-    // ASCII lowercasing keeps byte offsets, so `at` indexes `league` too.
-    let lower = league.to_ascii_lowercase();
-    let at = lower
-        .match_indices("allflame")
-        .map(|(at, _)| at)
-        .find(|&at| {
-            let end = at + "allflame".len();
-            !lower[..at]
-                .chars()
-                .next_back()
-                .is_some_and(char::is_alphanumeric)
-                && !lower[end..]
-                    .chars()
-                    .next()
-                    .is_some_and(char::is_alphanumeric)
-        })?;
-    Some(format!(
-        "{}Covens{}",
-        &league[..at],
-        &league[at + "allflame".len()..]
-    ))
+    if league.eq_ignore_ascii_case("Allflame") {
+        Some("Covens".into())
+    } else if league.eq_ignore_ascii_case("Hardcore Allflame") {
+        Some("Hardcore Covens".into())
+    } else {
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn stale_temp_files_from_a_reused_pid_are_skipped() {
+        let dir = std::env::temp_dir().join(format!("pmp-config-stale-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&dir);
+        fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("config.json");
+        let stale = |n: u64| dir.join(format!("config.json.{}.{n}.tmp", std::process::id()));
+        for n in 0..3 {
+            fs::write(stale(n), "stale").unwrap();
+        }
+
+        let (tmp, file) = create_temp_sibling(&path, &AtomicU64::new(0)).unwrap();
+        drop(file);
+        assert_eq!(tmp, stale(3));
+        assert_eq!(fs::read_to_string(stale(0)).unwrap(), "stale");
+
+        // Bounded: sixteen taken names in a row give up instead of spinning.
+        for n in 4..20 {
+            fs::write(stale(n), "stale").unwrap();
+        }
+        let error = create_temp_sibling(&path, &AtomicU64::new(4)).unwrap_err();
+        assert_eq!(error.kind(), std::io::ErrorKind::AlreadyExists);
+        fs::remove_dir_all(&dir).unwrap();
+    }
 }

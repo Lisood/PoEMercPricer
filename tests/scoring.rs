@@ -735,17 +735,114 @@ fn swiftblade_t1_gates_do_not_jackpot() {
 }
 
 #[test]
-fn eruptor_brutality_on_flame_link_is_a_reported_brick() {
+fn eruptor_flame_link_package_is_a_floor_screen() {
+    // docs/market-3.30.md, eruptor row: floor family (3d top-50 median). The
+    // 3.29 Brutality -30 gate is gone: Flame Link cannot roll Brutality in the
+    // 3.30 catalog (see every_gate_is_attainable_on_its_money_skill).
     let m = merc(
         "eruptor",
-        vec![Skill::new("Flame Link", "Flame Link").with_supports(vec![
-            ("gilded_empowered_link".into(), SupportTier::T3),
-            ("brutality".into(), SupportTier::T1),
-        ])],
+        vec![Skill::new("Flame Link", "Flame Link")
+            .with_supports(vec![("gilded_empowered_link".into(), SupportTier::T3)])],
     );
     let r = score_mercenary(&m, false);
-    assert!(r.bricks.iter().any(|b| b.contains("Brutality")));
-    assert!(r.score < 50.0);
+    assert!(r.bricks.is_empty());
+    assert_eq!(r.score, 36.0);
+    assert_eq!(r.band, "skip");
+}
+
+/// (skill, canonical) -> tiers the 3.30 catalog lets that skill roll.
+fn catalog_skill_tiers() -> std::collections::HashMap<(String, String), Vec<u8>> {
+    let raw = include_str!("../assets/catalog-3.30.json");
+    let cat: serde_json::Value = serde_json::from_str(raw).unwrap();
+    let mut out = std::collections::HashMap::new();
+    for support in cat["supports"].as_array().unwrap() {
+        let id = support["canonical"].as_str().unwrap();
+        for entry in support["skill_tiers"].as_array().unwrap() {
+            let (skill, tiers) = entry.as_str().unwrap().rsplit_once('|').unwrap();
+            out.entry((skill.to_string(), id.to_string()))
+                .or_insert_with(Vec::new)
+                .extend(tiers.bytes().map(|b| b - b'0'));
+        }
+    }
+    out
+}
+
+#[test]
+fn every_gate_is_attainable_on_its_money_skill() {
+    // A gate the catalog cannot roll is dead weight and prices to 0 listings.
+    // Positive market gates must reach T2 (the jackpot / sweep package tier);
+    // penalties any tier. Bespoke gates are checked at the tier they demand.
+    let tiers = catalog_skill_tiers();
+    let max_tier = |skills: &[&str], id: &str| {
+        skills
+            .iter()
+            .filter_map(|s| tiers.get(&(s.to_string(), id.to_string())))
+            .flatten()
+            .copied()
+            .max()
+            .unwrap_or(0)
+    };
+    for (family, screen) in SCREENS {
+        for (ids, pts, label) in screen.gates {
+            let need = if *pts > 0.0 { 2 } else { 1 };
+            assert!(
+                max_tier(screen.money, ids[0]) >= need,
+                "{family}: {label} ({}) cannot roll at T{need} on {:?}",
+                ids[0],
+                screen.money
+            );
+        }
+    }
+    let bespoke: &[(&str, &str, u8)] = &[
+        ("Kinetic Blast of Clustering", "return", 3),
+        ("Kinetic Blast of Clustering", "gmp", 3),
+        ("Kinetic Blast of Clustering", "chain", 1),
+        ("Kinetic Blast of Clustering", "pierce", 1),
+        ("Kinetic Blast of Clustering", "fork", 1),
+        ("Kinetic Blast of Clustering", "edwa", 1),
+        ("Kinetic Blast of Clustering", "faster_attacks", 1),
+        ("Kinetic Blast of Clustering", "crit_damage", 1),
+        ("Kinetic Blast of Clustering", "sacred_wisps", 1),
+        ("Vaal Ice Shot", "return", 1),
+        ("Vaal Ice Shot", "edwa", 3),
+        ("Vaal Ice Shot", "hypothermia", 3),
+        ("Vaal Ice Shot", "cdr", 1),
+        ("Vaal Ice Shot", "chain", 1),
+        ("Vaal Ice Shot", "pierce", 1),
+        ("Vaal Ice Shot", "fork", 1),
+        ("Ice Shot", "return", 1),
+        ("Ice Shot", "gmp", 1),
+        ("Ice Shot", "chain", 1),
+        ("Ice Shot", "pierce", 1),
+        ("Ice Shot", "fork", 1),
+        ("Ice Shot", "edwa", 1),
+        ("Ice Shot", "hypothermia", 1),
+        ("Mirror Arrow", "cdr", 1),
+        ("Frost Blades", "return", 3),
+        ("Frost Blades", "chain", 2),
+        ("Frost Blades", "edwa", 3),
+        ("Frost Blades", "faster_attacks", 1),
+        ("Frost Blades", "hypothermia", 1),
+        ("Frost Blades", "gmp", 1),
+        ("Frost Blades", "pierce", 1),
+        ("Wild Strike", "edwa", 3),
+        ("Wild Strike", "faster_attacks", 3),
+        ("Wild Strike", "hypothermia", 3),
+        ("Wild Strike", "gilded_elemental_weakness_on_hit", 1),
+        ("Wild Strike", "chain", 1),
+        ("Wild Strike", "gmp", 1),
+        ("Wild Strike", "multistrike", 1),
+        ("Static Strike", "more_duration", 1),
+        ("Static Strike", "edwa", 1),
+        ("Static Strike", "aoe", 1),
+        ("Static Strike", "chain", 1),
+    ];
+    for (skill, id, need) in bespoke {
+        assert!(
+            max_tier(&[skill], id) >= *need,
+            "{skill}: {id} cannot roll at T{need}"
+        );
+    }
 }
 
 #[test]

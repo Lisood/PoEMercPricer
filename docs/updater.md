@@ -235,7 +235,7 @@ jobs:
       - run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe -Setup target/installer/poemercpricer-setup-windows-x64.exe
       # Immutable releases lock the tag and assets at publish, so everything
       # is uploaded to the draft first.
-      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --notes-file "$env:RUNNER_TEMP/release-notes.md" --generate-notes
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --notes-file "$env:RUNNER_TEMP/release-notes.md"
         env:
           GH_TOKEN: ${{ github.token }}
       - run: gh release edit $env:GITHUB_REF_NAME --draft=false
@@ -410,7 +410,7 @@ Audited 2026-09-03 on the working tree and a local release build:
 | Account names in data | `assets/*.json` hold prices and counts only | Refresh scripts request no seller fields |
 | Screenshots | samples show the mercenary panel and game UI, no chat or account names | Bug template asks reporters to crop |
 | Debug captures and logs | written under `%APPDATA%`, never in the repo | `.gitignore` blocks `debug/` and `*.log`; `release.ps1` refuses tracked ones |
-| Commit messages | quoted by `--generate-notes` on the release page, below the `CHANGELOG.md` section | Rule in `AGENTS.md` |
+| Release notes | only the reviewed `CHANGELOG.md` section is published (`--notes-file`, no `--generate-notes`), so generated PR titles and handles cannot reach the page | The workflow step fails on a missing, empty or TODO-bearing section |
 | Email | none in the exe | `authors` is the GitHub handle |
 
 Not done on purpose: `--remap-path-prefix` for local builds (they are never published), SBOM or `cargo deny` (dependabot plus `cargo audit` already run in CI), and a git-history rewrite (nothing to remove).

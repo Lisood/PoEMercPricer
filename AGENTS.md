@@ -70,8 +70,8 @@ What the script does:
    tagged commit is on `main` and waits for that commit's `ci.yml` run to go
    green, then builds and uploads the four assets to a draft release, then
    publishes it after the final installer lifecycle and asset checks pass.
-   The release page opens with the `CHANGELOG.md` section for the version, then
-   the generated notes; the job fails if the section is missing, empty or
+   The release page shows only the `CHANGELOG.md` section for the version (no
+   generated notes); the job fails if the section is missing, empty or
    contains `TODO`.
 10. Verifies that the exe, gzip, installer and third-party notices were uploaded
     with nonzero sizes and SHA-256 digests, and prints the release URL.
@@ -116,8 +116,9 @@ What must never reach a release, and what enforces it:
   mercenary panel; the bug template says the same to reporters.
 - Debug captures and logs. They go to `%APPDATA%\PoEMercPricer\...\debug`,
   never into the repo, and `.gitignore` blocks `debug/` and `*.log`.
-- Commit messages: `--generate-notes` quotes them on the public release page,
-  so keep names, emails, and account details out of them.
+- Commit messages: the release page shows only the reviewed `CHANGELOG.md`
+  section, but the history is public, so keep names, emails, and account
+  details out of commit messages and the changelog.
 - Trade snapshots under `assets/` carry prices and counts only, no seller
   or account names; keep it that way when refreshing them.
 The repo is public, so keep GitHub secret scanning and push protection on

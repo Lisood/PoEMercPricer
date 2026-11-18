@@ -142,6 +142,7 @@ fn summary_line_carries_the_confidence_caveat() {
         min_level: 0,
         scanned: 0,
         passed: 0,
+        price_floor_chaos: None,
     };
     assert_eq!(thin_and_stale.confidence(), "thin market");
     assert_eq!(

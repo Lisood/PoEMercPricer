@@ -103,13 +103,15 @@ fn retired_allflame_league_is_migrated_to_covens_and_saved() {
     for (saved, expected) in [
         ("Allflame", "Covens"),
         ("Hardcore Allflame", "Hardcore Covens"),
-        ("Ruthless Allflame", "Ruthless Covens"),
-        ("HC Ruthless Allflame", "HC Ruthless Covens"),
-        ("hardcore ALLFLAME", "hardcore Covens"),
+        ("hardcore ALLFLAME", "Hardcore Covens"),
+        ("allflame", "Covens"),
+        // v0.2.0 never offered these, so they are the user's own names.
+        ("Ruthless Allflame", "Ruthless Allflame"),
+        ("HC Ruthless Allflame", "HC Ruthless Allflame"),
         ("Standard", "Standard"),
         ("My Private League (PL123)", "My Private League (PL123)"),
         ("Allflamers (PL123)", "Allflamers (PL123)"),
-        ("Hardcore-Allflame (PL9)", "Hardcore-Covens (PL9)"),
+        ("Hardcore-Allflame (PL9)", "Hardcore-Allflame (PL9)"),
     ] {
         let original = format!(r#"{{"hotkey":"Ctrl+M","trade_league":"{saved}"}}"#);
         std::fs::write(&path, &original).unwrap();
@@ -127,10 +129,49 @@ fn retired_allflame_league_is_migrated_to_covens_and_saved() {
             assert_eq!(back.trade_league, expected);
             assert_eq!(back.hotkey, "Ctrl+M");
         }
-        assert!(
-            !dir.join("config.json.tmp").exists(),
+        assert_eq!(
+            std::fs::read_dir(&dir).unwrap().count(),
+            1,
             "atomic save left its temp file"
         );
     }
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[test]
+fn concurrent_saves_leave_one_whole_config() {
+    let dir = std::env::temp_dir().join(format!("pmp-config-race-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    let path = dir.join("config.json");
+    let configs: Vec<AppConfig> = ["Ctrl+Alt+A", "Ctrl+Alt+B"]
+        .into_iter()
+        .map(|hotkey| AppConfig {
+            hotkey: hotkey.into(),
+            ..AppConfig::default()
+        })
+        .collect();
+    for _ in 0..20 {
+        // A losing rename may be refused while the other thread replaces the
+        // target; at least one save lands and no torn file is left behind.
+        let saved = std::thread::scope(|scope| {
+            let handles: Vec<_> = configs
+                .iter()
+                .map(|cfg| scope.spawn(|| cfg.save_to(&path).is_ok()))
+                .collect();
+            handles
+                .into_iter()
+                .filter_map(|h| h.join().unwrap().then_some(()))
+                .count()
+        });
+        assert!(saved >= 1);
+        let back: AppConfig =
+            serde_json::from_str(&std::fs::read_to_string(&path).unwrap()).unwrap();
+        assert!(configs.iter().any(|cfg| cfg.hotkey == back.hotkey));
+    }
+    assert_eq!(
+        std::fs::read_dir(&dir).unwrap().count(),
+        1,
+        "temp files left"
+    );
     std::fs::remove_dir_all(&dir).unwrap();
 }

@@ -36,8 +36,25 @@ try {
     function cargo {
         $global:LASTEXITCODE = 0
         if ($args[0] -notin @('update', 'build', 'fmt', 'clippy', 'test', 'about')) { throw "Unexpected cargo operation: $args" }
+        $global:cargoCalls++
         if ($args[0] -eq 'update') { Add-Content -LiteralPath "$fixtureRoot/Cargo.lock" -Value '# changed by version bump' }
     }
+    # release.ps1 refuses a version without a clean CHANGELOG.md section before it touches anything.
+    $changelogCases = @(
+        @{ Name = 'missing section'; Text = "# Changelog`n`n## [0.1.0] - 2026-09-04`n`n- First release.`n" },
+        @{ Name = 'empty section'; Text = "# Changelog`n`n## [0.2.0] - 2026-09-05`n`n## [0.1.0] - 2026-09-04`n`n- First release.`n" },
+        @{ Name = 'TODO in heading'; Text = "# Changelog`n`n## [0.2.0] - TODO(date)`n`n- Something changed.`n" }
+    )
+    foreach ($case in $changelogCases) {
+        [IO.File]::WriteAllText("$fixtureRoot/CHANGELOG.md", $case.Text)
+        $global:cargoCalls = 0
+        $message = $null
+        try { & "$fixtureRoot/scripts/release.ps1" -Version 0.2.0 -DryRun } catch { $message = $_.Exception.Message }
+        if ($message -notmatch 'CHANGELOG\.md') { throw "Changelog case '$($case.Name)' was not rejected with the changelog message (got: $message)." }
+        if ($global:cargoCalls -ne 0) { throw "Changelog case '$($case.Name)' ran cargo before the changelog check." }
+        if ([Convert]::ToBase64String([IO.File]::ReadAllBytes("$fixtureRoot/Cargo.toml")) -ne $cargoBefore) { throw "Changelog case '$($case.Name)' changed Cargo.toml." }
+    }
+    [IO.File]::WriteAllText("$fixtureRoot/CHANGELOG.md", "# Changelog`n`n## [0.2.0] - 2026-09-05`n`n- Something changed.`n")
     foreach ($fail in @($true, $false)) {
         Set-Content -LiteralPath "$fixtureRoot/scripts/build-installer.ps1" -Value $(if ($fail) { "throw 'simulated installer failure'" } else { '# mocked successful build' })
         $failed = $false
@@ -50,7 +67,7 @@ try {
         if ([Convert]::ToBase64String([IO.File]::ReadAllBytes("$fixtureRoot/Cargo.toml")) -ne $cargoBefore) { throw 'Dry run lost Cargo.toml bytes.' }
         if ([Convert]::ToBase64String([IO.File]::ReadAllBytes("$fixtureRoot/Cargo.lock")) -ne $lockBefore) { throw 'Dry run lost Cargo.lock bytes.' }
     }
-    Write-Host 'Release dry-run success and failure preserve local Cargo edits; no write to GitHub or git history occurred.'
+    Write-Host 'Release dry-run success and failure preserve local Cargo edits, bad changelog sections are refused first; no write to GitHub or git history occurred.'
 } finally {
     Set-Location -LiteralPath $originalLocation.Path
     $tempBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd('\') + '\'

@@ -66,6 +66,18 @@ pub struct Row {
     pub scanned: u32,
     #[serde(default)]
     pub passed: u32,
+    /// Skills the listings were required to have / not have beside the money
+    /// skill. A mercenary outside that rule is not what this row priced.
+    #[serde(default)]
+    pub partner_require: Vec<String>,
+    #[serde(default)]
+    pub partner_exclude: Vec<String>,
+    /// Canonical supports the money skill itself must not carry, at any tier.
+    #[serde(default)]
+    pub partner_exclude_supports: Vec<String>,
+    /// The search's trade `price.min`, in chaos, when it had one.
+    #[serde(default)]
+    pub price_floor_chaos: Option<f32>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
@@ -99,6 +111,7 @@ pub struct MarketEstimate {
     pub min_level: u32,
     pub scanned: u32,
     pub passed: u32,
+    pub price_floor_chaos: Option<f32>,
 }
 
 /// `money_gates` > `money` > `base`; anything else is not a package we price.
@@ -113,6 +126,14 @@ fn package_rank(package: &str) -> Option<u8> {
 
 /// Does this mercenary carry everything the row's package requires?
 pub fn satisfies(merc: &Mercenary, row: &Row) -> bool {
+    let has = |name: &String| {
+        merc.skills
+            .iter()
+            .any(|skill| skill.canonical.eq_ignore_ascii_case(name))
+    };
+    if !row.partner_require.iter().all(has) || row.partner_exclude.iter().any(has) {
+        return false;
+    }
     if row.package == "base" {
         return true;
     }
@@ -123,6 +144,13 @@ pub fn satisfies(merc: &Mercenary, row: &Row) -> bool {
     else {
         return false;
     };
+    if skill
+        .supports
+        .iter()
+        .any(|support| row.partner_exclude_supports.contains(&support.canonical))
+    {
+        return false;
+    }
     row.package != "money_gates"
         || row.gates.iter().all(|gate| {
             skill.support_tier(&[gate.canonical.as_str()]) >= SupportTier::from_u8(gate.tier)
@@ -179,6 +207,7 @@ pub fn estimate_for(merc: &Mercenary, bricked: bool) -> Option<MarketEstimate> {
         min_level: snap.min_level,
         scanned: row.scanned,
         passed: row.passed,
+        price_floor_chaos: row.price_floor_chaos,
     })
 }
 
@@ -262,11 +291,18 @@ impl MarketEstimate {
         } else {
             String::new()
         };
+        // A search with a trade price floor saw only the asks above it.
+        let floor = self
+            .price_floor_chaos
+            .map(|chaos| format!(" above {}", currency(chaos, self.chaos_per_divine)))
+            .unwrap_or_default();
         let matched = if self.passed > 0 {
             format!(
-                " · {} of {} cheapest match this package",
+                " · {} of {} cheapest{floor} match this package",
                 self.passed, self.scanned
             )
+        } else if !floor.is_empty() {
+            format!(" · cheapest asks{floor}")
         } else {
             String::new()
         };
@@ -287,8 +323,12 @@ impl MarketEstimate {
     /// One line for the copied summary and the CLI.
     pub fn summary_line(&self) -> String {
         let confidence = self.confidence();
+        let floor = self
+            .price_floor_chaos
+            .map(|chaos| format!(", asks above {}", currency(chaos, self.chaos_per_divine)))
+            .unwrap_or_default();
         format!(
-            "Market: {} ({} listed, snapshot {}{}{})",
+            "Market: {} ({} listed{floor}, snapshot {}{}{})",
             self.range_label(),
             self.listed(),
             self.snapshot_date,
@@ -335,6 +375,9 @@ mod tests {
             merc.skills
                 .push(Skill::new(name, name).with_supports(gates));
         }
+        for name in &row.partner_require {
+            merc.skills.push(Skill::new(name, name));
+        }
         merc
     }
 
@@ -357,6 +400,11 @@ mod tests {
         let row = |json: &str| serde_json::from_str::<Row>(json).unwrap();
         let ok = r#"{"family":"x","package":"base","listings":5,"sampled":5,"lowest_chaos":10,"median_chaos":20}"#;
         assert!(priced(&row(ok)));
+        // Fields the app does not use, such as `sampled_at`, are ignored.
+        assert!(priced(&row(&ok.replace(
+            r#""family""#,
+            r#""sampled_at":"2026-11-18T05:49:05Z","family""#
+        ))));
         for broken in [
             ok.replace(r#""sampled":5"#, r#""sampled":0"#),
             ok.replace(r#""lowest_chaos":10"#, r#""lowest_chaos":0"#),
@@ -419,6 +467,7 @@ mod tests {
             min_level: 0,
             scanned: 0,
             passed: 0,
+            price_floor_chaos: None,
         }
     }
 
@@ -457,5 +506,125 @@ mod tests {
             summary_line(None),
             "Market: no listings data for this build"
         );
+    }
+
+    #[test]
+    fn a_price_floor_qualifies_cheapest() {
+        let mut e = sample(900.0, 1800.0);
+        e.placeholder = false;
+        e.price_floor_chaos = Some(200.0);
+        assert!(e
+            .detail_line()
+            .contains(" · cheapest asks above 1.0 div · "));
+        assert!(e
+            .summary_line()
+            .contains("(12 listed, asks above 1.0 div, snapshot"));
+        e.passed = 3;
+        e.scanned = 10;
+        assert!(e
+            .detail_line()
+            .contains(" · 3 of 10 cheapest above 1.0 div match this package"));
+        e.price_floor_chaos = None;
+        assert!(e
+            .detail_line()
+            .contains(" · 3 of 10 cheapest match this package"));
+        assert!(!e.summary_line().contains("above"));
+    }
+
+    fn combatant(extra: &[&str]) -> Mercenary {
+        let mut skills = vec![
+            Skill::new("Frost Blades", "Frost Blades").with_supports(vec![
+                ("return".into(), SupportTier::T3),
+                ("chain".into(), SupportTier::T2),
+                ("edwa".into(), SupportTier::T3),
+            ]),
+        ];
+        skills.extend(extra.iter().map(|name| Skill::new(*name, *name)));
+        Mercenary {
+            family: "combatant".into(),
+            skills,
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn an_excluded_support_on_the_money_skill_skips_the_row() {
+        let sniper = |extra: Option<(&str, SupportTier)>, elsewhere: bool| {
+            let mut gates: Vec<(String, SupportTier)> =
+                ["gilded_secondary_shots", "arrow_nova", "gmp"]
+                    .into_iter()
+                    .map(|id| (id.to_string(), SupportTier::T3))
+                    .collect();
+            let mut other = Skill::new("Grace", "Grace");
+            if let Some((id, tier)) = extra {
+                if elsewhere {
+                    other = other.with_supports(vec![(id.into(), tier)]);
+                } else {
+                    gates.push((id.into(), tier));
+                }
+            }
+            Mercenary {
+                family: "sniper".into(),
+                skills: vec![
+                    Skill::new("Tornado Shot", "Tornado Shot").with_supports(gates),
+                    other,
+                ],
+                ..Default::default()
+            }
+        };
+        let row = snapshot()
+            .rows
+            .iter()
+            .find(|r| {
+                r.family == "sniper" && r.infamous == Some(false) && r.package == "money_gates"
+            })
+            .unwrap();
+        assert_eq!(row.partner_exclude_supports, ["brutality"]);
+        assert!(satisfies(&sniper(None, false), row));
+        // Any tier of Brutality on Tornado Shot rules the row out ...
+        assert!(!satisfies(
+            &sniper(Some(("brutality", SupportTier::T1)), false),
+            row
+        ));
+        // ... but Brutality on another skill is not what the sweep checked.
+        assert!(satisfies(
+            &sniper(Some(("brutality", SupportTier::T3)), true),
+            row
+        ));
+        let fallback = estimate(&sniper(Some(("brutality", SupportTier::T3)), false)).unwrap();
+        assert_ne!(fallback.package, "money_gates");
+    }
+
+    #[test]
+    fn partner_rules_decide_which_package_prices_the_warrant() {
+        // Priced under "Require Static Strike / Exclude Wild Strike".
+        let valid = estimate(&combatant(&["Static Strike"])).unwrap();
+        assert_eq!(valid.package, "money_gates");
+        assert_eq!(valid.money_skill.as_deref(), Some("Frost Blades"));
+
+        // Same gates beside Wild Strike: that row did not price this warrant.
+        let invalid = estimate(&combatant(&["Static Strike", "Wild Strike"])).unwrap();
+        assert_eq!(invalid.package, "base");
+        let missing_partner = estimate(&combatant(&[])).unwrap();
+        assert_eq!(missing_partner.package, "base");
+
+        // Every partner name is a catalog skill, so a rule can actually match.
+        let known = crate::catalog::all_known_skills();
+        for row in &snapshot().rows {
+            for name in row.partner_require.iter().chain(&row.partner_exclude) {
+                assert!(
+                    known.contains(&name.as_str()),
+                    "{} partner {name}",
+                    row.family
+                );
+            }
+            for id in &row.partner_exclude_supports {
+                assert!(
+                    crate::catalog::support_icon(id).is_some(),
+                    "{} support {id}",
+                    row.family
+                );
+            }
+        }
     }
 }
