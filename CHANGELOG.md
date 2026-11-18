@@ -2,7 +2,7 @@
 
 All notable changes to PoEMercPricer are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/). The release workflow publishes the section for the tagged version as the top of the GitHub release notes, so write each section for players.
 
-## [0.2.1] - TODO(date)
+## [0.2.1] - 2026-11-18
 
 Path of Exile 3.30.0 (Covens of Umbra) support.
 
