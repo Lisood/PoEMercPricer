@@ -7,7 +7,7 @@ fn lines(rows: &[&str]) -> Vec<String> {
 }
 
 #[test]
-fn manyshot_screenshot_lines_are_a_brick() {
+fn manyshot_screenshot_without_vaal_ice_shot_scores_low_and_cannot_jackpot() {
     let merc = parse_ocr_lines(
         &lines(&[
             "Alara, the Cyaxan Sister",
@@ -31,7 +31,14 @@ fn manyshot_screenshot_lines_are_a_brick() {
     assert!(merc.has_skill(&["Ice Shot"]));
     assert!(merc.has_skill(&["Icicle Rain"]));
     let result = score_mercenary(&merc, false);
-    assert_eq!(result.bricks, vec!["Icicle Rain".to_string()]);
+    // docs/market-3.30.md "VIS + Icicle Rain": no brick; OCR sees no supports and no
+    // Vaal Ice Shot (5c), so only Ice Shot 18 + Grace 2 score.
+    assert!(result.bricks.is_empty(), "{:?}", result.bricks);
+    assert!((result.score - 20.0).abs() < 0.01, "{}", result.score);
+    assert!(result
+        .highlights
+        .iter()
+        .any(|h| h == "Icicle Rain: no Vaal Ice Shot + Mirror Arrow jackpot package"));
     assert!(!result.jackpot);
     assert!(result.score < 50.0);
 }
@@ -256,5 +263,50 @@ fn trarthus_variant_stays_distinct_and_accepts_its_two_verified_support_arts() {
     assert_eq!(
         area.iter().map(|(id, _)| *id).collect::<Vec<_>>(),
         vec!["aoe"]
+    );
+}
+
+#[test]
+fn area_level_never_replaces_mercenary_level() {
+    let merc = parse_ocr_lines(
+        &lines(&[
+            "Danalla, the Second",
+            "Sanguimancer",
+            "Mercenary Level: 83",
+            "Area Level: 79",
+            "Area Lvl 79",
+            "Boiling Blood",
+        ]),
+        "ocr",
+    );
+    assert_eq!(merc.level, Some(83));
+
+    let area_only = parse_ocr_lines(&lines(&["Sanguimancer", "Area Lvl 79"]), "ocr");
+    assert_eq!(area_only.level, None);
+}
+
+#[test]
+fn chaplain_abyssal_skills_stay_distinct() {
+    let merc = parse_ocr_lines(
+        &lines(&[
+            "Orlan, the Unlit",
+            "Chaplain of the Well   Lvl 83   Str / Int",
+            "Abyssal Spray",
+            "Abyssal Spray Detonation",
+            "Power of the Depths",
+            "Abyssal Cry",
+        ]),
+        "ocr",
+    );
+    assert_eq!(merc.family, "chaplain_of_the_well");
+    let skills: Vec<&str> = merc.skills.iter().map(|s| s.canonical.as_str()).collect();
+    assert_eq!(
+        skills,
+        [
+            "Abyssal Spray",
+            "Abyssal Spray Detonation",
+            "Power of the Depths",
+            "Abyssal Cry"
+        ]
     );
 }

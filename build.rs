@@ -16,9 +16,9 @@ fn main() {
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR");
     let manifest = std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR");
     for name in [
-        "catalog-3.29.json",
-        "trade-stats-3.29.json",
-        "warrant-prices-3.29.json",
+        "catalog-3.30.json",
+        "trade-stats-3.30.json",
+        "warrant-prices-3.30.json",
     ] {
         println!("cargo:rerun-if-changed=assets/{name}");
         let src = std::fs::read_to_string(format!("assets/{name}"))

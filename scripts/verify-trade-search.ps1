@@ -2,7 +2,7 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$Image,
-    [string]$League = 'Allflame',
+    [string]$League = 'Covens',
     [switch]$Live,
     # One group per skill; anonymous POSTs reject this as too complex, so use it offline or with a session.
     [switch]$EverySkill

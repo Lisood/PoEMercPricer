@@ -51,12 +51,16 @@ fn scan_ocr_lines(
     let cleaned = merge_wrapped_skill_lines(&cleaned);
     let texts: Vec<String> = cleaned.iter().map(|l| l.text.clone()).collect();
     // Equipment tooltips can overlap a live mercenary panel.  Their
-    // "Requires Level 67" line must not replace the mercenary's header level.
+    // "Requires Level 67" line (or a warrant's "Area Level: 83") must not
+    // replace the mercenary's header level.
     // Keep the positioned OCR line for geometry/debugging, but exclude this
     // unambiguously unrelated text from semantic parsing.
     let parse_texts: Vec<String> = texts
         .iter()
-        .filter(|text| !normalize(text).contains("requires level"))
+        .filter(|text| {
+            let n = normalize(text);
+            !n.contains("requires level") && !n.contains("area level")
+        })
         .cloned()
         .collect();
     let mut merc = parse_ocr_lines(&parse_texts, "ocr");
@@ -357,7 +361,7 @@ fn wrapped_lines_are_adjacent(top: &OcrLine, bottom: &OcrLine) -> bool {
 }
 
 /// Recognize a two-line skill only when their combined text has a decisive
-/// match in the bundled 3.29 catalog.  The margin prevents unrelated adjacent
+/// match in the bundled catalog.  The margin prevents unrelated adjacent
 /// skill rows from being joined through a merely fuzzy match.
 fn catalog_wrapped_skill(top: &str, bottom: &str) -> Option<String> {
     let top = normalize(top);

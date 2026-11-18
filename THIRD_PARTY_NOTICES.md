@@ -19,10 +19,10 @@ following locations:
 
 - `assets/icons/skills/` and `assets/icons/supports/` contain skill and support
   icon reference images used for local visual recognition and display.
-- `assets/catalog-3.29.json` and `assets/trade-stats-3.29.json` contain
+- `assets/catalog-3.30.json` and `assets/trade-stats-3.30.json` contain
   Path of Exile-derived names, catalog information, and official trade-stat
   identifiers.
-- `assets/warrant-prices-3.29.json` contains prices and listing counts
+- `assets/warrant-prices-3.30.json` contains prices and listing counts
   observed on the official trade site, keyed by Path of Exile family and
   support names. It carries no seller or account names.
 - `samples/` contains screenshots of Path of Exile gameplay used as OCR and

@@ -1,6 +1,6 @@
 {
-  "patch": "3.29",
-  "league": "Allflame",
+  "patch": "3.30",
+  "league": "Covens",
   "source": "https://www.pathofexile.com/api/trade/data/stats",
   "entries": [
     {
@@ -413,6 +413,10 @@
     },
     {
       "id": "mercenary.skill_44334",
+      "text": "Herald of Ash"
+    },
+    {
+      "id": "mercenary.skill_31201",
       "text": "Herald of Ash"
     },
     {
@@ -1074,6 +1078,22 @@
     {
       "id": "mercenary.skill_8708",
       "text": "Elemental Hit of Ice"
+    },
+    {
+      "id": "mercenary.skill_50122",
+      "text": "Abyssal Spray"
+    },
+    {
+      "id": "mercenary.skill_41822",
+      "text": "Abyssal Spray Detonation"
+    },
+    {
+      "id": "mercenary.skill_54593",
+      "text": "Power of the Depths"
+    },
+    {
+      "id": "mercenary.skill_40606",
+      "text": "Vaal Smite"
     },
     {
       "id": "mercenary.support_12054",

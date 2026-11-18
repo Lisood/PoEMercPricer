@@ -15,3 +15,6 @@ debug/
 
 *.log
 THIRD_PARTY_NOTICES.html
+
+assets/*.checkpoint.json
+assets/*.tmp-*

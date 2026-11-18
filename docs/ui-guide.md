@@ -140,7 +140,7 @@ Empty, normal result, jackpot, bricked skip, not scored, ambiguous support, scan
 
   ```
   ≈ 4.5–9.0 div
-  12 listed · level 83+ · typical ask 6.8 div · median listing age 4 d · Allflame snapshot 2026-09-02
+  12 listed · level 83+ · typical ask 6.8 div · median listing age 4 d · Covens snapshot 2026-11-18
   ```
 
 - Plain labels only: `Skip`, `Price-check`, `Not scored`. No unexplained abbreviations beyond `KBoC`, `GMP`, `EDWA`, `T3`, which the game uses.

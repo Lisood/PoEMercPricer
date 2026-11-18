@@ -53,6 +53,11 @@ if ($leaks) { throw "Secret-looking text is tracked. Fix: remove it and rewrite 
 $stray = git ls-files | Select-String -Pattern '^debug/|\.log$|\.env$|config\.json$|last-capture'
 if ($stray) { throw "Local files are tracked. Fix: git rm --cached them and add to .gitignore.`n$($stray -join "`n")" }
 
+# release.yml publishes this CHANGELOG.md section as the release notes and fails without it.
+$notes = [regex]::Match((Get-Content -LiteralPath (Join-Path $repo 'CHANGELOG.md') -Raw), '(?ms)^## \[' + [regex]::Escape($Version) + '\][^\r\n]*\r?\n(.*?)(?=^## \[|\z)')
+if (-not $notes.Success -or -not $notes.Groups[1].Value.Trim()) { throw "CHANGELOG.md has no non-empty '## [$Version]' section. Fix: write the player-facing notes under it first." }
+if ($notes.Value -match 'TODO') { throw "CHANGELOG.md '## [$Version]' heading or body still contains a TODO placeholder. Fix: fill in the date and any other placeholder." }
+
 # Steps 1-5 run for real even under -DryRun.
 $cargoOriginalBytes = [IO.File]::ReadAllBytes($cargoPath)
 $lockPath = Join-Path $repo 'Cargo.lock'

@@ -52,7 +52,7 @@ pub struct Skill {
     pub raw: String,
 }
 
-/// 3.29 mercenary active/aura skill progression. Supports use tiers instead.
+/// Mercenary active/aura skill progression (measured in 3.29). Supports use tiers instead.
 pub fn infer_mercenary_skill_level(mercenary_level: u32) -> Option<u32> {
     let mercenary_level = mercenary_level.min(100);
     (mercenary_level >= 66).then(|| (18 + (mercenary_level - 66) / 2).min(40))

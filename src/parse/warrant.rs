@@ -9,7 +9,10 @@ static BUILD_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?im)^Build:\s*
 static LEVEL_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(?im)^Mercenary Level:\s*(\d+)").unwrap());
 static SKIP_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)^(?:note:|item level:|(?:corrupted|unidentified|mirrored)$)").unwrap()
+    Regex::new(
+        r"(?i)^(?:note:|item level:|limit:|portal:|area level:|item tier:|(?:corrupted|unidentified|mirrored)$)",
+    )
+    .unwrap()
 });
 static TIER_LINE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
@@ -57,15 +60,14 @@ pub fn parse_warrant_text(text: &str) -> Mercenary {
         if !started && section.to_lowercase().contains("mercenary warrant") {
             continue;
         }
-        if !started && section.to_lowercase().starts_with("item class") {
-            continue;
-        }
+        // 3.30 property lines ("Area Level: 83", "Limit: 1") are dropped
+        // wherever they land, so they never read as a skill or a support.
         let lines: Vec<&str> = section
             .lines()
             .map(str::trim)
-            .filter(|l| !l.is_empty() && !l.starts_with("----"))
+            .filter(|l| !l.is_empty() && !l.starts_with("----") && !SKIP_RE.is_match(l))
             .collect();
-        if lines.is_empty() || SKIP_RE.is_match(lines[0]) {
+        if lines.is_empty() || (!started && lines[0].to_lowercase().starts_with("item class")) {
             continue;
         }
         let (skill_name, conf) = canonical_skill(lines[0]);

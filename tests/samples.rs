@@ -81,10 +81,10 @@ fn sample_screenshots_exist_and_decode() {
 
 #[test]
 fn bundled_329_icon_catalog_is_complete_and_decodable() {
-    let text = std::fs::read_to_string("assets/catalog-3.29.json").expect("3.29 catalog");
+    let text = std::fs::read_to_string("assets/catalog-3.30.json").expect("3.30 catalog");
     let catalog: serde_json::Value = serde_json::from_str(&text).expect("valid catalog JSON");
-    assert_eq!(catalog["patch"], "3.29.3");
-    assert_eq!(catalog["builds"].as_array().unwrap().len(), 36);
+    assert_eq!(catalog["patch"], "3.30.0");
+    assert_eq!(catalog["builds"].as_array().unwrap().len(), 37);
     assert!(catalog["skills"].as_array().unwrap().len() >= 250);
 
     for (kind, dir) in [
@@ -106,16 +106,16 @@ fn bundled_329_icon_catalog_is_complete_and_decodable() {
 fn embedded_json_is_minified_but_equivalent_to_the_source_files() {
     let pairs: [(&str, &str); 3] = [
         (
-            "assets/catalog-3.29.json",
-            include_str!(concat!(env!("OUT_DIR"), "/catalog-3.29.json")),
+            "assets/catalog-3.30.json",
+            include_str!(concat!(env!("OUT_DIR"), "/catalog-3.30.json")),
         ),
         (
-            "assets/trade-stats-3.29.json",
-            include_str!(concat!(env!("OUT_DIR"), "/trade-stats-3.29.json")),
+            "assets/trade-stats-3.30.json",
+            include_str!(concat!(env!("OUT_DIR"), "/trade-stats-3.30.json")),
         ),
         (
-            "assets/warrant-prices-3.29.json",
-            include_str!(concat!(env!("OUT_DIR"), "/warrant-prices-3.29.json")),
+            "assets/warrant-prices-3.30.json",
+            include_str!(concat!(env!("OUT_DIR"), "/warrant-prices-3.30.json")),
         ),
     ];
     for (path, embedded) in pairs {

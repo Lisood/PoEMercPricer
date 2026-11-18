@@ -72,7 +72,7 @@ fn main() -> Result<()> {
             .ok_or_else(|| anyhow::anyhow!("dump-trade-query <image> [league]"))?;
         let img = crate::capture::load_image(&path)?;
         let merc = poemercpricer::scan::scan_rgba(&img)?;
-        let league = args.get(2).map(String::as_str).unwrap_or("Allflame");
+        let league = args.get(2).map(String::as_str).unwrap_or("Covens");
         let every_skill = args.get(3).is_some_and(|flag| flag == "--every-skill");
         let query = poemercpricer::trade::trade_query(&merc, every_skill)?;
         println!("{}", serde_json::to_string_pretty(&query)?);
@@ -275,7 +275,7 @@ fn parse_args(args: &[String]) -> Result<Args> {
 
 fn print_help() {
     eprintln!(
-        "PoEMercPricer: Path of Exile 3.29 Mercenary Warrant screener
+        "PoEMercPricer: Path of Exile {} Mercenary Warrant screener
 
 USAGE:
   poemercpricer                  Start the overlay (Ctrl+Shift+M)
@@ -290,7 +290,8 @@ USAGE:
   poemercpricer clipboard        Parse a pasted Warrant from stdin
   poemercpricer score --family kineticist --skill 'Kinetic Blast of Clustering:returnT3,gmpT3'
 
-PoE should be Windowed Fullscreen. If the game is elevated, run this app elevated too."
+PoE should be Windowed Fullscreen. If the game is elevated, run this app elevated too.",
+        poemercpricer::catalog::catalog_patch_short()
     );
 }
 

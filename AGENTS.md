@@ -6,7 +6,7 @@ this repository. Read this before making changes.
 ## 1. What this is
 
 PoEMercPricer is a Windows-only Rust egui overlay that screens Path of Exile
-3.29 Mercenary Warrants, either from a pasted clipboard item or from an OCR
+3.30 (Covens of Umbra) Mercenary Warrants, either from a pasted clipboard item or from an OCR
 scan of the game window. It builds to one unsigned exe, targets Rust 1.88+, and has no
 server component. Running `cargo run`, `poemercpricer --fixture`,
 or `poemercpricer --scan FILE` opens the GUI window and, in a release build,
@@ -39,7 +39,9 @@ The installer smoke script never launches the overlay.
 ## 3. How to ship an update (release)
 
 Preconditions: you are on `main`, the working tree is clean, `gh auth status`
-succeeds, and CI is green on `main`. The script also refuses to run against a
+succeeds, CI is green on `main`, and `CHANGELOG.md` has a non-empty, TODO-free `## [X.Y.Z]`
+section for the version, written for players (no names, emails or account
+details). The script also refuses to run against a
 private repo, because the updater 404s for every user while the repo is
 private, and refuses a version that already has a tag locally or on origin.
 It pushes `main` and the tag together, atomically.
@@ -50,7 +52,9 @@ and build for real but never commits, tags, or pushes.
 
 What the script does:
 0. Greps the tracked tree for secret-shaped text and for tracked debug or log
-   files, and refuses to go on if either turns up.
+   files, and refuses to go on if either turns up. Also refuses if
+   `CHANGELOG.md` has no non-empty `## [X.Y.Z]` section for the version, or that
+   section contains `TODO`.
 1. Rewrites the version line in `Cargo.toml`.
 2. Runs `cargo update -p poemercpricer` and `cargo build --release --locked`,
    then fails if the release exe is over 11,000,000 bytes. `release.yml` runs
@@ -66,6 +70,9 @@ What the script does:
    tagged commit is on `main` and waits for that commit's `ci.yml` run to go
    green, then builds and uploads the four assets to a draft release, then
    publishes it after the final installer lifecycle and asset checks pass.
+   The release page opens with the `CHANGELOG.md` section for the version, then
+   the generated notes; the job fails if the section is missing, empty or
+   contains `TODO`.
 10. Verifies that the exe, gzip, installer and third-party notices were uploaded
     with nonzero sizes and SHA-256 digests, and prints the release URL.
 

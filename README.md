@@ -1,8 +1,8 @@
 # PoEMercPricer
 
-In-game overlay for Path of Exile 3.29.3 Mercenary Warrants.
+In-game overlay for Path of Exile 3.30.0 (Covens of Umbra) Mercenary Warrants. The 3.29 data is kept as an archive ([`docs/research-3.29.md`](docs/research-3.29.md), [`docs/market-3.29.md`](docs/market-3.29.md)).
 
-Press Ctrl+Shift+M (configurable in Settings) while the mercenary inspect panel is open, or after copying a Warrant with Ctrl+C. The overlay scores every 3.29 mercenary family and prints a jackpot or skip verdict. Kineticist, Manyshot, Combatant and the Stormhand Arc sleeper get market-audited screens; every other family gets a market-floor screen mined from live trade-ledger data.
+Press Ctrl+Shift+M (configurable in Settings) while the mercenary inspect panel is open, or after copying a Warrant with Ctrl+C. The overlay scores every 3.30 mercenary family and prints a jackpot or skip verdict. The scoring was recalibrated from a 3.30 trade-site market survey; see [`docs/market-3.30.md`](docs/market-3.30.md) for which families get market-audited screens and which get market-floor screens.
 
 Inspired by [Awakened PoE Trade](https://github.com/SnosMe/awakened-poe-trade): hotkey, read the game, draw a dark gold card on top of the client. It never injects into the process or edits memory. It reads the clipboard and, if you ask it to, a screenshot.
 
@@ -15,12 +15,12 @@ Inspired by [Awakened PoE Trade](https://github.com/SnosMe/awakened-poe-trade): 
 - Clipboard input takes Warrant text, copied image pixels, or a PNG/JPEG/WebP
   copied as a file in Explorer
 - On-demand screen OCR of the inspect panel on Windows, via `Windows.Media.Ocr`
-- The 3.29.3 OCR catalog covers all 36 builds and 267 active-skill names
-- OCR reads active-skill names; image recognition handles all 151 currently attainable support names, at every visible tier I / II / III
+- The 3.30.0 OCR catalog covers all 37 builds and 272 active-skill names
+- OCR reads active-skill names; image recognition handles all 152 support names in the catalog, at every visible tier I / II / III
 - Active-skill level comes from mercenary level: 83 gives skill level 26, 84 gives 27
-- Market-audited screens for Kineticist, Manyshot, Combatant, and the Stormhand Arc sleeper. Sniper and Thunderquiver are scored as floor families: their packages sit at 1c on the ledger (Tornado Shot with GMP, n=8,383; Lightning Arrow with Return and GMP, n=3,404)
-- A market ask range next to the score, from a bundled snapshot of the cheapest level-83+ instant-buyout listings on the official trade site per family and support package, with listing count, listing age, and the snapshot date (see `docs/market-3.29.md`; refresh with `scripts/fetch-warrant-prices.ps1`)
-- Every other family gets a market-floor screen mined from the Perandus Ledger listing snapshot (money skill, skill-bound support gates, bricks), capped below the premium bands except for depth-backed jackpot packages like Swiftblade Rallying Cry + CDR + More Duration
+- The 3.30 Warrant lines `Limit`, `Portal`, `Area Level` and `Item Tier` are ignored by the clipboard parser wherever they appear, and OCR never reads an `Area Level` line as the mercenary level
+- A screen for every family, recalibrated from a 3.30 trade-site survey: market screens with skill-bound gates and bricks, jackpot screens for the premium packages, and a tier-capped generic estimate for six families (see Scoring)
+- A market ask range next to the score, from a bundled snapshot of the cheapest level-83+ instant-buyout listings on the official trade site per family and support package, with listing count (the trade site's search total at ilvl 83+, instant buyout), listing age, and the snapshot date (see `docs/market-3.30.md`; refresh with `scripts/fetch-warrant-prices.ps1`)
 - Jackpot boolean screens for premium packages with no bricks
 - Score breakdown, copy summary, and a pre-filled official Path of Exile trade search
 - Settings for the theme, the scan hotkey, clipboard-first scanning, projectile-speed Frost Blades Return, always-on-top, hide on Escape, the trade league, updates, and (under Advanced) debug capture dumps and the PoE window title
@@ -119,17 +119,17 @@ Click Scan to capture the Path of Exile window, or copy an image and click Clipb
 
 For images, the overlay reads current active-skill names from the panel text and matches support artwork cell by cell, reading each support's Roman tier. Support matches stay bound to their owning skill row.
 
-![The overlay after scanning samples/manyshot_alara.png: a bricked Manyshot with the Icicle Rain row expanded](docs/screenshots/overlay-scan.png)
+![The overlay after scanning samples/manyshot_alara.png: an Infamous Manyshot warrant without Vaal Ice Shot](docs/screenshots/overlay-scan.png)
 
 ### Ambiguous supports
 
-Some Mercenary supports deliberately reuse byte-identical art. Skill and visible-tier compatibility resolve 97.08% of the audited 3.29 contexts. When several valid supports are still physically indistinguishable, that cell is drawn in orange with the catalog-backed choices as buttons. Click the one shown in game and the score, the reasons and the copied summary update immediately.
+Some Mercenary supports deliberately reuse byte-identical art. Skill and visible-tier compatibility resolve 97.13% of the audited 3.30 contexts (4,773 of 4,914, all 37 build pages). When several valid supports are still physically indistinguishable, that cell is drawn in orange with the catalog-backed choices as buttons. Click the one shown in game and the score, the reasons and the copied summary update immediately.
 
 Two other ways out: hover that support in Path of Exile and scan again, because the existing OCR pass reads the visible tooltip title on its own, or copy the Warrant with `Ctrl+C`, whose text is exact.
 
 ### Trade search
 
-Trade searches are built locally from the bundled official 3.29 stat-ID snapshot. PoE's anonymous search accepts only one exact mercenary stat group, so the app searches the scanned warrant type and level plus its most-supported skill and that skill's linked supports. That keeps support-to-skill binding intact; a looser all-skill query returns false matches. The status line names the skill it picked and says that it narrowed the query.
+Trade searches are built locally from the bundled official 3.30 stat-ID snapshot. PoE's anonymous search accepts only one exact mercenary stat group, so the app searches the scanned warrant type and level plus its most-supported skill and that skill's linked supports. That keeps support-to-skill binding intact; a looser all-skill query returns false matches. The status line names the skill it picked and says that it narrowed the query.
 
 There is no trade API polling, background requests, result fetching, or automatic retries. Clicking Search official trade causes one normal browser navigation, with a two-second double-click guard. Change the trade league in Settings when you need to.
 
@@ -145,7 +145,7 @@ Open the pane with the Settings button. Changes take effect as you make them and
 | Assume 150%+ projectile speed for Frost Blades | off | Scores Combatant Frost Blades Return as if the mercenary has the projectile speed it needs to land its return hits |
 | Always on top | on | Keeps the overlay above the game window |
 | Hide the window when Escape is pressed | on | Escape hides the overlay instead of leaving it up. The hotkey brings it back. Turned off automatically when the hotkey could not be registered, so the window cannot become unreachable |
-| League | Allflame | The league the trade search targets. The dropdown lists the bundled snapshot's league, its Hardcore variant, Standard and Hardcore; pick Custom to type any other name. No network access is involved |
+| League | Covens | The league the trade search targets. A saved league containing Allflame is migrated to its Covens equivalent on load and the config file is rewritten. The dropdown lists the bundled snapshot's league, its Hardcore variant, Standard and Hardcore; pick Custom to type any other name. No network access is involved |
 | Search every skill | off | Adds up to four more of the warrant's skills to the trade query, five groups in total. Anonymous searches reject more than one group, so this needs a pathofexile.com login in your browser |
 | Check for updates at startup and every 6 hours | on | The automatic update check. Release builds only; a `cargo run` checkout never self-updates |
 | Install updates automatically | on | Downloads and verifies a newer release as soon as a check finds one. Off, a check only notifies and you get an Update to X button. Either way you choose when to restart |
@@ -171,7 +171,7 @@ The Open config folder link at the top right of the Settings pane opens it in Ex
   "scan_clipboard_first": true,
   "always_on_top": true,
   "hide_on_escape": true,
-  "trade_league": "Allflame",
+  "trade_league": "Covens",
   "trade_every_skill": false,
   "check_updates": true,
   "install_updates_automatically": true,
@@ -228,7 +228,7 @@ poemercpricer.exe --version
 poemercpricer.exe clipboard < warrant.txt
 poemercpricer.exe score --family kineticist --skill "Kinetic Blast of Clustering:returnT3,gmpT3,chainT2,edwaT3" --skill "Greater Kinetic Blast"
 poemercpricer.exe dump-scan samples\manyshot_alara.png
-poemercpricer.exe dump-trade-query samples\manyshot_alara.png Allflame --every-skill
+poemercpricer.exe dump-trade-query samples\manyshot_alara.png Covens --every-skill
 poemercpricer.exe dump-clipboard-scan          # optional: add a path to save the image
 poemercpricer.exe dump-window-scan out.png
 ```
@@ -246,18 +246,22 @@ Support tier factor used by the 0-100 screen:
 | normal / II | 2 | 0.8 |
 | Greater or Gilded / III | 3 | 1.0 |
 
-Worked Kineticist example: KBoC + Return III + GMP III + Chain II + Greater EDWA + Greater Kinetic Blast scores 84, which is a jackpot screen.
+Scores come from per-family screens recalibrated on 3.30 trade-site asks (Covens, level 83+, instant buyout; survey of 2026-11-18, day 5 of the league). The evidence behind every weight, and the rules that turned it into points, are in [`docs/market-3.30.md`](docs/market-3.30.md). Asks are not sales, and day-5 prices are unsettled.
 
 Full formulas and the mechanical audit (EDWA more-multipliers, CDR, Return geometry) live in [`docs/formulas.md`](docs/formulas.md).
 
 Fast in-game rules:
 
-- Kineticist: stop for KBoC + Return. The proven premium gate is Greater Kinetic Blast + Return + GMP on KBoC; Barrage is the budget pair. Reject Kinetic Bolt or Kinetic Rain stealing attacks.
-- Manyshot: Vaal Ice Shot + Mirror Arrow, with Return bound to Vaal Ice Shot, and no Icicle Rain. The biggest gate also has Return + GMP on fixed Ice Shot.
-- Combatant: exactly one of Frost Blades / Wild Strike plus Static Strike. The Frost Blades value cliff is Return + Greater EDWA + Chain. Return DPS still depends on roughly 150% projectile speed or favourable walls.
-- Stormhand sleeper: Arc + Ball Lightning of Static, with Chain + Gilded Chain Distance bound to Arc. Market evidence is strong; combat-efficacy reports are mixed.
+- Kineticist (premium, 200d top-50 median): stop for KBoC + Return. The jackpot gate is Return + GMP on KBoC. Kinetic Bolt stays a brick.
+- Manyshot (premium, 200d): Vaal Ice Shot + Mirror Arrow, with Return bound to Vaal Ice Shot. Icicle Rain is no longer penalised, because the market pays for it, but it never sits beside Mirror Arrow, so it still cannot jackpot.
+- Combatant (premium, 100d): Frost Blades + Static Strike. The jackpot gate is Return III + Chain + Greater EDWA on Frost Blades. Spectral Helix beside Frost Blades or Wild Strike is a brick; Frost Blades + Wild Strike is no longer penalised. Return DPS still depends on roughly 150% projectile speed or favourable walls.
+- Cruel Mistress (premium, 50d) is now a jackpot family: Soulrend of Reaping with GMP + Return.
+- Chaplain of the Well (new, premium, 300d): Abyssal Spray with Return and Faster Casting. No jackpot yet; the package is too thin to prove.
+- Sniper and Thunderquiver moved up to premium (50d and 100d). Sniper pays for Arrow Nova and GMP on Tornado Shot; Thunderquiver for Return, GMP and Wrath on Lightning Arrow. Neither jackpots.
+- Swiftblade and Shattersword lose their jackpot. Swiftblade's Rallying Cry with CDR + More Duration is a 30d package, below the 50d jackpot bar, and Shattersword is a mid family.
+- Stormhand is no longer a bespoke sleeper scorer. It is a mid family (10d) scored by the same market screen as the rest: Arc + Ball Lightning of Static with Chain and Gilded Chain Distance on Arc.
 
-Every current build and skill is recognised and scored. Families outside the audited set use market-floor screens derived from a 2026-09-01 Perandus Ledger snapshot (see `docs/research-3.29.md`): each one screens for its money skill and the skill-bound support package the market actually pays for, and dump-tier variants score skip. Only unmatched families fall back to a conservative estimate, badged `EST.` in the UI.
+Every current build and skill is recognised and scored. Cardinal, Withertouch, Frosthand, Bloodletter, Ripper and Warpriest have no market screen of their own and use the generic estimate (support tiers plus trade demand), capped at their price tier: 72 for high, 62 for mid, 52 for floor. A family with no listings (Mysterious Diver, Warpriest of the Ruckus) keeps its old screen or the generic estimate, and the market row says "no listings data" rather than quoting 0c.
 
 ## How it reads the game
 
@@ -268,7 +272,7 @@ Every current build and skill is recognised and scored. Families outside the aud
 
 - OCR calls the native Windows API directly. There is no OCR subprocess, temporary image, bundled neural model, or resident background OCR service.
 - Only the inspect panel's left three-quarters text/header column is passed to OCR. Support cells go through a small pixel matcher.
-- Recognition has the complete 3.29 support catalog available: 152 support identities collapse to 65 unique pixel arts, loaded lazily once at 32x32 and 16x16. Shared silver/gold art is filtered by active skill and visible tier, and a visible tooltip disambiguates any surviving identical-art candidates without another OCR pass.
+- Recognition has the complete 3.30 support catalog available: 152 support identities collapse to 65 unique pixel arts, loaded lazily once at 32x32 and 16x16. Shared silver/gold art is filtered by active skill and visible tier, and a visible tooltip disambiguates any surviving identical-art candidates without another OCR pass.
 - Scanning runs on demand on a worker thread. The UI is event-driven: it does not
   continuously repaint or poll the hotkey while idle, and the worker asks for one
   repaint when its result is ready.
@@ -277,7 +281,7 @@ Every current build and skill is recognised and scored. Families outside the aud
 Limits, benchmark method, and the regression tests are in [`docs/performance.md`](docs/performance.md).
 Layout, accessibility rules, and how the UI avoids repainting are in [`docs/ui-design.md`](docs/ui-design.md).
 
-The art/catalog snapshot is generated from current [PoEDB Mercenary game data](https://poedb.tw/us/Mercenaries). PoEDB is credited as the retrieval and data-reference source. All Path of Exile names, game data, icons, images, artwork, and other game materials remain the property of Grinding Gear Games Limited or its licensors. The money gates were checked against the live Allflame warrant export; methodology, exact filters, observed floors, level rules, and limitations are recorded in [`docs/research-3.29.md`](docs/research-3.29.md).
+The art/catalog snapshot is generated from current [PoEDB Mercenary game data](https://poedb.tw/us/Mercenaries). PoEDB is credited as the retrieval and data-reference source. All Path of Exile names, game data, icons, images, artwork, and other game materials remain the property of Grinding Gear Games Limited or its licensors. The 3.30 money gates were checked against the official trade site; the patch facts and data sources are in [`docs/research-3.30.md`](docs/research-3.30.md) and the market survey in [`docs/market-3.30.md`](docs/market-3.30.md). The 3.29 methodology is kept in the [3.29 archive](docs/research-3.29.md).
 
 ## Troubleshooting
 
@@ -334,11 +338,11 @@ The overlay declares itself per-monitor DPI aware and captures in physical pixel
 - Windows only. The overlay, the capture path and the OCR engine are all Win32 or WinRT.
 - Screen OCR reads English only. The game client is English regardless of profile language, so this is a Windows language-pack requirement rather than a game setting.
 - Exclusive Fullscreen is not supported, by Windows rather than by choice.
-- 2.92% of audited 3.29 support contexts stay ambiguous after skill and tier filtering, because the art is byte-identical. Those cells ask you to pick.
+- Some support cells stay ambiguous after skill and tier filtering, because the art is byte-identical. In the 3.30 audit that was 2.87% of contexts (141 of 4,914). Those cells ask you to pick.
 - Prices come from a snapshot bundled at build time, not a live query. They age between releases, and the UI shows the snapshot date so you can judge that.
-- Scores are screening heuristics tuned to the ledger, not valuations. A thin book swings hard.
+- Scores are screening heuristics tuned to a trade-site survey, not valuations. A thin book swings hard.
 - Releases are unsigned. Windows or antivirus software may flag a download or self-update.
-- The catalog covers the 36 builds listed for 3.29.3. A new patch needs a new release before its skills are recognised.
+- The catalog covers the 37 builds listed for 3.30.0. A new patch needs a new release before its skills are recognised.
 
 ## Safety and ToS
 
@@ -350,7 +354,7 @@ The app makes no network request except the update check: one HTTPS `GET` to `ap
 
 Nothing else leaves the machine. There is no telemetry, no crash reporting, no analytics, and no account of any kind. Scans, scores and clipboard text are held in memory and never written anywhere unless you turn on the Advanced debug capture, which writes one PNG into your own config folder. The trade search opens your browser at a URL built locally; the app itself never talks to the trade site. Turn the update check off and the app makes no outbound connection at all.
 
-The refresh scripts under `scripts/` do fetch from PoEDB, the trade site, poe.ninja and the Perandus Ledger, but they are maintainer tools and the app never runs them.
+The refresh scripts under `scripts/` do fetch from PoEDB, the trade site and poe.ninja, but they are maintainer tools and the app never runs them.
 
 ## Reporting a bug
 
@@ -368,7 +372,7 @@ cargo clippy --all-targets --locked -- -D warnings
 cargo test --locked
 ```
 
-Refresh the 3.29 catalog and icon templates:
+Refresh the 3.30 catalog and icon templates:
 
 ```powershell
 .\scripts\fetch-icons.ps1 -RefreshCatalog

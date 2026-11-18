@@ -1,7 +1,7 @@
 #Requires -Version 7
 <#
 .SYNOPSIS
-    Rate-limited market-data collector for 3.29 Mercenary Warrants.
+    Rate-limited market-data collector for Mercenary Warrants (default patch 3.30).
 
 .DESCRIPTION
     Queries the official trade API once per (family, warrant type, package) and
@@ -18,13 +18,14 @@
     consecutive 429s abort the run.
 
 .EXAMPLE
-    pwsh scripts/fetch-warrant-prices.ps1 -League Allflame -Out assets/warrant-prices-3.29.json
+    pwsh scripts/fetch-warrant-prices.ps1 -League Covens -Out assets/warrant-prices-3.30.json
     pwsh scripts/fetch-warrant-prices.ps1 -Families kineticist,manyshot -Out C:\tmp\test.json
 #>
 [CmdletBinding()]
 param(
-    [string]$League = 'Allflame',
-    [string]$Out = 'assets/warrant-prices-3.29.json',
+    [string]$League = 'Covens',
+    [string]$Patch = '3.30',
+    [string]$Out = 'assets/warrant-prices-3.30.json',
     [string[]]$Families,
     [string[]]$Packages = @('base', 'money', 'money_gates'),
     [double]$MinIntervalSeconds = 2.5,
@@ -33,7 +34,6 @@ param(
     # defaults to RateShare. Only raise it deliberately for a resumed sweep.
     [double]$LongWindowShare = -1,
     [int]$SampleSize = 10,
-    [int]$MaxConsecutive429 = 3,
     # Item level floor on every search: sub-83 warrants are a different, much
     # cheaper market and would drag the medians down. 0 disables the filter.
     [int]$MinLevel = 83,
@@ -48,25 +48,25 @@ param(
     [int]$ScanSize = 30,
     # Rows whose cheapest listings are all bricks scan every id the search
     # returns (the API hands back at most 100) instead of -ScanSize.
-    [int]$DeepScanSize = 100
+    [int]$DeepScanSize = 100,
+    # Print the planned searches (rows plus price-floor retries) and exit; no trade searches.
+    [switch]$PlanOnly
 )
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 if ($LongWindowShare -lt 0) { $LongWindowShare = $RateShare }
-function Get-Share([int]$window) { if ($window -ge 3600) { return $LongWindowShare } return $RateShare }
 
 $repo = Split-Path -Parent $PSScriptRoot
-$patch = '3.29'
-$userAgent = 'PoEMercPricer/0.1.0 (github.com/Lisood/PoEMercPricer)'
-$tradeApi = 'https://www.pathofexile.com/api/trade'
+$patchShort = ($Patch -split '\.')[0..1] -join '.'
+. (Join-Path $PSScriptRoot 'trade-http.ps1')   # Invoke-TradeRequest, rate limiting, $TradeApi, User-Agent
 $listingStatus = 'securable'
 $groupFilterLimit = 6
 
 # Family table: warrant type ids (src/trade.rs warrant_trade_type) and the
-# money packages (src/scoring/{kineticist,manyshot,combatant,extra}.rs and
+# money packages (src/scoring/{kineticist,manyshot,combatant,extra}.rs, docs/market-3.30.md and
 # src/scoring/market.rs SCREENS, positive gates ordered by screen points).
-# Gates are canonical support ids from assets/catalog-3.29.json.
+# Gates are canonical support ids from assets/catalog-<patch>.json.
 function Pkg([string]$skill, [string[]]$gates) {
     [pscustomobject]@{ Skill = $skill; Gates = @($gates) }
 }
@@ -74,38 +74,39 @@ $familyTable = [ordered]@{
     manyshot          = @{ Types = @('EleBowRangerClones', 'EleBowRangerClonesNoble'); Money = @((Pkg 'Vaal Ice Shot' @('return', 'edwa', 'hypothermia')), (Pkg 'Ice Shot' @('return', 'edwa', 'hypothermia'))) }
     kineticist        = @{ Types = @('MiscScionWandAttacks', 'MiscScionWandAttacksNoble'); Money = @((Pkg 'Kinetic Blast of Clustering' @('return', 'gmp'))) }
     combatant         = @{ Types = @('MeleeAOEStrikeDuelistRangeStrikes', 'MeleeAOEStrikeDuelistRangeStrikesNoble'); Money = @((Pkg 'Frost Blades' @('return', 'chain', 'edwa')), (Pkg 'Wild Strike' @('edwa', 'faster_attacks', 'hypothermia'))) }
-    sniper            = @{ Types = @('NonEleBowRangerPhys', 'NonEleBowRangerPhysNoble'); Money = @((Pkg 'Tornado Shot' @('gmp'))) }
+    chaplain_of_the_well = @{ Types = @('AbyssalTemplar', $null); Money = @((Pkg 'Abyssal Spray' @('return', 'faster_casting'))) }
+    sniper            = @{ Types = @('NonEleBowRangerPhys', 'NonEleBowRangerPhysNoble'); Money = @((Pkg 'Tornado Shot' @('gilded_secondary_shots', 'arrow_nova', 'gmp'))) }
     cruel_mistress    = @{ Types = @('ChaosMinionWitchChaosHit', 'ChaosMinionWitchChaosHitNoble'); Money = @((Pkg 'Soulrend of Reaping' @('gmp', 'return'))) }
     thunderquiver     = @{ Types = @('EleBowRangerLightning', $null); Money = @((Pkg 'Lightning Arrow' @('return', 'gmp'))) }
     flamequiver       = @{ Types = @('EleBowRangerFire', 'EleBowRangerFireNoble'); Money = @((Pkg 'Artillery Ballista' @('gilded_totemic_onslaught', 'multiple_totems', 'aoe', 'fire_penetration'))) }
     toxicologist      = @{ Types = @('NonEleBowRangerChaos', 'NonEleBowRangerChaosNoble'); Money = @((Pkg 'Scourge Arrow of Menace' @('gilded_additional_pods', 'gmp', 'mirage_archer', 'physical_as_extra_chaos'))) }
-    blade_ambusher    = @{ Types = @('TrapsMinesShadowAttack', 'TrapsMinesShadowAttackNoble'); Money = @((Pkg 'Bear Trap' @('trigger_radius', 'cdr'))) }
+    blade_ambusher    = @{ Types = @('TrapsMinesShadowAttack', 'TrapsMinesShadowAttackNoble'); Money = @((Pkg 'Bear Trap' @('trigger_radius'))) }
     striker           = @{ Types = @('MeleeStrikesMaraduerPhys', 'MeleeStrikesMaraduerPhysNoble'); Money = @((Pkg 'Leap Slam' @('gilded_frenzy', 'brutality'))) }
-    bladebitter       = @{ Types = @('Crit1HShadowPoison', 'Crit1HShadowPoisonNoble'); Money = @((Pkg 'Pestilent Strike' @('faster_attacks', 'dot_multiplier', 'chance_to_poison', 'ailment_effect'))) }
-    stormhand         = @{ Types = @('ElementalWitchLightning', 'ElementalWitchLightningNoble'); Money = @((Pkg 'Arc' @('chain', 'gilded_chain_distance'))) }
+    bladebitter       = @{ Types = @('Crit1HShadowPoison', 'Crit1HShadowPoisonNoble'); Money = @((Pkg 'Pestilent Strike' @('faster_attacks', 'chance_to_poison', 'ailment_effect'))) }
+    stormhand         = @{ Types = @('ElementalWitchLightning', 'ElementalWitchLightningNoble'); Money = @((Pkg 'Arc' @('chain', 'gilded_chain_distance', 'lucky_lightning_damage', 'faster_casting'))) }
     withertouch       = @{ Types = @('ChaosMinionWitchDot', 'ChaosMinionWitchDotNoble'); Money = @((Pkg 'Scourstorm' @('dot_multiplier', 'cdr', 'swift_affliction'))) }
     mysterious_diver  = @{ Types = @('DivingDuelist', 'DivingDuelistNoble'); Money = @((Pkg 'Frost Blades' @('edwa', 'return', 'hypothermia'))) }
     frosthand         = @{ Types = @('ElementalWitchCold', 'ElementalWitchColdNoble'); Money = @((Pkg 'Ice Nova' @('gilded_freezer_burn', 'cold_penetration', 'ailment_effect'))) }
     storming_zealot   = @{ Types = @('PhysConvertTemplarLightning', 'PhysConvertTemplarLightningNoble'); Money = @((Pkg 'Shockwave Totem of Shocking' @('gilded_astral_totem', 'multiple_totems', 'more_duration', 'aoe'))) }
     bladecaster       = @{ Types = @('Crit1HShadowPhysSpell', 'Crit1HShadowPhysSpellNoble'); Money = @((Pkg 'Seismic Crush' @('crit_damage', 'crit_chance', 'brutality', 'aoe'))) }
-    shock_ambusher    = @{ Types = @('TrapsMinesShadowLightning', 'TrapsMinesShadowLightningNoble'); Money = @((Pkg 'Vaal Lightning Trap' @('added_lightning', 'more_duration'))) }
+    shock_ambusher    = @{ Types = @('TrapsMinesShadowLightning', 'TrapsMinesShadowLightningNoble'); Money = @((Pkg 'Vaal Lightning Trap' @('added_lightning'))) }
     cardinal          = @{ Types = @('AurasMinionsTemplarStaff', 'AurasMinionsTemplarStaffNoble'); Money = @((Pkg 'Consecrated Path' @('gilded_consecration', 'faster_attacks', 'aoe'))) }
     warpriest         = @{ Types = @('AurasMinionsTemplarSmite', 'AurasMinionsTemplarSmiteNoble'); Money = @((Pkg 'Herald of Purity' @('minion_damage', 'pulverise', 'aoe', 'brutality'))) }
     swiftblade        = @{ Types = @('MeleeAOEStrikeDuelistCyclone', 'MeleeAOEStrikeDuelistCycloneNoble'); Money = @((Pkg 'Rallying Cry' @('cdr', 'more_duration'))) }
     smoulderstrike    = @{ Types = @('MeleeStrikesMarauderFire', $null); Money = @((Pkg 'Infernal Cry' @('aoe', 'more_duration'))) }
     sanguimancer      = @{ Types = @('MiscScionPhysDot', 'MiscScionPhysDotNoble'); Money = @((Pkg 'Vaal Reap' @('gilded_searing_agony', 'dot_multiplier', 'cdr'))) }
-    earthshaker       = @{ Types = @('MeleeAOEMarauderPhysSlam', 'MeleeAOEMarauderPhysSlamNoble'); Money = @((Pkg 'Molten Shell' @('cdr', 'gilded_physical_damage_reduction'))) }
-    reanimator        = @{ Types = @('ChaosMinionWitchInstability', 'ChaosMinionWitchInstabilityNoble'); Money = @((Pkg 'Raise Zombie of Falling' @('minion_damage', 'added_chaos', 'melee_physical_damage'))) }
+    earthshaker       = @{ Types = @('MeleeAOEMarauderPhysSlam', 'MeleeAOEMarauderPhysSlamNoble'); Money = @((Pkg 'Ground Slam' @('fortify'))) }
+    reanimator        = @{ Types = @('ChaosMinionWitchInstability', 'ChaosMinionWitchInstabilityNoble'); Money = @((Pkg 'Summon Raging Spirit' @('minion_damage'))) }
     bloodletter       = @{ Types = @('PhysicalDuelistBleed', 'PhysicalDuelistBleedNoble'); Money = @((Pkg 'Leap Slam' @('gilded_frenzy', 'faster_attacks'))) }
     fallen_reverend   = @{ Types = @('AurasMinionsTemplarSpectres', 'AurasMinionsTemplarSpectresNoble'); Money = @((Pkg 'Reinforce: Fallen Bishop' @())) }
-    bastion           = @{ Types = @('PhysicalDuelistShields', 'PhysicalDuelistShieldsNoble'); Money = @((Pkg 'Impenetrable Bastion' @('cdr', 'more_duration'))) }
+    bastion           = @{ Types = @('PhysicalDuelistShields', 'PhysicalDuelistShieldsNoble'); Money = @((Pkg 'Prismplate' @())) }
     ripper            = @{ Types = @('MeleeAOEMarauderNonSlam', 'MeleeAOEMarauderNonSlamNoble'); Money = @((Pkg 'Leap Slam' @('gilded_frenzy', 'pulverise', 'brutality'))) }
     eruptor           = @{ Types = @('MeleeAOEMarauderFireSlam', 'MeleeAOEMarauderFireSlamNoble'); Money = @((Pkg 'Flame Link' @('gilded_empowered_link', 'more_duration', 'cdr'))) }
     flamehand         = @{ Types = @('ElementalWitchFire', $null); Money = @((Pkg 'Rolling Magma' @('gilded_area_per_projectile', 'gmp'))) }
-    winter_deacon     = @{ Types = @('PhysConvertTemplarCold', $null); Money = @((Pkg 'Earthquake of Winter' @('concentrated_effect', 'hypothermia', 'freeze_chance'))) }
-    frost_ambusher    = @{ Types = @('TrapsMinesShadowCold', $null); Money = @((Pkg 'Ice Trap' @('cold_penetration', 'trigger_radius', 'trap_and_mine_damage'))) }
+    winter_deacon     = @{ Types = @('PhysConvertTemplarCold', $null); Money = @((Pkg 'Earthquake of Winter' @('concentrated_effect', 'freeze_chance'))) }
+    frost_ambusher    = @{ Types = @('TrapsMinesShadowCold', $null); Money = @((Pkg 'Ice Trap' @('cold_penetration'))) }
     flaming_charlatan = @{ Types = @('PhysConvertTemplarFire', $null); Money = @((Pkg 'Wave of Conviction of Trarthus' @('added_fire', 'cdr'))) }
-    shattersword      = @{ Types = @('PhysicalDuelistSteel', $null); Money = @((Pkg 'Rallying Cry' @('cdr', 'more_duration'))) }
+    shattersword      = @{ Types = @('PhysicalDuelistSteel', $null); Money = @((Pkg 'Rallying Cry' @('more_duration'))) }
     warpriest_of_the_ruckus = @{ Types = @($null, 'AurasMinionsTemplarSmiteRuckusNoble'); Money = @() }
 }
 
@@ -115,30 +116,28 @@ $familyTable = [ordered]@{
 # fetched listings' item.mercenarySkills instead. Key: "family|money skill" or
 # "family|*". SupportExclude names catalog canonicals that brick the money skill.
 $partnerRules = @{
-    'kineticist|*'           = @{ Require = @('Greater Kinetic Blast'); Exclude = @('Kinetic Bolt', 'Kinetic Rain of Impact', 'Power Siphon'); SupportExclude = @() }
-    'manyshot|*'             = @{ Require = @('Mirror Arrow'); Exclude = @('Icicle Rain'); SupportExclude = @() }
-    'combatant|Frost Blades' = @{ Require = @('Static Strike'); Exclude = @('Wild Strike', 'Spectral Helix of Trarthus', 'Spectral Helix'); SupportExclude = @() }
-    'combatant|Wild Strike'  = @{ Require = @('Static Strike'); Exclude = @('Frost Blades', 'Spectral Helix of Trarthus', 'Spectral Helix'); SupportExclude = @() }
-    'stormhand|*'            = @{ Require = @('Ball Lightning of Static'); Exclude = @(); SupportExclude = @() }
-    'fallen_reverend|*'      = @{ Require = @('Wrath', 'Zealotry'); Exclude = @("Battlemage's Cry"); SupportExclude = @() }
-    'thunderquiver|*'        = @{ Require = @(); Exclude = @('Galvanic Arrow'); SupportExclude = @() }
-    'sniper|*'               = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality', 'arrow_nova') }
-    'eruptor|*'              = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality') }
+    'kineticist|*'             = @{ Require = @('Greater Kinetic Blast'); Exclude = @('Kinetic Bolt', 'Kinetic Rain of Impact', 'Power Siphon'); SupportExclude = @() }
+    'manyshot|*'               = @{ Require = @('Mirror Arrow'); Exclude = @('Icicle Rain'); SupportExclude = @() }
+    'combatant|Frost Blades'   = @{ Require = @('Static Strike'); Exclude = @('Wild Strike', 'Spectral Helix of Trarthus', 'Spectral Helix'); SupportExclude = @() }
+    'combatant|Wild Strike'    = @{ Require = @('Static Strike'); Exclude = @('Frost Blades', 'Spectral Helix of Trarthus', 'Spectral Helix'); SupportExclude = @() }
+    'fallen_reverend|*'        = @{ Require = @('Wrath', 'Zealotry'); Exclude = @('Battlemage''s Cry', 'Frostblink'); SupportExclude = @() }
+    'thunderquiver|*'          = @{ Require = @(); Exclude = @('Galvanic Arrow'); SupportExclude = @() }
+    'sniper|*'                 = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality') }
+    'eruptor|*'                = @{ Require = @(); Exclude = @(); SupportExclude = @('brutality') }
 }
 # "family|package|money skill" rows scanned to -DeepScanSize: their cheapest 30
-# are brick variants (Kinetic Bolt, Icicle Rain, Wild Strike) and the real
-# package starts above them.
-$deepScanRows = @('kineticist|money_gates|Kinetic Blast of Clustering', 'manyshot|money_gates|Vaal Ice Shot', 'combatant|money_gates|Frost Blades', 'stormhand|money_gates|Arc')
+# are brick variants and the real package starts above them.
+$deepScanRows = @('kineticist|money_gates|Kinetic Blast of Clustering', 'manyshot|money_gates|Vaal Ice Shot', 'combatant|money_gates|Frost Blades')
 # "family|package|money skill" rows whose cheapest 100 are entirely bricks:
 # the search is re-run with a trade price floor (divines, tried in order until a
 # listing passes the rule) so the 100-id window starts above the brick wall.
 $priceFloorRows = @{
-    'kineticist|money_gates|Kinetic Blast of Clustering' = @(30, 80)
-    'combatant|money_gates|Frost Blades'                 = @(3, 10)
-    'stormhand|money_gates|Arc'                          = @(1, 3)
+    'kineticist|money_gates|Kinetic Blast of Clustering'    = @(1, 10, 50)
+    'manyshot|money_gates|Vaal Ice Shot'                    = @(1, 10, 50)
+    'combatant|money_gates|Frost Blades'                    = @(1, 10, 25)
 }
 # Families whose plain "money" row is filtered by the rule as well.
-$moneyRuleFamilies = @('kineticist', 'manyshot', 'combatant', 'stormhand', 'fallen_reverend')
+$moneyRuleFamilies = @('kineticist', 'manyshot', 'combatant', 'fallen_reverend')
 function Get-PartnerRule([string]$family, [string]$skill) {
     foreach ($k in @("$family|$skill", "$family|*")) { if ($partnerRules.ContainsKey($k)) { return $partnerRules[$k] } }
     return $null
@@ -150,8 +149,8 @@ function Format-PartnerRule($rule) {
 }
 
 # Catalog + official stat resolution (mirrors src/trade.rs key/support_key).
-$catalog = Get-Content -LiteralPath (Join-Path $repo 'assets/catalog-3.29.json') -Raw | ConvertFrom-Json
-$stats = Get-Content -LiteralPath (Join-Path $repo 'assets/trade-stats-3.29.json') -Raw | ConvertFrom-Json
+$catalog = Get-Content -LiteralPath (Join-Path $repo "assets/catalog-$patchShort.json") -Raw | ConvertFrom-Json
+$stats = Get-Content -LiteralPath (Join-Path $repo "assets/trade-stats-$patchShort.json") -Raw | ConvertFrom-Json
 $catalogFamilies = @($catalog.builds | ForEach-Object { $_.family })
 foreach ($f in $catalogFamilies) {
     if (-not $familyTable.Contains($f)) { throw "catalog family '$f' has no entry in the script's family table" }
@@ -233,6 +232,7 @@ function Resolve-SupportId([string]$canonical, [int]$wantedTier, [string]$skillN
             if ($canonical -eq 'gilded_extra_targets') {
                 $hash = switch (Get-Key $skillName) {
                     'smite' { '37259' }
+                    'vaalsmite' { '37259' }
                     'lightningarrow' { '58471' }
                     'greaterlightningarrow' { '58471' }
                     default { throw "no skill-bound Extra Targets trade stat for $skillName" }
@@ -249,204 +249,6 @@ function Resolve-SupportId([string]$canonical, [int]$wantedTier, [string]$skillN
     throw "no official trade stat for support $canonical at any tier <= $wantedTier"
 }
 
-# HTTP with rate-limit accounting. One policy per endpoint family; every
-# response's X-Rate-Limit-Ip rules replace the known policy, and this script's
-# own request timestamps keep every window under RateShare of its maximum.
-$script:requestCount = 0
-$script:lastRequestAt = [datetime]::MinValue
-$script:policies = @{}      # policy name -> @{ Rules = @(@{Max;Window;Penalty}); Times = List[datetime] }
-$script:peaks = @{}         # "policy max:window" -> peak observed hits
-$script:consecutive429 = 0
-$script:total429 = 0
-
-function Wait-ForBudget([string]$policy) {
-    $now = [datetime]::UtcNow
-    $sinceLast = ($now - $script:lastRequestAt).TotalSeconds
-    if ($sinceLast -lt $MinIntervalSeconds) {
-        Start-Sleep -Milliseconds ([int][math]::Ceiling(($MinIntervalSeconds - $sinceLast) * 1000))
-    }
-    if (-not $script:policies.ContainsKey($policy)) { return }
-    $entry = $script:policies[$policy]
-    while ($true) {
-        $now = [datetime]::UtcNow
-        $waitUntil = $null
-        foreach ($rule in $entry.Rules) {
-            $allowed = [math]::Max(1, [math]::Floor($rule.Max * (Get-Share $rule.Window)))
-            $inWindow = @($entry.Times | Where-Object { ($now - $_).TotalSeconds -lt $rule.Window } | Sort-Object)
-            if ($inWindow.Count -ge $allowed) {
-                $candidate = $inWindow[$inWindow.Count - $allowed].AddSeconds($rule.Window + 0.5)
-                if ($null -eq $waitUntil -or $candidate -gt $waitUntil) { $waitUntil = $candidate }
-            }
-        }
-        if ($null -eq $waitUntil) { return }
-        $sleep = ($waitUntil - $now).TotalSeconds
-        if ($sleep -le 0) { return }
-        Write-Host ("    rate budget ({0}): sleeping {1:n1}s" -f $policy, $sleep)
-        Start-Sleep -Milliseconds ([int][math]::Ceiling($sleep * 1000))
-    }
-}
-
-function Read-Header($response, [string]$name) {
-    if ($null -eq $response -or $null -eq $response.Headers) { return $null }
-    if (-not $response.Headers.ContainsKey($name)) { return $null }
-    return (@($response.Headers[$name]) -join ',')
-}
-
-function Update-RateState([string]$policyHint, $response) {
-    $policy = Read-Header $response 'X-Rate-Limit-Policy'
-    if ([string]::IsNullOrEmpty($policy)) { $policy = $policyHint }
-    $rulesHeader = Read-Header $response 'X-Rate-Limit-Ip'
-    $stateHeader = Read-Header $response 'X-Rate-Limit-Ip-State'
-    if (-not $script:policies.ContainsKey($policy)) {
-        $script:policies[$policy] = @{ Rules = @(); Times = [System.Collections.Generic.List[datetime]]::new() }
-    }
-    $entry = $script:policies[$policy]
-    $entry.Times.Add([datetime]::UtcNow)
-    if (-not [string]::IsNullOrEmpty($rulesHeader)) {
-        $entry.Rules = @($rulesHeader -split ',' | ForEach-Object {
-            $p = $_.Trim() -split ':'
-            if ($p.Count -ge 2) { @{ Max = [int]$p[0]; Window = [int]$p[1]; Penalty = $(if ($p.Count -ge 3) { [int]$p[2] } else { 0 }) } }
-        })
-    }
-    # Server-side hit counts are the truth (they include anything else on this IP).
-    $forcedSleep = 0.0
-    if (-not [string]::IsNullOrEmpty($stateHeader)) {
-        $states = @($stateHeader -split ',')
-        for ($i = 0; $i -lt $states.Count -and $i -lt $entry.Rules.Count; $i++) {
-            $p = $states[$i].Trim() -split ':'
-            if ($p.Count -lt 2) { continue }
-            $hits = [int]$p[0]
-            $rule = $entry.Rules[$i]
-            $peakKey = "$policy $($rule.Max):$($rule.Window)"
-            if (-not $script:peaks.ContainsKey($peakKey) -or $hits -gt $script:peaks[$peakKey]) { $script:peaks[$peakKey] = $hits }
-            $allowed = [math]::Max(1, [math]::Floor($rule.Max * (Get-Share $rule.Window)))
-            if ($hits -ge $allowed) {
-                $needed = [math]::Min($rule.Window, ($rule.Window / [double]$allowed) * ($hits - $allowed + 1))
-                if ($needed -gt $forcedSleep) { $forcedSleep = $needed }
-            }
-        }
-    }
-    return @{ Policy = $policy; Rules = $rulesHeader; State = $stateHeader; ForcedSleep = $forcedSleep }
-}
-
-function Invoke-TradeRequest {
-    param(
-        [ValidateSet('GET', 'POST')][string]$Method,
-        [string]$Uri,
-        [string]$Body,
-        [string]$PolicyHint,
-        [string]$Label
-    )
-    $networkRetries = 0
-    while ($true) {
-        Wait-ForBudget $PolicyHint
-        $script:requestCount++
-        $n = $script:requestCount
-        $script:lastRequestAt = [datetime]::UtcNow
-        $stamp = $script:lastRequestAt.ToString('HH:mm:ss')
-        $response = $null
-        try {
-            $params = @{
-                Method = $Method; Uri = $Uri; Headers = @{ 'User-Agent' = $userAgent; 'Accept' = 'application/json' }
-                UseBasicParsing = $true; SkipHttpErrorCheck = $true; TimeoutSec = 60; MaximumRetryCount = 0
-            }
-            if ($Method -eq 'POST') { $params.ContentType = 'application/json'; $params.Body = $Body }
-            $response = Invoke-WebRequest @params
-        }
-        catch {
-            $networkRetries++
-            Write-Host ("[{0}] #{1} {2} {3} -> network error: {4}" -f $stamp, $n, $Method, $Label, $_.Exception.Message)
-            if ($networkRetries -ge 3) { throw }
-            Start-Sleep -Seconds 30
-            continue
-        }
-        $status = [int]$response.StatusCode
-        $rate = Update-RateState $PolicyHint $response
-        Write-Host ("[{0}] #{1} {2} {3} -> {4} ip=[{5}] state=[{6}]" -f $stamp, $n, $Method, $Label, $status, $rate.Rules, $rate.State)
-        if ($status -eq 429) {
-            $script:consecutive429++
-            $script:total429++
-            $retryAfter = Read-Header $response 'Retry-After'
-            $sleep = 65
-            if (-not [string]::IsNullOrEmpty($retryAfter) -and [int]::TryParse($retryAfter, [ref]$null)) { $sleep = [int]$retryAfter }
-            if ($sleep -lt 1) { $sleep = 65 }
-            if ($script:consecutive429 -ge $MaxConsecutive429) {
-                throw "aborting: $($script:consecutive429) consecutive HTTP 429 responses"
-            }
-            Write-Host ("    429: sleeping {0}s (consecutive {1})" -f $sleep, $script:consecutive429)
-            Start-Sleep -Seconds ($sleep + 1)
-            continue
-        }
-        $script:consecutive429 = 0
-        if ($rate.ForcedSleep -gt 0) {
-            Write-Host ("    server state at/over the allowed share of a window: sleeping {0:n1}s" -f $rate.ForcedSleep)
-            Start-Sleep -Milliseconds ([int][math]::Ceiling($rate.ForcedSleep * 1000))
-        }
-        return @{ Status = $status; Content = $response.Content }
-    }
-}
-
-# poe.ninja retired /api/data/currencyoverview in mid-2026; the stash overview
-# keeps the same line shape (currencyTypeName / chaosEquivalent / detailsId)
-# and, unlike the exchange overview, reflects stash-tab asks like trade listings.
-$ninjaUri = "https://poe.ninja/poe1/api/economy/stash/current/currency/overview?league=$([uri]::EscapeDataString($League))&type=Currency"
-$ninja = Invoke-TradeRequest -Method GET -Uri $ninjaUri -PolicyHint 'poe.ninja' -Label 'poe.ninja currencyoverview'
-if ($ninja.Status -ne 200) { throw "poe.ninja returned HTTP $($ninja.Status)" }
-$ninjaLines = ($ninja.Content | ConvertFrom-Json).lines
-$rateByDetails = @{}
-foreach ($line in $ninjaLines) {
-    if ($line.PSObject.Properties['detailsId'] -and $line.chaosEquivalent) { $rateByDetails[$line.detailsId] = [double]$line.chaosEquivalent }
-}
-$divineLine = $ninjaLines | Where-Object { $_.currencyTypeName -eq 'Divine Orb' } | Select-Object -First 1
-if ($null -eq $divineLine) { throw 'poe.ninja has no Divine Orb line' }
-$chaosPerDivine = [double]$divineLine.chaosEquivalent
-Write-Host ("chaos_per_divine = {0}" -f $chaosPerDivine)
-
-# Trade listings price in short currency tags ("chrome", "alch"). The official
-# static data maps every tag to its display name, which poe.ninja lines carry
-# as currencyTypeName; the hard-coded detailsId map below is only the fallback.
-$rateByTag = @{}
-$static = Invoke-TradeRequest -Method GET -Uri "$tradeApi/data/static" -PolicyHint 'trade-static' -Label 'trade static data'
-if ($static.Status -eq 200) {
-    $rateByName = @{}
-    foreach ($line in $ninjaLines) { if ($line.chaosEquivalent) { $rateByName[$line.currencyTypeName] = [double]$line.chaosEquivalent } }
-    foreach ($group in @(($static.Content | ConvertFrom-Json).result)) {
-        foreach ($entry in @($group.entries)) {
-            if ($entry.PSObject.Properties['id'] -and $entry.PSObject.Properties['text'] -and $rateByName.ContainsKey($entry.text)) {
-                if (-not $rateByTag.ContainsKey($entry.id)) { $rateByTag[$entry.id] = $rateByName[$entry.text] }
-            }
-        }
-    }
-    Write-Host ("{0} trade currency tags mapped to poe.ninja chaos rates" -f $rateByTag.Count)
-}
-else {
-    Write-Host "trade static data returned HTTP $($static.Status); using the built-in tag map only"
-}
-$currencyTag = @{
-    'exalted' = 'exalted-orb'; 'mirror' = 'mirror-of-kalandra'; 'alch' = 'orb-of-alchemy'; 'vaal' = 'vaal-orb'
-    'fusing' = 'orb-of-fusing'; 'chrome' = 'chromatic-orb'; 'jewellers' = 'jewellers-orb'; 'chance' = 'orb-of-chance'
-    'gcp' = 'gemcutters-prism'; 'regal' = 'regal-orb'; 'annul' = 'orb-of-annulment'; 'regret' = 'orb-of-regret'
-    'scour' = 'orb-of-scouring'; 'blessed' = 'blessed-orb'; 'alt' = 'orb-of-alteration'; 'aug' = 'orb-of-augmentation'
-    'trans' = 'orb-of-transmutation'; 'silver' = 'silver-coin'; 'wisdom' = 'scroll-of-wisdom'; 'portal' = 'portal-scroll'
-    'bauble' = 'glassblowers-bauble'; 'whetstone' = 'blacksmiths-whetstone'; 'scrap' = 'armourers-scrap'
-    'divine-orb' = 'divine-orb'; 'exalted-orb' = 'exalted-orb'; 'mirror-of-kalandra' = 'mirror-of-kalandra'
-    'awakened-sextant' = 'awakened-sextant'; 'elevated-sextant' = 'elevated-sextant'; 'orb-of-unmaking' = 'orb-of-unmaking'
-    'veiled-chaos-orb' = 'veiled-chaos-orb'; 'ancient-orb' = 'ancient-orb'; 'orb-of-binding' = 'orb-of-binding'
-    'orb-of-horizons' = 'orb-of-horizons'; 'harbingers-orb' = 'harbingers-orb'; 'engineers-orb' = 'engineers-orb'
-    'hinekoras-lock' = 'hinekoras-lock'; 'fracturing-orb' = 'fracturing-orb'; 'tainted-divine-teardrop' = 'tainted-divine-teardrop'
-}
-function ConvertTo-Chaos([double]$amount, [string]$currency) {
-    switch ($currency) {
-        'chaos' { return $amount }
-        'divine' { return $amount * $chaosPerDivine }
-        default {
-            if ($rateByTag.ContainsKey($currency)) { return $amount * $rateByTag[$currency] }
-            $details = if ($currencyTag.ContainsKey($currency)) { $currencyTag[$currency] } else { $currency }
-            if ($rateByDetails.ContainsKey($details)) { return $amount * $rateByDetails[$details] }
-            return $null
-        }
-    }
-}
 
 function Get-Median([double[]]$values) {
     if ($values.Count -eq 0) { return 0.0 }
@@ -469,6 +271,7 @@ $selectedFamilies = @(if ($Families) { $Families | ForEach-Object { $_.Trim().To
 foreach ($f in $selectedFamilies) { if (-not $familyTable.Contains($f)) { throw "unknown family '$f'" } }
 
 $skipped = [System.Collections.Generic.List[object]]::new()
+$rowFailures = [System.Collections.Generic.List[string]]::new()   # runtime failures; any entry aborts before the asset is written
 $work = [System.Collections.Generic.List[object]]::new()
 foreach ($family in $selectedFamilies) {
     $def = $familyTable[$family]
@@ -515,8 +318,80 @@ foreach ($family in $selectedFamilies) {
 }
 Write-Host ("Planned {0} searches across {1} families; {2} rows skipped up front." -f $work.Count, $selectedFamilies.Count, $skipped.Count)
 foreach ($s in $skipped) { Write-Host "  skip: $s" }
+if ($PlanOnly) {
+    $floorTries = 0
+    foreach ($w in $work) { $k = "$($w.Family)|$($w.Package)|$($w.Skill)"; if ($PartnerSweep -and $priceFloorRows.ContainsKey($k)) { $floorTries += @($priceFloorRows[$k]).Count - 1 } }
+    Write-Host ("PlanOnly: {0} rows = {1} searches minimum, up to {2} with every price-floor retry." -f $work.Count, $work.Count, ($work.Count + $floorTries))
+    Write-Host ("by package: " + (($work | Group-Object { $_.Package } | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ' '))
+    Write-Host "network requests made: search=$($script:Counts.search) fetch=$($script:Counts.fetch) other=$($script:Counts.other)"
+    exit 0
+}
 
-$searchUri = "$tradeApi/search/$([uri]::EscapeDataString($League))"
+# poe.ninja retired /api/data/currencyoverview in mid-2026; the stash overview
+# keeps the same line shape (currencyTypeName / chaosEquivalent / detailsId)
+# and, unlike the exchange overview, reflects stash-tab asks like trade listings.
+# Everything below is network: -PlanOnly has already exited above.
+$ninjaUri = "https://poe.ninja/poe1/api/economy/stash/current/currency/overview?league=$([uri]::EscapeDataString($League))&type=Currency"
+$ninja = Invoke-TradeRequest GET $ninjaUri $null 'poe.ninja'
+if ($ninja.Status -ne 200) { throw "poe.ninja returned HTTP $($ninja.Status)" }
+$ninjaLines = ($ninja.Content | ConvertFrom-Json).lines
+$rateByDetails = @{}
+foreach ($line in $ninjaLines) {
+    if ($line.PSObject.Properties['detailsId'] -and $line.chaosEquivalent) { $rateByDetails[$line.detailsId] = [double]$line.chaosEquivalent }
+}
+$divineLine = $ninjaLines | Where-Object { $_.currencyTypeName -eq 'Divine Orb' } | Select-Object -First 1
+if ($null -eq $divineLine) { throw 'poe.ninja has no Divine Orb line' }
+$chaosPerDivine = [double]$divineLine.chaosEquivalent
+if (-not [double]::IsFinite($chaosPerDivine) -or $chaosPerDivine -le 0) { throw "poe.ninja Divine Orb rate is not a positive number: $($divineLine.chaosEquivalent)" }
+Write-Host ("chaos_per_divine = {0}" -f $chaosPerDivine)
+
+# Trade listings price in short currency tags ("chrome", "alch"). The official
+# static data maps every tag to its display name, which poe.ninja lines carry
+# as currencyTypeName; the hard-coded detailsId map below is only the fallback.
+$rateByTag = @{}
+$static = Invoke-TradeRequest GET "$TradeApi/data/static" $null 'trade-static'
+if ($static.Status -eq 200) {
+    $rateByName = @{}
+    foreach ($line in $ninjaLines) { if ($line.chaosEquivalent) { $rateByName[$line.currencyTypeName] = [double]$line.chaosEquivalent } }
+    foreach ($group in @(($static.Content | ConvertFrom-Json).result)) {
+        foreach ($entry in @($group.entries)) {
+            if ($entry.PSObject.Properties['id'] -and $entry.PSObject.Properties['text'] -and $rateByName.ContainsKey($entry.text)) {
+                if (-not $rateByTag.ContainsKey($entry.id)) { $rateByTag[$entry.id] = $rateByName[$entry.text] }
+            }
+        }
+    }
+    Write-Host ("{0} trade currency tags mapped to poe.ninja chaos rates" -f $rateByTag.Count)
+}
+else {
+    Write-Host "trade static data returned HTTP $($static.Status); using the built-in tag map only"
+}
+$currencyTag = @{
+    'exalted' = 'exalted-orb'; 'mirror' = 'mirror-of-kalandra'; 'alch' = 'orb-of-alchemy'; 'vaal' = 'vaal-orb'
+    'fusing' = 'orb-of-fusing'; 'chrome' = 'chromatic-orb'; 'jewellers' = 'jewellers-orb'; 'chance' = 'orb-of-chance'
+    'gcp' = 'gemcutters-prism'; 'regal' = 'regal-orb'; 'annul' = 'orb-of-annulment'; 'regret' = 'orb-of-regret'
+    'scour' = 'orb-of-scouring'; 'blessed' = 'blessed-orb'; 'alt' = 'orb-of-alteration'; 'aug' = 'orb-of-augmentation'
+    'trans' = 'orb-of-transmutation'; 'silver' = 'silver-coin'; 'wisdom' = 'scroll-of-wisdom'; 'portal' = 'portal-scroll'
+    'bauble' = 'glassblowers-bauble'; 'whetstone' = 'blacksmiths-whetstone'; 'scrap' = 'armourers-scrap'
+    'divine-orb' = 'divine-orb'; 'exalted-orb' = 'exalted-orb'; 'mirror-of-kalandra' = 'mirror-of-kalandra'
+    'awakened-sextant' = 'awakened-sextant'; 'elevated-sextant' = 'elevated-sextant'; 'orb-of-unmaking' = 'orb-of-unmaking'
+    'veiled-chaos-orb' = 'veiled-chaos-orb'; 'ancient-orb' = 'ancient-orb'; 'orb-of-binding' = 'orb-of-binding'
+    'orb-of-horizons' = 'orb-of-horizons'; 'harbingers-orb' = 'harbingers-orb'; 'engineers-orb' = 'engineers-orb'
+    'hinekoras-lock' = 'hinekoras-lock'; 'fracturing-orb' = 'fracturing-orb'; 'tainted-divine-teardrop' = 'tainted-divine-teardrop'
+}
+function ConvertTo-Chaos([double]$amount, [string]$currency) {
+    switch ($currency) {
+        'chaos' { return $amount }
+        'divine' { return $amount * $chaosPerDivine }
+        default {
+            if ($rateByTag.ContainsKey($currency)) { return $amount * $rateByTag[$currency] }
+            $details = if ($currencyTag.ContainsKey($currency)) { $currencyTag[$currency] } else { $currency }
+            if ($rateByDetails.ContainsKey($details)) { return $amount * $rateByDetails[$details] }
+            return $null
+        }
+    }
+}
+
+$searchUri = "$TradeApi/search/$([uri]::EscapeDataString($League))"
 $rows = [System.Collections.Generic.List[object]]::new()
 $outPath = if ([System.IO.Path]::IsPathRooted($Out)) { $Out } else { Join-Path $repo $Out }
 $outDir = Split-Path -Parent $outPath
@@ -524,7 +399,19 @@ if (-not (Test-Path -LiteralPath $outDir)) { New-Item -ItemType Directory -Path 
 if (-not $Checkpoint) { $Checkpoint = "$outPath.checkpoint.json" }
 $done = @{}
 if (Test-Path -LiteralPath $Checkpoint) {
-    foreach ($r in @((Get-Content -LiteralPath $Checkpoint -Raw | ConvertFrom-Json).rows)) {
+    $cp = Get-Content -LiteralPath $Checkpoint -Raw | ConvertFrom-Json
+    $want = [ordered]@{ league = $League; min_level = $MinLevel; partner_sweep = [bool]$PartnerSweep }
+    foreach ($k in $want.Keys) {
+        if (-not $cp.PSObject.Properties[$k] -or "$($cp.$k)" -ne "$($want[$k])") {
+            throw "checkpoint $Checkpoint was written with $k='$(if ($cp.PSObject.Properties[$k]) { $cp.$k } else { '<missing>' })' but this run has $k='$($want[$k])'; delete the checkpoint to start over"
+        }
+    }
+    # The live rate drifts between runs; prices already in the checkpoint used the stored one, so keep it for the whole run.
+    $storedRate = if ($cp.PSObject.Properties['chaos_per_divine']) { [double]$cp.chaos_per_divine } else { 0.0 }
+    if (-not [double]::IsFinite($storedRate) -or $storedRate -le 0) { throw "checkpoint $Checkpoint has no valid chaos_per_divine; delete the checkpoint to start over" }
+    Write-Host ("Resuming with the checkpoint's chaos_per_divine = {0} (live poe.ninja rate {1} ignored)" -f $storedRate, $chaosPerDivine)
+    $chaosPerDivine = $storedRate
+    foreach ($r in @($cp.rows)) {
         $ordered = [ordered]@{}
         foreach ($prop in $r.PSObject.Properties) { $ordered[$prop.Name] = $prop.Value }
         $rows.Add($ordered)
@@ -566,9 +453,10 @@ foreach ($item in $work) {
             Write-Host "    price floor $floorDiv div = $priceFloorChaos chaos"
         }
         $body = $query | ConvertTo-Json -Depth 8 -Compress
-        $search = Invoke-TradeRequest -Method POST -Uri $searchUri -Body $body -PolicyHint 'trade-search-request-limit' -Label "search $tag ($index/$($work.Count))"
+        Write-Host "[$index/$($work.Count)] $tag"
+        $search = Invoke-TradeRequest POST $searchUri $body 'trade-search-request-limit' 'search'
         if ($search.Status -ne 200) {
-            $skipped.Add("$tag`: search HTTP $($search.Status) $($search.Content)")
+            $rowFailures.Add("$tag`: search HTTP $($search.Status) $($search.Content)")
             $searchFailed = $true
             break
         }
@@ -579,15 +467,16 @@ foreach ($item in $work) {
         $scanLimit = if (-not $applyRule) { $SampleSize } elseif ($deepScanRows -contains "$($item.Family)|$($item.Package)|$($item.Skill)") { $DeepScanSize } else { $ScanSize }
         $ids = @($payload.result | Select-Object -First $scanLimit)
 
-        $prices = @(); $ages = @(); $scanned = 0; $passed = 0; $unpriced = 0
+        $prices = @(); $ages = @(); $scanned = 0; $passed = 0; $unpriced = 0; $fetchFailed = $false
         if ($total -gt 0 -and $ids.Count -gt 0) {
             $now = [datetime]::UtcNow
             for ($offset = 0; $offset -lt $ids.Count -and $prices.Count -lt $SampleSize; $offset += 10) {
                 $chunk = @($ids[$offset..([math]::Min($offset + 9, $ids.Count - 1))])
-                $fetchUri = "$tradeApi/fetch/$($chunk -join ',')?query=$($payload.id)"
-                $fetch = Invoke-TradeRequest -Method GET -Uri $fetchUri -PolicyHint 'trade-fetch-request-limit' -Label "fetch $tag x$($chunk.Count)"
+                $fetchUri = "$TradeApi/fetch/$($chunk -join ',')?query=$($payload.id)"
+                $fetch = Invoke-TradeRequest GET $fetchUri $null 'trade-fetch-request-limit' 'fetch'
                 if ($fetch.Status -ne 200) {
                     Write-Host "    fetch failed with HTTP $($fetch.Status); stopping this row at scanned=$scanned"
+                    $fetchFailed = $true
                     break
                 }
                 foreach ($listing in @(($fetch.Content | ConvertFrom-Json).result)) {
@@ -610,6 +499,7 @@ foreach ($item in $work) {
                 }
             }
         }
+        if ($fetchFailed) { $rowFailures.Add("${tag}: fetch HTTP failure after scanned=$scanned"); $searchFailed = $true; break }
         if ($null -eq $floorDiv -or $passed -gt 0) { break }
         Write-Host "    no listing passed at this floor; trying the next one"
     }
@@ -641,10 +531,14 @@ foreach ($item in $work) {
         if ($null -ne $priceFloorChaos) { $row.price_floor_chaos = $priceFloorChaos }
     }
     $rows.Add($row)
-    [System.IO.File]::WriteAllText($Checkpoint, ((@{ rows = @($rows) } | ConvertTo-Json -Depth 8)), [System.Text.UTF8Encoding]::new($false))
+    [System.IO.File]::WriteAllText($Checkpoint, (([ordered]@{ league = $League; min_level = [int]$MinLevel; partner_sweep = [bool]$PartnerSweep; chaos_per_divine = $chaosPerDivine; rows = @($rows) } | ConvertTo-Json -Depth 8)), [System.Text.UTF8Encoding]::new($false))
     Write-Host ("    => listings={0} sampled={1} low={2}c med={3}c p75={4}c age={5}d fresh={6}{7}" -f $row.listings, $row.sampled, $row.lowest_chaos, $row.median_chaos, $row.p75_chaos, $row.median_age_days, $row.fresh_share, $(if ($applyRule) { " scanned=$scanned passed=$passed" } else { '' }))
 }
 
+if ($rowFailures.Count) {
+    throw ("{0} row(s) failed and the asset was NOT written; the checkpoint {1} is kept, rerun to resume:`n  {2}" -f $rowFailures.Count, $Checkpoint, ($rowFailures -join "`n  "))
+}
+if ($rows.Count -ne $work.Count) { throw "expected $($work.Count) rows but have $($rows.Count); the asset was NOT written" }
 $finalRows = $rows
 if ($PartnerSweep) {
     if (-not (Test-Path -LiteralPath $outPath)) { throw "-PartnerSweep merges into an existing file, but $outPath does not exist" }
@@ -666,7 +560,7 @@ if ($PartnerSweep) {
 $document = [ordered]@{
     generated_at     = [datetime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     league           = $League
-    patch            = $patch
+    patch            = $patchShort
     source           = "https://www.pathofexile.com/api/trade/search (status $listingStatus, ilvl >= $MinLevel, sort price asc; cheapest $SampleSize fetched; one mercenary stats group per package; listings caps at 10000; chaos rates from poe.ninja stash currency overview)"
     chaos_per_divine = [double]$chaosPerDivine
     min_level        = [int]$MinLevel
@@ -682,9 +576,7 @@ if (Test-Path -LiteralPath $Checkpoint) { Remove-Item -LiteralPath $Checkpoint -
 
 $elapsed = [datetime]::UtcNow - $runStart
 Write-Host ''
-Write-Host ("Wrote {0} rows to {1} in {2:n0} min with {3} requests ({4} HTTP 429)." -f $finalRows.Count, $outPath, $elapsed.TotalMinutes, $script:requestCount, $script:total429)
-Write-Host 'Rate-limit peaks (policy max:window -> peak hits):'
-foreach ($k in ($script:peaks.Keys | Sort-Object)) { Write-Host ("  {0} -> {1}" -f $k, $script:peaks[$k]) }
+Write-Host ("Wrote {0} rows to {1} in {2:n0} min: {3} searches, {4} fetches, {5} other requests, {6} HTTP 429." -f $finalRows.Count, $outPath, $elapsed.TotalMinutes, $script:Counts.search, $script:Counts.fetch, $script:Counts.other, $script:Counts.r429)
 if ($skipped.Count) {
     Write-Host "Skipped rows ($($skipped.Count)):"
     foreach ($s in $skipped) { Write-Host "  $s" }

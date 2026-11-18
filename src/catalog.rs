@@ -42,8 +42,8 @@ struct CatalogSupport {
 fn catalog_329() -> &'static Catalog329 {
     static CATALOG: OnceLock<Catalog329> = OnceLock::new();
     CATALOG.get_or_init(|| {
-        serde_json::from_str(include_str!(concat!(env!("OUT_DIR"), "/catalog-3.29.json")))
-            .expect("bundled 3.29 mercenary catalog must be valid")
+        serde_json::from_str(include_str!(concat!(env!("OUT_DIR"), "/catalog-3.30.json")))
+            .expect("bundled 3.30 mercenary catalog must be valid")
     })
 }
 
@@ -72,6 +72,18 @@ static BUILD_NORMS: LazyLock<Vec<String>> = LazyLock::new(|| {
 
 pub fn catalog_patch() -> &'static str {
     &catalog_329().patch
+}
+
+/// The catalog patch as `major.minor` ("3.30.0" -> "3.30") for UI labels.
+pub fn catalog_patch_short() -> &'static str {
+    major_minor(catalog_patch())
+}
+
+fn major_minor(patch: &str) -> &str {
+    patch
+        .match_indices('.')
+        .nth(1)
+        .map_or(patch, |(at, _)| &patch[..at])
 }
 
 pub fn known_build_names() -> impl Iterator<Item = &'static str> {
@@ -304,7 +316,7 @@ pub fn support_display(id: &str) -> &str {
     }
 }
 
-/// The 3.29 mercenary UI gives a few support families tier-specific names.
+/// The mercenary UI gives a few support families tier-specific names.
 /// Keep the canonical id stable for scoring, but show the exact in-game label
 /// where the tier changes the wording rather than merely appending I/II/III.
 pub fn support_display_for_tier(id: &str, tier: u8) -> String {
@@ -400,6 +412,8 @@ pub fn compatible_supports_for_skill_tier(
     }
 }
 
+/// Pools audited for 3.30 against the PoEDB mercenary table and the 3.30
+/// trade survey (2026-11-18).
 pub fn family_skills(family: &str) -> &'static [&'static str] {
     match family {
         "sniper" => &[
@@ -415,6 +429,9 @@ pub fn family_skills(family: &str) -> &'static [&'static str] {
             "Grace",
             "Dash",
             "Blink Arrow",
+            "Puncture",
+            "Frenzy",
+            "Haste",
         ],
         "thunderquiver" => &[
             "Lightning Arrow",
@@ -444,6 +461,7 @@ pub fn family_skills(family: &str) -> &'static [&'static str] {
             "Flame Dash",
             "Wrath",
             "Purity of Lightning",
+            "Proximity Shield",
         ],
         "kineticist" => &[
             "Elemental Weakness",
@@ -484,7 +502,7 @@ pub fn family_skills(family: &str) -> &'static [&'static str] {
             "Frostblink",
             "Purity of Ice",
         ],
-        // PoEDB 3.29 Bladebitter primary/secondary/utility pool. Keeping this
+        // PoEDB Bladebitter primary/secondary/utility pool. Keeping this
         // family bounded prevents its class header from fuzzily becoming the
         // unrelated Blade Ambusher skill `Blade Trap`.
         "bladebitter" => &[
@@ -499,6 +517,19 @@ pub fn family_skills(family: &str) -> &'static [&'static str] {
             "Malevolence",
             "Withering Step",
             "Grace",
+        ],
+        // 3.30 survey (70 warrants) and PoEDB agree on these nine. Bounding the
+        // family keeps OCR from collapsing Abyssal Spray (Detonation) into Abyssal Cry.
+        "chaplain_of_the_well" => &[
+            "Abyssal Spray",
+            "Abyssal Spray Detonation",
+            "Power of the Depths",
+            "Smite",
+            "Vaal Smite",
+            "Envy",
+            "Flame Dash",
+            "Abyssal Cry",
+            "Herald of Ash",
         ],
         _ => &[],
     }
@@ -823,9 +854,17 @@ mod tests {
     }
 
     #[test]
+    fn patch_label_is_major_minor() {
+        assert_eq!(major_minor("3.30.0"), "3.30");
+        assert_eq!(major_minor("3.29.3"), "3.29");
+        assert_eq!(major_minor("3.30"), "3.30");
+        assert!(catalog_patch().starts_with(catalog_patch_short()));
+    }
+
+    #[test]
     fn bundled_329_catalog_is_current_and_complete() {
-        assert_eq!(catalog_patch(), "3.29.3");
-        assert_eq!(known_build_names().count(), 36);
+        assert_eq!(catalog_patch(), "3.30.0");
+        assert_eq!(known_build_names().count(), 37);
         assert!(all_known_skills().len() >= 250);
         assert_eq!(
             canonical_skill("Soulrend of Reaping").0,
@@ -876,7 +915,7 @@ mod tests {
 
     #[test]
     fn generated_catalog_preserves_exact_skill_tier_pairs() {
-        let raw = include_str!("../assets/catalog-3.29.json");
+        let raw = include_str!("../assets/catalog-3.30.json");
         assert!(
             !raw.starts_with('\u{feff}'),
             "catalog must be BOM-less UTF-8"

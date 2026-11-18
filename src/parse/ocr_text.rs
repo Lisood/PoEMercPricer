@@ -48,9 +48,12 @@ pub fn parse_ocr_lines(lines: &[String], source: &str) -> Mercenary {
         }
         // Item tooltips can overlap the mercenary panel and contain text such as
         // "Requires Level 67". That is an equipment requirement, never the
-        // mercenary's level. Prefer the compact `Lvl` header used by the panel,
+        // mercenary's level; nor is a map-style "Area Level: 83". Prefer the compact `Lvl` header used by the panel,
         // while retaining `Mercenary Level` as a lower-priority OCR fallback.
-        let is_item_requirement = n.contains("requires level") || n.contains("required level");
+        let is_item_requirement = n.contains("requires level")
+            || n.contains("required level")
+            || n.contains("area level")
+            || n.contains("area lv");
         let candidate_priority = if n.contains("lvl") {
             2
         } else if n.contains("mercenary level") {
@@ -92,7 +95,7 @@ pub fn parse_ocr_lines(lines: &[String], source: &str) -> Mercenary {
     }
     let (display, family, infamous) = classify_class(&raw_class);
     let preferred = family_skills(&family);
-    // A known family has a finite, audited 3.29 skill pool. Do not merely rank
+    // A known family has a finite, audited 3.30 skill pool. Do not merely rank
     // those skills ahead of the global catalog: that still lets unrelated
     // fuzzy matches through (for example `Bladebitter` -> `Blade Trap`).
     let catalog: Vec<&str> = if preferred.is_empty() {

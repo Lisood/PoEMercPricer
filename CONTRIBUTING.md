@@ -51,8 +51,8 @@ on manual dispatch. Build/release details are in `docs/installation.md`.
 - Updater: `src/update.rs`, designed in `docs/updater.md`.
 - Installer and Windows integration: `installer/`, `src/installation.rs`,
   `scripts/build-installer.ps1`, `scripts/test-installer.ps1`.
-- Market data and its provenance: `assets/`, `docs/market-3.29.md`,
-  `docs/research-3.29.md`.
+- Market data and its provenance: `assets/`, `docs/market-3.30.md`,
+  `docs/research-3.30.md`.
 
 Behaviour changes update the matching file under `docs/` in the same commit.
 
@@ -71,7 +71,9 @@ Behaviour changes update the matching file under `docs/` in the same commit.
 `.\scripts\release.ps1 -Version X.Y.Z` does step by step, how to rehearse it
 with `-DryRun`, what must never reach a release, and how to recover from each
 way it can fail. Ask before pushing a tag; a tag is a release, and every
-installed copy offers it as an update on its next launch.
+installed copy offers it as an update on its next launch. Add a `## [X.Y.Z]`
+section to `CHANGELOG.md`, written for players, before releasing: the release
+script refuses without it and the workflow publishes it as the release notes.
 
 ## Reporting bugs
 

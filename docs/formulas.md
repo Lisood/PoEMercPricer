@@ -7,7 +7,7 @@ I went back over those weights later. What held up and what didn't:
 | Piece | Status |
 |-------|--------|
 | Tier factor T1=0.6 / T2=0.8 / T3=1.0 (`SupportTier::factor`) | Heuristic. Real supports have their own progressions. |
-| Point weights (+25 KBoC, -40 Icicle Rain, and the rest) | Heuristic. Not derived from sales or DPS tests. |
+| Point weights (+25 KBoC, -20 Kinetic Bolt, and the rest) | Heuristic. Not derived from sales or DPS tests. |
 | Bands skip <50 / common <55 (Combatant <60) / check <65 / good <80 / very valuable <90 / jackpot >=90 (`models::interpret_score`) | Unverified cutoffs. Useful as a UI, not as a valuation. A market-proven support package overrides the band to "jackpot" at any score. |
 | AI share ≈ 1/(1+n competing skills) | Invalid as a general rule. |
 | Cooldown `CD / (1+CDR)` | Confirmed. |
@@ -32,11 +32,18 @@ Projectile behaviour order: Split, Pierce, Fork, Chain, Return.
 
 The app never emits a sale-price quote; the market row is a dated ask range, described below. Price-check comparable current listings yourself using class + main skill + supports bound to that skill + secondary skill + brick exclusions. Whatever number falls out of that is an asking-price signal, not a confirmed sale.
 
-The current 3.29.3 listing audit and the exact skill-bound gates are in [`research-3.29.md`](research-3.29.md).
+The current 3.30 market survey and the exact skill-bound gates are in [`market-3.30.md`](market-3.30.md); the patch facts and data sources are in [`research-3.30.md`](research-3.30.md). The 3.29.3 listing audit is kept in the [3.29 archive](research-3.29.md).
+
+How the 3.30 screens differ from 3.29, with the evidence in [`market-3.30.md`](market-3.30.md):
+
+- Stormhand is not a bespoke scorer any more. Its jackpot failed (it is a 10d family and the Arc + Ball Lightning of Static + Chain + Gilded Chain Distance package has n=1), so it is an ordinary `market::SCREENS` entry.
+- Jackpot holds only for a premium family whose gate package has n >= 8, a median of at least 50d and top-share >= 0.95. That keeps Kineticist, Manyshot and Combatant and adds Cruel Mistress. Swiftblade and Shattersword lose it.
+- Six families (Cardinal, Withertouch, Frosthand, Bloodletter, Ripper, Warpriest) have no screen and use `extra::score_generic`. Its estimate is capped at the family's price tier: 72 for high, 62 for mid, 52 for floor. Premium families and families with no measured tier keep the 79 cap.
+- Penalties the market contradicted are removed: Icicle Rain on Manyshot (it still cannot jackpot, because it never sits beside Mirror Arrow) and Frost Blades + Wild Strike on Combatant. Fallen Reverend gains a Frostblink brick.
 
 ## Market ask estimate
 
-`src/pricing.rs` reads `assets/warrant-prices-3.29.json`, a snapshot of the cheapest instant-buyout asks on the official trade site, collected per family and support package by `scripts/fetch-warrant-prices.ps1` (one search plus a fetch of the ten cheapest listings per row, level 83 and above only). It is compiled into the binary by `build.rs` and never refreshed at run time; the snapshot date and level floor are printed next to every estimate. The bundled snapshot was generated 2026-09-02T12:59:33Z for Allflame, 192 rows, at 298.1 chaos per divine.
+`src/pricing.rs` reads `assets/warrant-prices-3.30.json`, a snapshot of the cheapest instant-buyout asks on the official trade site, collected per family and support package by `scripts/fetch-warrant-prices.ps1` (one search plus a fetch of the ten cheapest listings per row, level 83 and above only). It is compiled into the binary by `build.rs` and never refreshed at run time; the snapshot date and level floor are printed next to every estimate. The bundled snapshot was generated 2026-11-18T05:49:05Z for Covens: 193 rows (base 65, money 64, money_gates 64, of which 23 are partner-swept), at 95.29 chaos per divine (poe.ninja, 2026-11-18 05:49Z). This is the rate the market row uses. The scoring survey in `market-3.30.md` converted divine asks at 101.5 chaos per divine (poe.ninja, 2026-11-18 02:57Z) and only fed the score weights and tiers, never the displayed prices. Mysterious Diver and Warpriest of the Ruckus have 0 listings and show "no listings data". A package with no listings falls back to the next package, never to 0c. Listing counts are the trade site's search totals at ilvl 83+, instant buyout.
 
 Refresh with `pwsh scripts/fetch-warrant-prices.ps1` and rebuild. The run takes about an hour: the script keeps every request at least 2.5 s apart and holds itself to half of every rate-limit window the trade API reports in its `X-Rate-Limit-Ip` headers, so a full sweep spends most of its time waiting on the 6-hour search window. A run that dies part way resumes from its checkpoint file.
 

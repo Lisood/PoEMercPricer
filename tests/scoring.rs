@@ -56,7 +56,10 @@ fn kineticist_bricks_kill_premium() {
 }
 
 #[test]
-fn manyshot_icicle_rain_penalty() {
+fn manyshot_icicle_rain_is_not_a_score_brick() {
+    // docs/market-3.30.md, bespoke table, "VIS + Icicle Rain": 175d median
+    // (n=14+2 mirror, top-share 0.88), so the 3.29 -40 brick is gone. Icicle
+    // Rain never sits beside the VIS + Mirror Arrow jackpot pair (n=0), so it still cannot jackpot.
     let m = merc(
         "manyshot",
         vec![
@@ -74,9 +77,14 @@ fn manyshot_icicle_rain_penalty() {
         ],
     );
     let r = score_mercenary(&m, false);
-    assert_eq!(r.bricks, vec!["Icicle Rain".to_string()]);
+    assert!(r.bricks.is_empty());
     assert!(!r.jackpot);
-    assert!(r.score < 60.0);
+    assert_ne!(r.band, "jackpot");
+    assert!(r.score >= 80.0);
+    assert!(r
+        .highlights
+        .iter()
+        .any(|h| h.contains("no Vaal Ice Shot + Mirror Arrow jackpot package")));
 }
 
 #[test]
@@ -184,20 +192,28 @@ fn combatant_check_band_is_reachable() {
 }
 
 #[test]
-fn combatant_both_mains_penalized() {
+fn combatant_both_mains_is_not_a_brick_but_never_jackpots() {
+    // docs/market-3.30.md, bespoke table, "Frost Blades + Wild Strike": 100d
+    // median (n=20+3 mirror, top-share 0.87), level with the family, so the
+    // 3.29 -28 penalty is gone. Both mains rule out the Frost Blades jackpot.
     let m = merc(
         "combatant",
         vec![
-            Skill::new("Frost Blades", "Frost Blades")
-                .with_supports(vec![("chain".into(), SupportTier::T3)]),
+            Skill::new("Frost Blades", "Frost Blades").with_supports(vec![
+                ("return".into(), SupportTier::T3),
+                ("chain".into(), SupportTier::T2),
+                ("edwa".into(), SupportTier::T3),
+            ]),
             Skill::new("Wild Strike", "Wild Strike")
                 .with_supports(vec![("edwa".into(), SupportTier::T3)]),
             Skill::new("Static Strike", "Static Strike"),
         ],
     );
     let r = score_mercenary(&m, false);
-    assert!(r.bricks.iter().any(|b| b == "Frost Blades + Wild Strike"));
+    assert!(r.bricks.is_empty());
+    assert!(!r.breakdown.iter().any(|p| p.label == "FB+WS penalty"));
     assert!(!r.jackpot);
+    assert_ne!(r.band, "jackpot");
 }
 
 #[test]
@@ -223,7 +239,11 @@ fn combatant_return_keeps_resale_value_without_proj_speed() {
 }
 
 #[test]
-fn stormhand_market_sleeper_requires_skill_bound_chain_package() {
+fn stormhand_arc_package_is_a_mid_screen_not_a_jackpot() {
+    // docs/market-3.30.md, stormhand row: a mid family (10d top-50 median);
+    // Arc + BLS + Chain + Gilded Chain Distance is n=1, so the 3.29 jackpot is
+    // gone and the screen moved into market::SCREENS (base 20, Chain 15,
+    // GCD 10, Faster Casting 3, BLS 8).
     let m = merc(
         "stormhand",
         vec![
@@ -235,17 +255,18 @@ fn stormhand_market_sleeper_requires_skill_bound_chain_package() {
             Skill::new("Ball Lightning of Static", "Ball Lightning of Static"),
         ],
     );
-    let result = score_mercenary(&m, false);
-    assert!(result.jackpot);
-    assert!(result
-        .highlights
-        .iter()
-        .any(|line| line.contains("sleeper")));
+    let r = score_mercenary(&m, false);
+    assert!(!r.jackpot);
+    assert!((r.score - 53.0).abs() < 0.01);
+    assert_eq!(r.band, "common");
+    assert!(!r.estimate);
 }
 
 #[test]
-fn sniper_tornado_gmp_is_a_floor_package_not_a_jackpot() {
-    // 2026-09-02 ledger: TS::GMP floors at 1c (n=8,383); see docs/market-3.29.md.
+fn sniper_tornado_gmp_is_a_check_not_a_jackpot() {
+    // docs/market-3.30.md, sniper row: premium family (50d top-50 median);
+    // TS::GMP is confirmed (n=22, top-share 0.86, 50d), TS::GMP + Arrow Nova
+    // is n=6, too thin for a jackpot. Base 45 + GMP 10 = 55.
     let m = merc(
         "sniper",
         vec![Skill::new("Tornado Shot", "Tornado Shot")
@@ -253,7 +274,8 @@ fn sniper_tornado_gmp_is_a_floor_package_not_a_jackpot() {
     );
     let r = score_mercenary(&m, false);
     assert!(!r.jackpot);
-    assert_eq!(r.band, "skip");
+    assert_eq!(r.score, 55.0);
+    assert_eq!(r.band, "check");
     assert!(!r.estimate);
 }
 
@@ -271,7 +293,10 @@ fn sniper_brutality_bricks_tornado_shot() {
 }
 
 #[test]
-fn sniper_arrow_nova_only_bricks_on_tornado_shot() {
+fn sniper_arrow_nova_on_tornado_shot_is_a_gate() {
+    // docs/market-3.30.md, sniper row: Arrow Nova on Tornado Shot is n=28+1
+    // mirror, top-share 0.97, 50d median, so the 3.29 -20 brick became a +12
+    // gate. It only counts on Tornado Shot.
     let elsewhere = merc(
         "sniper",
         vec![
@@ -281,7 +306,9 @@ fn sniper_arrow_nova_only_bricks_on_tornado_shot() {
                 .with_supports(vec![("arrow_nova".into(), SupportTier::T3)]),
         ],
     );
-    assert!(score_mercenary(&elsewhere, false).bricks.is_empty());
+    let r = score_mercenary(&elsewhere, false);
+    assert!(r.bricks.is_empty());
+    assert_eq!(r.score, 55.0);
 
     let on_ts = merc(
         "sniper",
@@ -294,15 +321,22 @@ fn sniper_arrow_nova_only_bricks_on_tornado_shot() {
     );
     let r = score_mercenary(&on_ts, false);
     assert!(!r.jackpot);
-    assert!(r.bricks.iter().any(|b| b.contains("Arrow Nova")));
+    assert!(r.bricks.is_empty());
     let sum: f32 = r.breakdown.iter().map(|p| p.points).sum();
     assert!((sum - r.score).abs() < 0.01);
-    assert!(r.breakdown.iter().any(|p| p.points == -20.0));
+    // T1 Arrow Nova earns 12 * 0.6.
+    assert!(r
+        .breakdown
+        .iter()
+        .any(|p| p.label.contains("Arrow Nova") && (p.points - 7.2).abs() < 0.01));
+    assert!(r.score > 55.0);
 }
 
 #[test]
-fn thunderquiver_return_gmp_package_is_not_a_jackpot() {
-    // 2026-09-02 ledger: LA::Return+GMP floors at 1c (n=3,404).
+fn thunderquiver_return_gmp_package_is_good_not_a_jackpot() {
+    // docs/market-3.30.md, thunderquiver row: premium family (100d top-50
+    // median), LA::Return confirmed (n=25+4 mirror, top-share 0.86), but
+    // Return + GMP is n=5, so no jackpot. Base 47 + 15 + 10 = 72.
     let m = merc(
         "thunderquiver",
         vec![
@@ -314,7 +348,8 @@ fn thunderquiver_return_gmp_package_is_not_a_jackpot() {
     );
     let r = score_mercenary(&m, false);
     assert!(!r.jackpot);
-    assert_eq!(r.band, "skip");
+    assert_eq!(r.score, 72.0);
+    assert_eq!(r.band, "good");
     assert!(!r.estimate);
 }
 
@@ -335,7 +370,7 @@ fn thunderquiver_galvanic_arrow_is_a_brick() {
 
 #[test]
 fn generic_fallback_family_scores_an_estimate() {
-    // warpriest_of_the_ruckus is the only family without a market screen (1 listing).
+    // warpriest_of_the_ruckus has no 3.30 listings and no market screen.
     let m = Mercenary {
         infamous: true,
         ..merc(
@@ -401,6 +436,28 @@ fn generic_fallback_ignores_non_catalog_junk_canonicals() {
 
 #[test]
 fn jackpot_screen_enters_the_jackpot_band_below_80() {
+    // docs/market-3.30.md, cruel_mistress row: SoR::GMP + Return is n=15+5
+    // mirror, 50d median, top-share 1.00, so jackpot. T2 gates still satisfy
+    // the package: 40 + 0.8 * (22 + 18) = 72.
+    let m = merc(
+        "cruel_mistress",
+        vec![
+            Skill::new("Soulrend of Reaping", "Soulrend of Reaping").with_supports(vec![
+                ("gmp".into(), SupportTier::T2),
+                ("return".into(), SupportTier::T2),
+            ]),
+        ],
+    );
+    let r = score_mercenary(&m, false);
+    assert!((r.score - 72.0).abs() < 0.01);
+    assert!(r.jackpot);
+    assert_eq!(r.band, "jackpot");
+}
+
+#[test]
+fn shattersword_lost_its_jackpot() {
+    // docs/market-3.30.md, shattersword row: mid family (11d top-50 median),
+    // CDR on Rallying Cry not priced (n=20, top-share 0.70).
     let m = merc(
         "shattersword",
         vec![
@@ -411,9 +468,129 @@ fn jackpot_screen_enters_the_jackpot_band_below_80() {
         ],
     );
     let r = score_mercenary(&m, false);
-    assert_eq!(r.score, 75.0);
-    assert!(r.jackpot);
-    assert_eq!(r.band, "jackpot");
+    assert!(!r.jackpot);
+    assert_eq!(r.score, 62.0);
+    assert_eq!(r.band, "check");
+}
+
+#[test]
+fn chaplain_of_the_well_return_faster_casting_package() {
+    // docs/market-3.30.md, chaplain_of_the_well row: Return + Faster Casting
+    // on Abyssal Spray is n=8+10 mirror, top-share 0.94, 300d median; under
+    // the 0.95 jackpot bar, so the full package is 55 + 12 + 12 = 79, "good".
+    let full = merc(
+        "chaplain_of_the_well",
+        vec![
+            Skill::new("Abyssal Spray", "Abyssal Spray").with_supports(vec![
+                ("return".into(), SupportTier::T3),
+                ("faster_casting".into(), SupportTier::T3),
+                ("gmp".into(), SupportTier::T3),
+            ]),
+            Skill::new("Abyssal Spray Detonation", "Abyssal Spray Detonation"),
+            Skill::new("Power of the Depths", "Power of the Depths"),
+        ],
+    );
+    let r = score_mercenary(&full, false);
+    assert!(!r.estimate);
+    assert!(!r.jackpot);
+    assert_eq!(r.score, 79.0);
+    assert_eq!(r.band, "good");
+
+    // GMP on Abyssal Spray is not priced (top-share 0.68): it earns nothing.
+    let bare = merc(
+        "chaplain_of_the_well",
+        vec![Skill::new("Abyssal Spray", "Abyssal Spray")
+            .with_supports(vec![("gmp".into(), SupportTier::T3)])],
+    );
+    assert_eq!(score_mercenary(&bare, false).score, 55.0);
+}
+
+#[test]
+fn unpriced_money_skill_families_fall_back_to_the_generic_estimate() {
+    // docs/market-3.30.md, "Generic fallback": the 3.30 survey prices none of
+    // these money skills and finds no >= 0.90 replacement. The estimate is
+    // capped at the family's rule-6 tier target (high 72, mid 62), so a maxed
+    // warrant lands exactly on the cap and never outranks a screened family.
+    let maxed = |family: &str| Mercenary {
+        infamous: true,
+        ..merc(
+            family,
+            vec![Skill::new("Smite", "Smite").with_supports(vec![
+                ("aoe".into(), SupportTier::T3),
+                ("cdr".into(), SupportTier::T3),
+                ("more_duration".into(), SupportTier::T3),
+                ("faster_attacks".into(), SupportTier::T3),
+                ("edwa".into(), SupportTier::T3),
+            ])],
+        )
+    };
+    for (family, cap) in [
+        ("cardinal", 62.0),
+        ("withertouch", 72.0),
+        ("frosthand", 62.0),
+        ("bloodletter", 62.0),
+        ("ripper", 62.0),
+        ("warpriest", 72.0),
+    ] {
+        assert!(
+            SCREENS.iter().all(|(f, _)| *f != family),
+            "{family} still has a screen"
+        );
+        let r = score_mercenary(&maxed(family), false);
+        assert!(r.estimate, "{family}");
+        assert_eq!(r.score, cap, "{family}");
+        assert_eq!(r.band, interpret_score(cap, family).0, "{family}");
+    }
+    // No measured tier (0 listings): only the 79 cap applies, and the same
+    // warrant estimates 20 + 40 + 10 + 0 demand = 70, above the mid cap.
+    let r = score_mercenary(&maxed("warpriest_of_the_ruckus"), false);
+    assert_eq!(r.score, 70.0);
+}
+
+#[test]
+fn ripper_generic_estimate_stays_in_its_mid_tier() {
+    // docs/market-3.30.md, ripper row (mid, 5d top-50 median) and "Generic
+    // estimate cap": six T2 supports used to estimate ~72 "good"; the mid
+    // cap holds it at 62, level with a screened mid family's full package.
+    let m = merc(
+        "ripper",
+        vec![
+            Skill::new("Cleave", "Cleave").with_supports(vec![
+                ("brutality".into(), SupportTier::T2),
+                ("faster_attacks".into(), SupportTier::T2),
+            ]),
+            Skill::new("Leap Slam", "Leap Slam").with_supports(vec![
+                ("pulverise".into(), SupportTier::T2),
+                ("brutality".into(), SupportTier::T2),
+            ]),
+            Skill::new("Molten Shell", "Molten Shell").with_supports(vec![
+                ("cdr".into(), SupportTier::T2),
+                ("more_duration".into(), SupportTier::T2),
+            ]),
+        ],
+    );
+    let r = score_mercenary(&m, false);
+    assert!(r.estimate);
+    assert_eq!(r.score, 62.0);
+    assert_eq!(r.band, "check");
+}
+
+#[test]
+fn bastion_money_skill_moved_to_prismplate() {
+    // docs/market-3.30.md, bastion row: Impenetrable Bastion is a brick
+    // (n=25, top-share 0.32, 10c); Prismplate is n=72, top-share 0.96.
+    let ib = merc(
+        "bastion",
+        vec![
+            Skill::new("Impenetrable Bastion", "Impenetrable Bastion").with_supports(vec![
+                ("cdr".into(), SupportTier::T3),
+                ("more_duration".into(), SupportTier::T3),
+            ]),
+        ],
+    );
+    assert_eq!(score_mercenary(&ib, false).band, "skip");
+    let pp = merc("bastion", vec![Skill::new("Prismplate", "Prismplate")]);
+    assert_eq!(score_mercenary(&pp, false).score, 54.0);
 }
 
 #[test]
@@ -521,7 +698,10 @@ fn market_screen_skill_names_are_catalog_canonicals() {
 }
 
 #[test]
-fn swiftblade_rallying_cry_cdr_duration_is_jackpot() {
+fn swiftblade_rallying_cry_cdr_duration_is_good_not_jackpot() {
+    // docs/market-3.30.md, swiftblade row: RC::CDR + More Duration is a 30d
+    // median (n=33, top-share 1.00), under the 50d jackpot bar; high tier, so
+    // the full package scales to 25 + 25 + 21 = 71.
     let m = merc(
         "swiftblade",
         vec![
@@ -532,8 +712,9 @@ fn swiftblade_rallying_cry_cdr_duration_is_jackpot() {
         ],
     );
     let r = score_mercenary(&m, false);
-    assert!(r.jackpot);
-    assert_eq!(r.band, "jackpot");
+    assert!(!r.jackpot);
+    assert_eq!(r.score, 71.0);
+    assert_eq!(r.band, "good");
     assert!(!r.estimate);
 }
 

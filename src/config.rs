@@ -37,7 +37,7 @@ impl Default for AppConfig {
             scan_clipboard_first: true,
             always_on_top: true,
             hide_on_escape: true,
-            trade_league: "Allflame".into(),
+            trade_league: "Covens".into(),
             trade_every_skill: false,
             check_updates: true,
             install_updates_automatically: true,
@@ -66,8 +66,18 @@ impl AppConfig {
 
     pub fn load_from(path: &Path) -> (Self, Option<String>) {
         match fs::read_to_string(path) {
-            Ok(text) => match serde_json::from_str(&text) {
-                Ok(cfg) => (cfg, None),
+            Ok(text) => match serde_json::from_str::<Self>(&text) {
+                Ok(mut cfg) => match retired_league_successor(&cfg.trade_league) {
+                    Some(league) => {
+                        cfg.trade_league = league;
+                        let err = cfg
+                            .save_to(path)
+                            .err()
+                            .map(|e| format!("Could not write {}: {e:#}", path.display()));
+                        (cfg, err)
+                    }
+                    None => (cfg, None),
+                },
                 Err(e) => (
                     Self::default(),
                     Some(format!(
@@ -99,7 +109,43 @@ impl AppConfig {
         if let Some(dir) = path.parent() {
             fs::create_dir_all(dir)?;
         }
-        fs::write(path, serde_json::to_string_pretty(self)?)?;
-        Ok(())
+        // Write a sibling and rename it over the target, so a crash mid-write
+        // never leaves a truncated config behind.
+        let mut tmp = path.as_os_str().to_owned();
+        tmp.push(".tmp");
+        let tmp = PathBuf::from(tmp);
+        let written = fs::write(&tmp, serde_json::to_string_pretty(self)?)
+            .and_then(|()| fs::rename(&tmp, path));
+        if written.is_err() {
+            let _ = fs::remove_file(&tmp);
+        }
+        Ok(written?)
     }
+}
+
+/// The 3.29 Allflame leagues ended with 3.30; carry a saved choice such as
+/// "HC Ruthless Allflame" over to its Covens equivalent. Only the whole word
+/// is replaced, so a private league such as "Allflamers (PL123)" is kept.
+fn retired_league_successor(league: &str) -> Option<String> {
+    // ASCII lowercasing keeps byte offsets, so `at` indexes `league` too.
+    let lower = league.to_ascii_lowercase();
+    let at = lower
+        .match_indices("allflame")
+        .map(|(at, _)| at)
+        .find(|&at| {
+            let end = at + "allflame".len();
+            !lower[..at]
+                .chars()
+                .next_back()
+                .is_some_and(char::is_alphanumeric)
+                && !lower[end..]
+                    .chars()
+                    .next()
+                    .is_some_and(char::is_alphanumeric)
+        })?;
+    Some(format!(
+        "{}Covens{}",
+        &league[..at],
+        &league[at + "allflame".len()..]
+    ))
 }

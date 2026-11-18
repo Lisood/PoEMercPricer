@@ -5,13 +5,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$catalog = Get-Content -Raw (Join-Path $root 'assets\catalog-3.29.json') | ConvertFrom-Json
+$catalog = Get-Content -Raw (Join-Path $root 'assets\catalog-3.30.json') | ConvertFrom-Json
 $headers = @{
   Referer = 'https://poedb.tw/'
   'User-Agent' = 'PoEMercPricer/0.1.0 (+https://github.com/Lisood/PoEMercPricer)'
 }
 
-$supportPattern = '<img\s+loading="lazy"\s+src="(?<url>https://cdn\.poedb\.tw/image/Art/2DItems/Gems/Support/[^"]+)"[^>]*/></div><div class="flex-grow-1 ms-2">(?<name>[^<]+)\s*<span>(?<tier>I{1,3})</span>'
+$supportPattern = '<img\s+loading="lazy"\s+(?:decoding="async"\s+)?src="(?<url>https://cdn\.poedb\.tw/image/Art/2DItems/Gems/Support/[^"]+)"[^>]*/></div><div class="flex-grow-1 ms-2">(?<name>[^<]+)\s*<span>(?<tier>I{1,3})</span>'
 $sectionPattern = '<div class="border mb-2">(?<section>.*?)(?=<div class="border mb-2">|\z)'
 $rows = [Collections.Generic.List[object]]::new()
 $auditedBuilds = [Collections.Generic.List[string]]::new()
@@ -127,7 +127,7 @@ $remainingAmbiguities = @(
 )
 
 $report = [ordered]@{
-  source = 'https://poedb.tw/us/Mercenaries and its 36 build pages'
+  source = "https://poedb.tw/us/Mercenaries and its $($catalog.builds.Count) build pages"
   audited_at = [DateTime]::UtcNow.ToString('o')
   requested_build_pages = $catalog.builds.Count
   audited_build_pages = $auditedBuilds.Count

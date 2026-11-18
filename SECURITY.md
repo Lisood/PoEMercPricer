@@ -41,9 +41,8 @@ Inno Setup 6.7.3 from the official GitHub repository and verifies the pinned
 SHA-256 and Pyrsys B.V. Authenticode signature before running it.
 
 The PowerShell scripts under `scripts/` do make outbound requests, to PoEDB,
-the official trade site and API, poe.ninja (currency rates), and the Perandus
-Ledger (`xddbsns.com`, build list). They are maintainer tools for refreshing
-the bundled snapshots. The app never runs them.
+the official trade site and API, and poe.ninja (currency rates). They are
+maintainer tools for refreshing the bundled snapshots. The app never runs them.
 
 ## Local footprint
 

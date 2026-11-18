@@ -1,67 +1,8 @@
-//! Lightweight 3.29 money screen for Stormhand (its jackpot needs a second
-//! skill plus a subset of the gates, which `market::Screen` cannot express),
-//! plus the generic tier+demand estimate used by every other catalog family.
-//! Sniper and Thunderquiver live as `market::SCREENS` rows.
+//! Generic tier+demand estimate for catalog families without a 3.30 market
+//! screen, plus the shared result builder. Stormhand moved to
+//! `market::SCREENS` in 3.30: its jackpot no longer holds (docs/market-3.30.md).
 
 use crate::models::{interpret_score, Mercenary, ScoreBreakdown, ScoreResult};
-
-pub fn score_stormhand(merc: &Mercenary) -> ScoreResult {
-    let arc = merc.skill(&["Arc"]);
-    let has_arc = arc.is_some();
-    let chain = arc.map(|s| s.t(&["chain"])).unwrap_or(0.0);
-    let chain_distance = arc.map(|s| s.t(&["gilded_chain_distance"])).unwrap_or(0.0);
-    let faster_casting = arc.map(|s| s.t(&["faster_casting"])).unwrap_or(0.0);
-    let bls = merc.has_skill(&["Ball Lightning of Static"]);
-    let mut score = if has_arc { 40.0 } else { 0.0 };
-    let mut parts = vec![ScoreBreakdown {
-        label: "Arc".into(),
-        points: score,
-        detail: "money main".into(),
-    }];
-    if chain > 0.0 {
-        parts.push(ScoreBreakdown {
-            label: "Chain on Arc".into(),
-            points: 30.0 * chain,
-            detail: String::new(),
-        });
-        score += 30.0 * chain;
-    }
-    if bls {
-        parts.push(ScoreBreakdown {
-            label: "Ball Lightning of Static".into(),
-            points: 15.0,
-            detail: String::new(),
-        });
-        score += 15.0;
-    }
-    if chain_distance > 0.0 {
-        parts.push(ScoreBreakdown {
-            label: "Gilded Chain Distance on Arc".into(),
-            points: 20.0 * chain_distance,
-            detail: "market sleeper gate".into(),
-        });
-        score += 20.0 * chain_distance;
-    }
-    if faster_casting > 0.0 {
-        parts.push(ScoreBreakdown {
-            label: "Faster Casting on Arc".into(),
-            points: 5.0 * faster_casting,
-            detail: String::new(),
-        });
-        score += 5.0 * faster_casting;
-    }
-    let jackpot = has_arc && bls && chain > 0.0 && chain_distance > 0.0;
-    let mut result = finish("stormhand", score, jackpot, Vec::new(), parts);
-    if jackpot {
-        result.highlights.push(
-            "Market sleeper: Arc + Ball Lightning of Static + Chain + Gilded Chain Distance".into(),
-        );
-        result
-            .notes
-            .push("Market value is evidenced; combat efficacy reports remain mixed.".into());
-    }
-    result
-}
 
 /// Data-driven estimate for families without an audited money screen.
 /// There's no known brick list for these yet, so bricks stay empty and low
@@ -102,17 +43,33 @@ pub fn score_generic(merc: &Mercenary, family: &str, listings: u64) -> ScoreResu
             detail: format!("{listings} trade listings"),
         },
     ];
-    // Estimates cap at 79 so the very-valuable / jackpot bands stay exclusive
-    // to the market-audited screens.
-    let raw = (base + support_pts + infamous_pts + demand_pts).min(79.0);
+    // Estimates cap at the family's 3.30 tier target (docs/market-3.30.md,
+    // rule 6) so a de-screened family never outranks a screened one; 79 keeps
+    // the very-valuable / jackpot bands exclusive to the market screens.
+    let raw = (base + support_pts + infamous_pts + demand_pts).min(tier_cap(family));
     let mut result = finish(family, raw, false, Vec::new(), parts);
     result.estimate = true;
     result.formula = "generic-estimate".into();
     result.notes = vec![
-        "Estimated from support tiers + trade demand; this family has no market-audited money screen."
+        "Estimated from support tiers + trade demand; the 3.30 trade survey found no priced money skill for this family."
             .into(),
     ];
     result
+}
+
+/// Full-package score target of the family's 3.30 tier (top-50 median ask,
+/// docs/market-3.30.md rule 6). Premium and unmeasured families keep 79.
+pub(super) fn tier_cap(family: &str) -> f32 {
+    match family {
+        "withertouch" | "swiftblade" | "smoulderstrike" | "blade_ambusher" | "bladebitter"
+        | "warpriest" => 72.0,
+        "toxicologist" | "striker" | "shattersword" | "bastion" | "stormhand"
+        | "fallen_reverend" | "flamequiver" | "cardinal" | "bladecaster" | "bloodletter"
+        | "shock_ambusher" | "flamehand" | "winter_deacon" | "frosthand" | "storming_zealot"
+        | "frost_ambusher" | "ripper" | "sanguimancer" => 62.0,
+        "earthshaker" | "eruptor" | "reanimator" | "flaming_charlatan" => 52.0,
+        _ => 79.0,
+    }
 }
 
 pub(super) fn finish(
@@ -138,7 +95,7 @@ pub(super) fn finish(
         highlights: Vec::new(),
         breakdown: parts,
         notes: vec![
-            "3.29 Allflame money screen (community testing). Not a sale-price formula.".into(),
+            "3.30 Covens trade-survey screen (2026-11-18 asks). Not a sale-price formula.".into(),
         ],
         formula: "screening-heuristic".into(),
         estimate: false,

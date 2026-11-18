@@ -136,7 +136,7 @@ fn summary_line_carries_the_confidence_caveat() {
         median_age_days: 15.0,
         fresh_share: 0.1,
         chaos_per_divine: 200.0,
-        league: "Allflame".into(),
+        league: "Covens".into(),
         snapshot_date: "2026-09-02".into(),
         placeholder: false,
         min_level: 0,

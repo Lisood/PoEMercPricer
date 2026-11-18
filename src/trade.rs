@@ -40,7 +40,6 @@ fn money_skills(family: &str) -> &'static [&'static str] {
         "kineticist" => &["Kinetic Blast of Clustering", "Greater Kinetic Blast"],
         "manyshot" => &["Vaal Ice Shot", "Ice Shot"],
         "combatant" => &["Frost Blades", "Wild Strike", "Static Strike"],
-        "stormhand" => &["Arc"],
         other => match crate::scoring::market::screen_for(other) {
             Some(screen) => screen.money,
             None => &[],
@@ -67,9 +66,9 @@ fn trade_stats() -> &'static TradeStatCatalog {
     STATS.get_or_init(|| {
         serde_json::from_str(include_str!(concat!(
             env!("OUT_DIR"),
-            "/trade-stats-3.29.json"
+            "/trade-stats-3.30.json"
         )))
-        .expect("bundled official 3.29 trade stat catalog must be valid")
+        .expect("bundled official 3.30 trade stat catalog must be valid")
     })
 }
 
@@ -101,7 +100,7 @@ fn support_key(value: &str) -> String {
     }
 }
 
-fn skill_trade_id(name: &str) -> Result<&'static str> {
+fn skill_trade_id(name: &str, build: &str) -> Result<&'static str> {
     let wanted = key(name);
     let matches: Vec<_> = trade_stats()
         .entries
@@ -111,6 +110,20 @@ fn skill_trade_id(name: &str) -> Result<&'static str> {
     match matches.as_slice() {
         [entry] => Ok(entry.id.as_str()),
         [] => bail!("no official trade stat for skill {name}"),
+        entries if wanted == "heraldofash" => {
+            // 3.30 listings carry 31201 on Chaplain of the Well and 44334 on
+            // every other build (Eruptor, Flaming Charlatan).
+            let expected_hash = if key(build) == "chaplainofthewell" {
+                "31201"
+            } else {
+                "44334"
+            };
+            entries
+                .iter()
+                .find(|entry| entry.id.ends_with(expected_hash))
+                .map(|entry| entry.id.as_str())
+                .with_context(|| format!("missing Herald of Ash hash {expected_hash}"))
+        }
         _ => bail!("multiple official trade stats for skill {name}"),
     }
 }
@@ -144,7 +157,8 @@ fn support_trade_id(canonical: &str, tier: SupportTier, skill_name: &str) -> Res
             // Both bundled stats share the text "Gilded Extra Targets (Tier 3)";
             // the site scopes 37259 to Smite and 58471 to Lightning Arrow.
             let expected_hash = match key(skill_name).as_str() {
-                "smite" => "37259",
+                // Vaal Smite on 37259 confirmed live in mercenarySkills, 2026-11-18.
+                "smite" | "vaalsmite" => "37259",
                 "lightningarrow" | "greaterlightningarrow" => "58471",
                 _ => bail!("no skill-bound Extra Targets trade stat for {skill_name}"),
             };
@@ -161,19 +175,24 @@ fn support_trade_id(canonical: &str, tier: SupportTier, skill_name: &str) -> Res
     }
 }
 
-/// Official item-type ids from `/api/trade/data/items` for patch 3.29. A scan
-/// identifies both build and rarity, so unlike a build-wide market report we
-/// can select one exact warrant type without splitting the user's result pool.
-fn warrant_trade_type(mercenary: &Mercenary) -> Result<&'static str> {
+/// The scanned build without its Infamous prefix, else the family id.
+fn build_label(mercenary: &Mercenary) -> &str {
     let class = mercenary
         .class_name
         .strip_prefix("Infamous ")
         .unwrap_or(&mercenary.class_name);
-    let label = if class.trim().is_empty() {
+    if class.trim().is_empty() {
         mercenary.family.as_str()
     } else {
         class
-    };
+    }
+}
+
+/// Official item-type ids from `/api/trade/data/items` for patch 3.30. A scan
+/// identifies both build and rarity, so unlike a build-wide market report we
+/// can select one exact warrant type without splitting the user's result pool.
+fn warrant_trade_type(mercenary: &Mercenary) -> Result<&'static str> {
+    let label = build_label(mercenary);
     let (ordinary, infamous) = match key(label).as_str() {
         "manyshot" => (Some("EleBowRangerClones"), Some("EleBowRangerClonesNoble")),
         "kineticist" => (
@@ -277,6 +296,7 @@ fn warrant_trade_type(mercenary: &Mercenary) -> Result<&'static str> {
         "flamingcharlatan" => (Some("PhysConvertTemplarFire"), None),
         "shattersword" => (Some("PhysicalDuelistSteel"), None),
         "warpriestoftheruckus" => (None, Some("AurasMinionsTemplarSmiteRuckusNoble")),
+        "chaplainofthewell" => (Some("AbyssalTemplar"), None),
         _ => bail!("no official warrant type for build {label}"),
     };
     if mercenary.infamous {
@@ -305,7 +325,7 @@ fn build_trade_query(
     let mut candidates = Vec::with_capacity(mercenary.skills.len());
     for (skill_index, skill) in mercenary.skills.iter().enumerate() {
         let skill_name = skill.canonical.trim();
-        let skill_id = match skill_trade_id(skill_name) {
+        let skill_id = match skill_trade_id(skill_name, build_label(mercenary)) {
             Ok(id) => id,
             Err(error) => {
                 dropped.push(error.to_string());
@@ -509,7 +529,7 @@ mod tests {
         assert_eq!(query["sort"]["price"], "asc");
         assert!(query.get("_poemerc").is_none());
 
-        let search = trade_search(&mercenary, "Allflame", false).unwrap();
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
         assert_eq!(search.selected_skill, "Kinetic Blast of Clustering");
         assert_eq!(search.included_skills, 1);
         assert_eq!(search.available_skills, 3);
@@ -525,7 +545,7 @@ mod tests {
         assert_eq!(groups.len(), 3);
         assert!(groups.iter().all(|group| group["type"] == "mercenary"));
         assert_eq!(groups[0]["filters"].as_array().unwrap().len(), 5);
-        let search = trade_search(&mercenary, "Allflame", true).unwrap();
+        let search = trade_search(&mercenary, "Covens", true).unwrap();
         assert_eq!(search.selected_skill, "Kinetic Blast of Clustering");
         assert_eq!(search.included_skills, 3);
         assert_eq!(search.included_filters, 7);
@@ -537,7 +557,7 @@ mod tests {
         for name in ["Haste", "Frost Bomb", "Blink Arrow", "Grace"] {
             six.skills.push(Skill::new(name, name));
         }
-        let search = trade_search(&six, "Allflame", true).unwrap();
+        let search = trade_search(&six, "Covens", true).unwrap();
         assert_eq!(search.available_skills, 7);
         assert_eq!(search.included_skills, LOGGED_IN_GROUP_LIMIT);
     }
@@ -545,13 +565,13 @@ mod tests {
     #[test]
     fn official_url_contains_one_offline_encoded_query() {
         let (mercenary, _) = kineticist_jackpot_fixture();
-        let url = trade_search_url(&mercenary, "Allflame", false).unwrap();
-        assert!(url.starts_with("https://www.pathofexile.com/trade/search/Allflame?q="));
+        let url = trade_search_url(&mercenary, "Covens", false).unwrap();
+        assert!(url.starts_with("https://www.pathofexile.com/trade/search/Covens?q="));
         assert!(!url.contains(' '));
         assert!(!url.contains("xddbsns"));
 
-        let hardcore = trade_search_url(&mercenary, "Hardcore Allflame", false).unwrap();
-        assert!(hardcore.contains("/Hardcore%20Allflame?q="));
+        let hardcore = trade_search_url(&mercenary, "Hardcore Covens", false).unwrap();
+        assert!(hardcore.contains("/Hardcore%20Covens?q="));
     }
 
     #[test]
@@ -559,7 +579,7 @@ mod tests {
         let (mut mercenary, _) = kineticist_jackpot_fixture();
         mercenary.skills[0].supports[0].canonical = "ambiguous".into();
         mercenary.skills[0].supports[1].tier = SupportTier::Absent;
-        let search = trade_search(&mercenary, "Allflame", false).unwrap();
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
         assert_eq!(search.selected_skill, "Kinetic Blast of Clustering");
         assert_eq!(search.included_filters, 3);
         assert_eq!(search.dropped.len(), 2);
@@ -576,13 +596,13 @@ mod tests {
             ("gmp".into(), SupportTier::T3),
             ("edwa".into(), SupportTier::T3),
         ]);
-        let search = trade_search(&mercenary, "Allflame", false).unwrap();
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
         assert_eq!(search.selected_skill, "Kinetic Blast of Clustering");
         assert_eq!(search.included_filters, 2);
 
         // No money skill for the family: fall back to the best-supported row.
         mercenary.family = "other".into();
-        let search = trade_search(&mercenary, "Allflame", false).unwrap();
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
         assert_eq!(search.selected_skill, "Haste");
     }
 
@@ -600,7 +620,7 @@ mod tests {
                     ("pierce".into(), SupportTier::T3),
                 ],
             );
-        let search = trade_search(&mercenary, "Allflame", false).unwrap();
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
         assert_eq!(search.included_filters, SAFE_GROUP_FILTER_LIMIT);
         assert_eq!(search.available_filters, 9);
         assert!(search.dropped.is_empty(), "{:?}", search.dropped);
@@ -610,6 +630,7 @@ mod tests {
     fn extra_targets_hash_is_pinned_to_its_skill() {
         let lookup = |skill| support_trade_id("gilded_extra_targets", SupportTier::T3, skill);
         assert_eq!(lookup("Smite").unwrap(), "mercenary.support_37259");
+        assert_eq!(lookup("Vaal Smite").unwrap(), "mercenary.support_37259");
         assert_eq!(
             lookup("Lightning Arrow").unwrap(),
             "mercenary.support_58471"
@@ -618,29 +639,188 @@ mod tests {
     }
 
     #[test]
-    fn bundled_stats_are_the_current_official_snapshot() {
-        let (patch, league, source) = bundled_trade_stat_provenance();
-        assert_eq!(patch, "3.29");
-        assert_eq!(league, "Allflame");
-        assert_eq!(source, "https://www.pathofexile.com/api/trade/data/stats");
-        assert_eq!(trade_stats().entries.len(), 534);
+    fn generic_family_without_money_skill_searches_its_best_supported_row() {
+        assert!(money_skills("withertouch").is_empty());
+        let mercenary = Mercenary {
+            class_name: "Withertouch".into(),
+            family: "withertouch".into(),
+            skills: vec![
+                Skill::new("Haste", "Haste"),
+                Skill::new("Essence Drain of Wickedness", "Essence Drain of Wickedness")
+                    .with_supports(vec![("gmp".into(), SupportTier::T3)]),
+            ],
+            ..Default::default()
+        };
+        let search = trade_search(&mercenary, "Covens", false).unwrap();
+        assert_eq!(search.selected_skill, "Essence Drain of Wickedness");
+        assert_eq!(search.included_skills, 1);
+        assert_eq!(search.included_filters, 2);
+        assert!(search.dropped.is_empty(), "{:?}", search.dropped);
+        let query = trade_query(&mercenary, false).unwrap();
+        assert_eq!(query["query"]["type"]["option"], "ChaosMinionWitchDot");
     }
 
     #[test]
-    fn every_329_skill_and_attainable_support_tier_has_one_official_trade_id() {
+    fn steelskin_ally_has_its_330_trade_stat() {
+        assert_eq!(
+            skill_trade_id("Steelskin Ally", "").unwrap(),
+            "mercenary.skill_17105"
+        );
+    }
+
+    #[test]
+    fn herald_of_ash_hash_is_pinned_to_its_build() {
+        let lookup = |build| skill_trade_id("Herald of Ash", build).unwrap();
+        assert_eq!(lookup("Chaplain of the Well"), "mercenary.skill_31201");
+        assert_eq!(lookup("chaplain_of_the_well"), "mercenary.skill_31201");
+        assert_eq!(lookup("Eruptor"), "mercenary.skill_44334");
+        assert_eq!(lookup("Flaming Charlatan"), "mercenary.skill_44334");
+
+        let mut chaplain = Mercenary {
+            class_name: "Chaplain of the Well".into(),
+            skills: vec![Skill::new("Herald of Ash", "Herald of Ash")],
+            ..Default::default()
+        };
+        let query = trade_query(&chaplain, false).unwrap();
+        assert_eq!(
+            query["query"]["stats"][0]["filters"][0]["id"],
+            "mercenary.skill_31201"
+        );
+        chaplain.class_name = "Infamous Eruptor".into();
+        chaplain.infamous = true;
+        let query = trade_query(&chaplain, false).unwrap();
+        assert_eq!(
+            query["query"]["stats"][0]["filters"][0]["id"],
+            "mercenary.skill_44334"
+        );
+    }
+
+    #[test]
+    fn bundled_stats_are_the_current_official_snapshot() {
+        let (patch, league, source) = bundled_trade_stat_provenance();
+        assert_eq!(patch, "3.30");
+        assert_eq!(league, "Covens");
+        assert_eq!(source, "https://www.pathofexile.com/api/trade/data/stats");
+        assert_eq!(trade_stats().entries.len(), 539);
+    }
+
+    /// Every `disc: mercenary_warrant` entry of `/api/trade/data/items`,
+    /// fetched 2026-11-18 for 3.30 Covens, as (warrant text, type id).
+    const WARRANT_TYPES_330: &[(&str, &str)] = &[
+        ("Bastion", "PhysicalDuelistShields"),
+        ("Blade Ambusher", "TrapsMinesShadowAttack"),
+        ("Bladebitter", "Crit1HShadowPoison"),
+        ("Bladecaster", "Crit1HShadowPhysSpell"),
+        ("Bloodletter", "PhysicalDuelistBleed"),
+        ("Cardinal", "AurasMinionsTemplarStaff"),
+        ("Chaplain of the Well", "AbyssalTemplar"),
+        ("Combatant", "MeleeAOEStrikeDuelistRangeStrikes"),
+        ("Cruel Mistress", "ChaosMinionWitchChaosHit"),
+        ("Earthshaker", "MeleeAOEMarauderPhysSlam"),
+        ("Eruptor", "MeleeAOEMarauderFireSlam"),
+        ("Fallen Reverend", "AurasMinionsTemplarSpectres"),
+        ("Flamehand", "ElementalWitchFire"),
+        ("Flamequiver", "EleBowRangerFire"),
+        ("Flaming Charlatan", "PhysConvertTemplarFire"),
+        ("Frost Ambusher", "TrapsMinesShadowCold"),
+        ("Frosthand", "ElementalWitchCold"),
+        ("Infamous Bastion", "PhysicalDuelistShieldsNoble"),
+        ("Infamous Blade Ambusher", "TrapsMinesShadowAttackNoble"),
+        ("Infamous Bladebitter", "Crit1HShadowPoisonNoble"),
+        ("Infamous Bladecaster", "Crit1HShadowPhysSpellNoble"),
+        ("Infamous Bloodletter", "PhysicalDuelistBleedNoble"),
+        ("Infamous Cardinal", "AurasMinionsTemplarStaffNoble"),
+        (
+            "Infamous Combatant",
+            "MeleeAOEStrikeDuelistRangeStrikesNoble",
+        ),
+        ("Infamous Cruel Mistress", "ChaosMinionWitchChaosHitNoble"),
+        ("Infamous Earthshaker", "MeleeAOEMarauderPhysSlamNoble"),
+        ("Infamous Eruptor", "MeleeAOEMarauderFireSlamNoble"),
+        (
+            "Infamous Fallen Reverend",
+            "AurasMinionsTemplarSpectresNoble",
+        ),
+        ("Infamous Flamequiver", "EleBowRangerFireNoble"),
+        ("Infamous Frosthand", "ElementalWitchColdNoble"),
+        ("Infamous Kineticist", "MiscScionWandAttacksNoble"),
+        ("Infamous Manyshot", "EleBowRangerClonesNoble"),
+        ("Infamous Mysterious Diver", "DivingDuelistNoble"),
+        ("Infamous Reanimator", "ChaosMinionWitchInstabilityNoble"),
+        ("Infamous Ripper", "MeleeAOEMarauderNonSlamNoble"),
+        ("Infamous Sanguimancer", "MiscScionPhysDotNoble"),
+        ("Infamous Shock Ambusher", "TrapsMinesShadowLightningNoble"),
+        ("Infamous Sniper", "NonEleBowRangerPhysNoble"),
+        ("Infamous Stormhand", "ElementalWitchLightningNoble"),
+        (
+            "Infamous Storming Zealot",
+            "PhysConvertTemplarLightningNoble",
+        ),
+        ("Infamous Striker", "MeleeStrikesMaraduerPhysNoble"),
+        ("Infamous Swiftblade", "MeleeAOEStrikeDuelistCycloneNoble"),
+        ("Infamous Toxicologist", "NonEleBowRangerChaosNoble"),
+        ("Infamous Warpriest", "AurasMinionsTemplarSmiteNoble"),
+        (
+            "Infamous Warpriest of the Ruckus",
+            "AurasMinionsTemplarSmiteRuckusNoble",
+        ),
+        ("Infamous Withertouch", "ChaosMinionWitchDotNoble"),
+        ("Kineticist", "MiscScionWandAttacks"),
+        ("Manyshot", "EleBowRangerClones"),
+        ("Mysterious Diver", "DivingDuelist"),
+        ("Reanimator", "ChaosMinionWitchInstability"),
+        ("Ripper", "MeleeAOEMarauderNonSlam"),
+        ("Sanguimancer", "MiscScionPhysDot"),
+        ("Shattersword", "PhysicalDuelistSteel"),
+        ("Shock Ambusher", "TrapsMinesShadowLightning"),
+        ("Smoulderstrike", "MeleeStrikesMarauderFire"),
+        ("Sniper", "NonEleBowRangerPhys"),
+        ("Stormhand", "ElementalWitchLightning"),
+        ("Storming Zealot", "PhysConvertTemplarLightning"),
+        ("Striker", "MeleeStrikesMaraduerPhys"),
+        ("Swiftblade", "MeleeAOEStrikeDuelistCyclone"),
+        ("Thunderquiver", "EleBowRangerLightning"),
+        ("Toxicologist", "NonEleBowRangerChaos"),
+        ("Warpriest", "AurasMinionsTemplarSmite"),
+        ("Winter Deacon", "PhysConvertTemplarCold"),
+        ("Withertouch", "ChaosMinionWitchDot"),
+    ];
+
+    #[test]
+    fn every_330_warrant_type_is_mapped_and_no_other_id_is() {
+        let known: std::collections::HashSet<&str> =
+            WARRANT_TYPES_330.iter().map(|(_, id)| *id).collect();
+        for (label, id) in WARRANT_TYPES_330 {
+            let infamous = label.starts_with("Infamous ");
+            let mut mercenary = Mercenary {
+                class_name: (*label).to_string(),
+                infamous,
+                ..Default::default()
+            };
+            assert_eq!(warrant_trade_type(&mercenary).unwrap(), *id, "{label}");
+            // The other rarity must map to a listed id or to nothing at all.
+            mercenary.infamous = !infamous;
+            if let Ok(other) = warrant_trade_type(&mercenary) {
+                assert!(known.contains(other), "{label} maps to unlisted {other}");
+            }
+        }
+    }
+
+    #[test]
+    fn every_330_skill_and_attainable_support_tier_has_one_official_trade_id() {
         let mut skill_count = 0;
         for skill in catalog_skill_names() {
-            skill_trade_id(skill).unwrap_or_else(|error| panic!("{skill}: {error}"));
+            skill_trade_id(skill, "").unwrap_or_else(|error| panic!("{skill}: {error}"));
             skill_count += 1;
         }
-        assert_eq!(skill_count, 267);
+        assert_eq!(skill_count, 272);
 
         let support_tiers = catalog_skill_support_tiers();
         for (skill, canonical, tier) in &support_tiers {
             support_trade_id(canonical, SupportTier::from_u8(*tier), skill)
                 .unwrap_or_else(|error| panic!("{canonical} T{tier} on {skill}: {error}"));
         }
-        // 4,028 before the PoEDB placeholder rows (Steelskin Ally, [DNT] Unused) were scrubbed.
-        assert_eq!(support_tiers.len(), 4_011, "attainable pair census");
+        // 3.30 catalog: Steelskin Ally is a real skill again; [DNT] Unused rows stay scrubbed.
+        assert_eq!(support_tiers.len(), 4_068, "attainable pair census");
     }
 }

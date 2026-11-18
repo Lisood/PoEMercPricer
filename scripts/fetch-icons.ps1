@@ -1,12 +1,26 @@
+#Requires -Version 7
 param(
-  [switch]$RefreshCatalog
+  [switch]$RefreshCatalog,
+  [string]$Patch = '3.30.0',
+  [string]$League = 'Covens',
+  [string]$Out = 'assets/catalog-3.30.json',
+  # Catalog of the previous patch: entries it has that PoEDB dropped are kept
+  # when the trade site still knows the skill (stat) or the build (warrant type).
+  # Empty (the default) keeps nothing over.
+  [string]$Previous,
+  [int]$MinLevel = 83,
+  # Reuse `listings` by build name from an earlier catalog instead of searching again.
+  [string]$ListingsFrom
 )
 
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'trade-http.ps1')
 $root = Split-Path -Parent $PSScriptRoot
 $skillDir = Join-Path $root 'assets\icons\skills'
 $supportDir = Join-Path $root 'assets\icons\supports'
-$catalogPath = Join-Path $root 'assets\catalog-3.29.json'
+$catalogPath = if ([IO.Path]::IsPathRooted($Out)) { $Out } else { Join-Path $root $Out }
+$patchShort = ($Patch -split '\.')[0..1] -join '.'
+$tradeStatsPath = Join-Path $root "assets\trade-stats-$patchShort.json"
 $headers = @{
   Referer = 'https://poedb.tw/'
   'User-Agent' = 'PoEMercPricer/0.1.0 (+https://github.com/Lisood/PoEMercPricer)'
@@ -51,7 +65,7 @@ function Save-Icon([string]$Url, [string]$Path) {
 }
 
 $mercHtml = Get-Page 'https://poedb.tw/us/Mercenaries'
-$skillPattern = '<img\s+loading="lazy"\s+src="(?<url>https://cdn\.poedb\.tw/image/Art/2DArt/SkillIcons/[^"]+)"\s+alt="[^"]*"\s+class="size32 MercenarySkill(?:Primary|Secondary|Utility)"\s*/></span>\s*<span[^>]*>(?<name>.*?)</span>'
+$skillPattern = '<img\s+loading="lazy"\s+(?:decoding="async"\s+)?src="(?<url>https://cdn\.poedb\.tw/image/Art/2DArt/(?:Skill|Buff)Icons/[^"]+)"\s+alt="[^"]*"\s+class="size32 MercenarySkill(?:Primary|Secondary|Utility)"\s*/></span>\s*<span[^>]*>(?<name>.*?)</span>'
 $skillsByName = [ordered]@{}
 foreach ($match in [regex]::Matches($mercHtml, $skillPattern, [Text.RegularExpressions.RegexOptions]::Singleline)) {
   $rawName = $match.Groups['name'].Value -replace '<[^>]+>', ''
@@ -64,32 +78,57 @@ foreach ($match in [regex]::Matches($mercHtml, $skillPattern, [Text.RegularExpre
   $skillsByName[$name] = [ordered]@{ name = $name; icon = $file; source = $url }
 }
 
-# The build list comes from xddbsns.com (a third-party mercenary market
-# tracker), not PoEDB: it is the only source that lists all 36 builds with the
-# families this project prices. PoEDB is still the source of every icon.
-$index = Get-Page 'https://xddbsns.com/data/allflame/mercenary-builder.json' | ConvertFrom-Json
-$builds = @($index.builds | ForEach-Object {
-  [ordered]@{ name = $_.build; family = ConvertTo-Key $_.build; listings = $_.listings }
-})
+# Builds come from the PoEDB Mercenaries index (an Infamous-only build such as
+# Warpriest of the Ruckus is listed under its "Infamous_" page). `listings` is
+# the official trade search total (securable, ilvl >= $MinLevel) summed over the
+# build's ordinary and Infamous warrant types; the Infamous-only build counts
+# just its own type.
+$buildLinks = [ordered]@{}
+foreach ($m in [regex]::Matches($mercHtml, '<a href="(?<page>[A-Za-z_0-9]+)"><img loading="lazy" decoding="async" src="[^"]*InGame/MercenariesofTrarthus/[^"]*"[^>]*/></a></div><div class="flex-grow-1[^"]*">.{0,200}?<a [^>]*>(?<name>[^<]+)</a>', [Text.RegularExpressions.RegexOptions]::Singleline)) {
+  $name = [Net.WebUtility]::HtmlDecode($m.Groups['name'].Value.Trim()) -replace '^Infamous ', ''
+  $page = $m.Groups['page'].Value
+  # The ordinary page wins over an Infamous_ one.
+  if (-not $buildLinks.Contains($name) -or -not $page.StartsWith('Infamous_')) { $buildLinks[$name] = $page }
+}
+if ($buildLinks.Count -eq 0) { throw 'no builds found on the PoEDB Mercenaries page' }
 
-$supportPattern = '<img\s+loading="lazy"\s+src="(?<url>https://cdn\.poedb\.tw/image/Art/2DItems/Gems/Support/[^"]+)"[^>]*/></div><div class="flex-grow-1 ms-2">(?<name>[^<]+)\s*<span>(?<tier>I{1,3})</span>'
-$supportsByIdentity = [ordered]@{}
-foreach ($build in $builds) {
-  Start-Sleep -Milliseconds 250
-  $pageName = $build.name -replace ' ', '_'
-  try {
-    $html = Get-Page "https://poedb.tw/us/$pageName"
-  } catch {
-    # PoEDB exposes this one current build under its infamous-prefixed slug.
-    # Keep the public build name/family, but fetch the real support table so
-    # regeneration does not silently omit one of the 36 pools.
-    if ($build.name -eq 'Warpriest of the Ruckus') {
-      $html = Get-Page 'https://poedb.tw/us/Infamous_Warpriest_of_the_Ruckus'
-    } else {
-      Write-Warning "No PoEDB support page for $($build.name); continuing"
-      continue
-    }
+$itemsResp = Invoke-TradeRequest GET "$TradeApi/data/items" $null 'trade-data-request-limit'
+$warrantTypes = @{}   # "Mercenary Warrant (Name)" -> type id
+foreach ($group in ($itemsResp.Content | ConvertFrom-Json).result) {
+  foreach ($e in $group.entries) { if ($e.PSObject.Properties['disc'] -and $e.disc -eq 'mercenary_warrant' -and $e.text) { $warrantTypes[$e.text] = $e.type } }
+}
+function Get-TypeTotal([string]$typeId) {
+  $q = [ordered]@{ query = [ordered]@{ status = @{ option = 'securable' }; type = [ordered]@{ option = $typeId; discriminator = 'mercenary_warrant' }
+        stats = @(); filters = @{ misc_filters = @{ filters = @{ ilvl = @{ min = $MinLevel } } } } }; sort = @{ price = 'desc' } }
+  $r = Search-Trade $League $q
+  if ($r.Status -ne 200) { throw "trade search for $typeId returned HTTP $($r.Status)" }
+  [int]($r.Content | ConvertFrom-Json).total
+}
+function Get-BuildListings([string]$name) {
+  $total = 0; $found = $false
+  foreach ($text in @("Mercenary Warrant ($name)", "Mercenary Warrant (Infamous $name)")) {
+    if ($warrantTypes.ContainsKey($text)) { $found = $true; $total += Get-TypeTotal $warrantTypes[$text] }
   }
+  if (-not $found) { Write-Warning "no trade warrant type for build '$name'"; return $null }
+  $total
+}
+
+$supportPattern = '<img\s+loading="lazy"\s+(?:decoding="async"\s+)?src="(?<url>https://cdn\.poedb\.tw/image/Art/2DItems/Gems/Support/[^"]+)"[^>]*/></div><div class="flex-grow-1 ms-2">(?<name>[^<]+)\s*<span>(?<tier>I{1,3})</span>'
+$supportsByIdentity = [ordered]@{}
+$builds = [Collections.Generic.List[object]]::new()
+foreach ($buildName in $buildLinks.Keys) {
+  Start-Sleep -Milliseconds 250
+  try {
+    $html = Get-Page "https://poedb.tw/us/$($buildLinks[$buildName])"
+  } catch {
+    Write-Warning "No PoEDB support page for $buildName; continuing"
+    continue
+  }
+  # Placeholder pages (Bladereach: "This really shouldn't be here...") have no
+  # support table and no trade warrant type; they are not builds.
+  $hasType = $warrantTypes.ContainsKey("Mercenary Warrant ($buildName)") -or $warrantTypes.ContainsKey("Mercenary Warrant (Infamous $buildName)")
+  if (-not $hasType -and -not [regex]::IsMatch($html, $supportPattern)) { Write-Warning "skipping placeholder build $buildName"; continue }
+  $builds.Add([ordered]@{ name = $buildName; family = ConvertTo-Key $buildName; listings = 0 })
   foreach ($match in [regex]::Matches($html, $supportPattern, [Text.RegularExpressions.RegexOptions]::Singleline)) {
     $name = [Net.WebUtility]::HtmlDecode($match.Groups['name'].Value.Trim())
     $url = $match.Groups['url'].Value
@@ -115,6 +154,7 @@ foreach ($build in $builds) {
     $skillMatch = [regex]::Match($section, '<span class="lc">(?<name>[^<]+)</span>')
     if (-not $skillMatch.Success) { continue }
     $skillName = [Net.WebUtility]::HtmlDecode($skillMatch.Groups['name'].Value.Trim())
+    if ($skillName.StartsWith('[DNT]')) { continue }
     foreach ($match in [regex]::Matches($section, $supportPattern, [Text.RegularExpressions.RegexOptions]::Singleline)) {
       $supportName = [Net.WebUtility]::HtmlDecode($match.Groups['name'].Value.Trim())
       $family = ConvertTo-SupportFamily $supportName
@@ -142,11 +182,33 @@ foreach ($support in $supportsByIdentity.Values) {
   Save-Icon $support.source (Join-Path $supportDir $support.icon)
 }
 
+if ($skillsByName.Count -eq 0 -or $supportsByIdentity.Count -eq 0) { throw 'PoEDB scrape found no skills or no supports; its markup probably changed' }
+# Previous-patch entries PoEDB dropped stay while the trade site still has them.
+$kept = [Collections.Generic.List[string]]::new()
+$previousPath = if (-not $Previous) { $null } elseif ([IO.Path]::IsPathRooted($Previous)) { $Previous } else { Join-Path $root $Previous }
+if ($previousPath -and (Test-Path -LiteralPath $previousPath)) {
+  $prev = Get-Content -Raw -LiteralPath $previousPath | ConvertFrom-Json
+  $tradeSkills = @{}
+  foreach ($e in (Get-Content -Raw -LiteralPath $tradeStatsPath | ConvertFrom-Json).entries) { if ($e.id -like 'mercenary.skill_*') { $tradeSkills[$e.text] = $true } }
+  foreach ($s in $prev.skills) {
+    if (-not $skillsByName.Contains($s.name) -and $tradeSkills.ContainsKey($s.name)) { $skillsByName[$s.name] = [ordered]@{ name = $s.name; icon = $s.icon }; $kept.Add("skill $($s.name)") }
+  }
+  foreach ($b in $prev.builds) {
+    if (-not @($builds | Where-Object { $_.name -eq $b.name }) -and ($warrantTypes.ContainsKey("Mercenary Warrant ($($b.name))") -or $warrantTypes.ContainsKey("Mercenary Warrant (Infamous $($b.name))"))) {
+      $builds.Add([ordered]@{ name = $b.name; family = $b.family; listings = 0 }); $kept.Add("build $($b.name)")
+    }
+  }
+}
+$reuse = @{}
+if ($ListingsFrom) { foreach ($b in (Get-Content -Raw -LiteralPath $(if ([IO.Path]::IsPathRooted($ListingsFrom)) { $ListingsFrom } else { Join-Path $root $ListingsFrom }) | ConvertFrom-Json).builds) { $reuse[$b.name] = [int]$b.listings } }
+foreach ($b in $builds) { $b.listings = if ($reuse.ContainsKey($b.name)) { $reuse[$b.name] } else { [int](Get-BuildListings $b.name) } }
+$builds = @($builds | Sort-Object { -$_.listings }, { $_.name })
+
 $catalog = [ordered]@{
-  patch = '3.29.3'
-  league = 'Allflame'
-  generated_at = $index.generated_at
-  market_source = 'https://xddbsns.com/data/allflame/mercenary-builder.json'
+  patch = $Patch
+  league = $League
+  generated_at = [datetime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  market_source = "https://www.pathofexile.com/api/trade/search (status securable, ilvl >= $MinLevel, per warrant type total)"
   game_data_source = 'https://poedb.tw/us/Mercenaries'
   builds = $builds
   skills = @($skillsByName.Values | ForEach-Object {
@@ -167,10 +229,11 @@ $catalog = [ordered]@{
   })
 }
 $catalogJson = $catalog | ConvertTo-Json -Depth 8
-# Windows PowerShell's `-Encoding utf8` writes a BOM, which serde_json rejects
-# at byte zero when this file is embedded by Rust. Emit portable BOM-less UTF-8
-# under both Windows PowerShell 5.1 and PowerShell 7.
+# serde_json rejects a BOM at byte zero when Rust embeds this file, so write
+# BOM-less UTF-8 explicitly.
 [IO.File]::WriteAllText($catalogPath, $catalogJson, [Text.UTF8Encoding]::new($false))
 
-Write-Output "3.29 catalog: $($builds.Count) builds, $($skillsByName.Count) skills, $($supportsByIdentity.Count) support arts"
+Write-Output "$Patch catalog: $($builds.Count) builds, $($skillsByName.Count) skills, $($supportsByIdentity.Count) support arts"
 Write-Output "Catalog: $catalogPath"
+if ($kept.Count) { Write-Output "Kept from $Previous (gone from PoEDB, still on trade): $($kept -join '; ')" }
+Write-Output "Trade calls: $($script:Counts | ConvertTo-Json -Compress)"

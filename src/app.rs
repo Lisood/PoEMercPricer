@@ -847,7 +847,11 @@ impl eframe::App for PricerApp {
                     ui.label(poe_text("PoEMercPricer", 18.0, p.gold));
                     if show_meta {
                         ui.label(
-                            RichText::new(format!("3.29 · v{}", update::CURRENT))
+                            RichText::new(format!(
+                                "{} · v{}",
+                                poemercpricer::catalog::catalog_patch_short(),
+                                update::CURRENT
+                            ))
                                 .color(p.subtle)
                                 .small(),
                         );
@@ -2481,7 +2485,7 @@ fn modifiers_prefix(m: egui::Modifiers) -> String {
 }
 
 /// Breathing room above a section title. 4, not the mock's 7: only at 4 does
-/// the whole Ledger fit a 780 px window without a scrollbar clipping the
+/// the whole settings panel fit a 780 px window without a scrollbar clipping the
 /// attribution line.
 const SETTINGS_TITLE_PAD_TOP: f32 = 4.0;
 
@@ -3369,10 +3373,10 @@ mod tests {
     #[test]
     fn league_options_orders_snapshot_league_first() {
         assert_eq!(
-            league_options("Allflame"),
+            league_options("Covens"),
             vec![
-                "Allflame".to_string(),
-                "Hardcore Allflame".to_string(),
+                "Covens".to_string(),
+                "Hardcore Covens".to_string(),
                 "Standard".to_string(),
                 "Hardcore".to_string(),
             ]
@@ -3380,8 +3384,18 @@ mod tests {
     }
 
     #[test]
+    fn default_league_is_an_option_of_the_bundled_snapshot() {
+        let (_, league, _) = poemercpricer::trade::bundled_trade_stat_provenance();
+        assert_eq!(league, poemercpricer::pricing::snapshot().league);
+        let options = league_options(league);
+        assert_eq!(options[..2], ["Covens", "Hardcore Covens"]);
+        let default = poemercpricer::config::AppConfig::default().trade_league;
+        assert!(league_is_listed(&options, &default));
+    }
+
+    #[test]
     fn league_is_listed_matches_standard_but_not_ruthless() {
-        let options = league_options("Allflame");
+        let options = league_options("Covens");
         assert!(league_is_listed(&options, "Standard"));
         assert!(!league_is_listed(&options, "Ruthless"));
     }

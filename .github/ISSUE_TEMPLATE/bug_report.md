@@ -19,7 +19,7 @@ labels: bug
 ## Environment
 
 - Windows version:
-- PoE version (e.g. 3.29.x):
+- PoE version (e.g. 3.30.x):
 - Display mode (Windowed Fullscreen, Windowed, Fullscreen):
 - PoEMercPricer version (Settings > Updates, or `poemercpricer --version`):
 - Does Path of Exile run as Administrator? Does PoEMercPricer?

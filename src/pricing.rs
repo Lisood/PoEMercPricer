@@ -1,5 +1,5 @@
 //! Market ask estimate from the bundled trade-site snapshot
-//! (`assets/warrant-prices-3.29.json`).
+//! (`assets/warrant-prices-3.30.json`).
 //!
 //! The snapshot holds, per family, the cheapest instant-buyout asks for a few
 //! support "packages": `base` (any warrant of that family), `money` (has the
@@ -14,7 +14,7 @@ use serde::Deserialize;
 
 use crate::models::{Mercenary, SupportTier};
 
-const SNAPSHOT_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/warrant-prices-3.29.json"));
+const SNAPSHOT_JSON: &str = include_str!(concat!(env!("OUT_DIR"), "/warrant-prices-3.30.json"));
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Snapshot {
@@ -77,7 +77,7 @@ pub struct Gate {
 pub fn snapshot() -> &'static Snapshot {
     static SNAPSHOT: OnceLock<Snapshot> = OnceLock::new();
     SNAPSHOT.get_or_init(|| {
-        serde_json::from_str(SNAPSHOT_JSON).expect("bundled warrant-prices-3.29.json parses")
+        serde_json::from_str(SNAPSHOT_JSON).expect("bundled warrant-prices-3.30.json parses")
     })
 }
 
@@ -129,6 +129,13 @@ pub fn satisfies(merc: &Mercenary, row: &Row) -> bool {
         })
 }
 
+/// A row with real asks. An empty or failed fetch (no sample, zero or
+/// non-finite prices) falls through to the next package instead of showing 0c.
+fn priced(row: &Row) -> bool {
+    let positive = |chaos: f32| chaos.is_finite() && chaos > 0.0;
+    row.listings > 0 && row.sampled > 0 && positive(row.lowest_chaos) && positive(row.median_chaos)
+}
+
 pub fn estimate(merc: &Mercenary) -> Option<MarketEstimate> {
     estimate_for(merc, false)
 }
@@ -140,7 +147,7 @@ pub fn estimate_for(merc: &Mercenary, bricked: bool) -> Option<MarketEstimate> {
     let row = snap
         .rows
         .iter()
-        .filter(|row| row.listings > 0 && row.family.eq_ignore_ascii_case(&merc.family))
+        .filter(|row| priced(row) && row.family.eq_ignore_ascii_case(&merc.family))
         .filter(|row| !bricked || row.package == "base")
         .filter(|row| {
             row.infamous
@@ -243,7 +250,7 @@ impl MarketEstimate {
         }
     }
 
-    /// "12 listed · typical ask 9.0 div · median listing age 4 d · Allflame snapshot 2026-09-02"
+    /// "12 listed · typical ask 9.0 div · median listing age 4 d · Covens snapshot 2026-09-02"
     pub fn detail_line(&self) -> String {
         let league = if self.league.is_empty() {
             "trade".to_string()
@@ -310,6 +317,79 @@ pub fn summary_line(estimate: Option<&MarketEstimate>) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::models::Skill;
+
+    /// A mercenary that satisfies exactly what `row` requires.
+    fn satisfying(row: &Row) -> Mercenary {
+        let mut merc = Mercenary {
+            family: row.family.clone(),
+            infamous: row.infamous.unwrap_or(false),
+            ..Default::default()
+        };
+        if let Some(name) = row.money_skill.as_deref() {
+            let gates = row
+                .gates
+                .iter()
+                .map(|gate| (gate.canonical.clone(), SupportTier::from_u8(gate.tier)))
+                .collect();
+            merc.skills
+                .push(Skill::new(name, name).with_supports(gates));
+        }
+        merc
+    }
+
+    #[test]
+    fn empty_rows_fall_back_to_a_priced_package_or_to_no_range() {
+        let empty: Vec<_> = snapshot().rows.iter().filter(|r| r.listings == 0).collect();
+        assert!(!empty.is_empty(), "the snapshot has no empty row to test");
+        for row in empty {
+            let merc = satisfying(row);
+            assert!(satisfies(&merc, row), "{} {}", row.family, row.package);
+            for bricked in [false, true] {
+                if let Some(market) = estimate_for(&merc, bricked) {
+                    assert!(market.listings > 0, "{} {}", row.family, row.package);
+                    assert!(market.low_chaos > 0.0 && market.high_chaos >= market.low_chaos);
+                    assert!(!market.range_label().contains(" 0c"));
+                }
+            }
+        }
+        // A failed fetch can leave listings > 0 with no sample or no price.
+        let row = |json: &str| serde_json::from_str::<Row>(json).unwrap();
+        let ok = r#"{"family":"x","package":"base","listings":5,"sampled":5,"lowest_chaos":10,"median_chaos":20}"#;
+        assert!(priced(&row(ok)));
+        for broken in [
+            ok.replace(r#""sampled":5"#, r#""sampled":0"#),
+            ok.replace(r#""lowest_chaos":10"#, r#""lowest_chaos":0"#),
+            ok.replace(r#""median_chaos":20"#, r#""median_chaos":-1"#),
+            ok.replace(r#""listings":5"#, r#""listings":0"#),
+        ] {
+            assert!(!priced(&row(&broken)), "{broken}");
+        }
+        let mut nan = row(ok);
+        nan.median_chaos = f32::NAN;
+        assert!(!priced(&nan));
+        assert!(snapshot()
+            .rows
+            .iter()
+            .filter(|r| r.listings > 0)
+            .all(priced));
+
+        // Families with no listing at all show "no listings data", never "0c".
+        let diver = Mercenary {
+            family: "mysterious_diver".into(),
+            ..Default::default()
+        };
+        assert!(snapshot()
+            .rows
+            .iter()
+            .filter(|r| r.family == "mysterious_diver")
+            .all(|r| r.listings == 0));
+        assert_eq!(estimate(&diver), None);
+        assert_eq!(
+            summary_line(None),
+            "Market: no listings data for this build"
+        );
+    }
 
     #[test]
     fn currency_switches_units_at_half_a_divine() {
@@ -333,7 +413,7 @@ mod tests {
             median_age_days: 4.0,
             fresh_share: 0.5,
             chaos_per_divine: 200.0,
-            league: "Allflame".into(),
+            league: "Covens".into(),
             snapshot_date: "2026-09-02".into(),
             placeholder: false,
             min_level: 0,
@@ -364,7 +444,7 @@ mod tests {
         let mut e = sample(900.0, 1800.0);
         assert_eq!(
             e.detail_line(),
-            "12 listed · typical ask 6.8 div · median listing age 4 d · Allflame snapshot 2026-09-02"
+            "12 listed · typical ask 6.8 div · median listing age 4 d · Covens snapshot 2026-09-02"
         );
         assert_eq!(
             e.summary_line(),

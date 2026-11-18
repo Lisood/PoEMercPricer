@@ -1,7 +1,7 @@
 //! End-to-end acceptance checks for support-gem recognition.
 //!
 //! Detecting the gold-framed cells is not enough: every detected support must
-//! have a real 3.29 catalog identity and tier.  Finding all 16 cells on this
+//! have a real 3.30 catalog identity and tier.  Finding all 16 cells on this
 //! fixture while silently returning eight of them as `unknown` is a failure.
 
 #[cfg(windows)]
@@ -20,7 +20,7 @@ mod windows {
 
     fn catalog_supports() -> (HashSet<String>, HashMap<String, String>) {
         let text =
-            std::fs::read_to_string("assets/catalog-3.29.json").expect("read bundled 3.29 catalog");
+            std::fs::read_to_string("assets/catalog-3.30.json").expect("read bundled 3.30 catalog");
         let catalog: serde_json::Value = serde_json::from_str(&text).expect("valid catalog JSON");
         let entries = catalog["supports"].as_array().expect("supports array");
         let ids = entries
@@ -80,7 +80,14 @@ mod windows {
             "level-83 mercenary skills should be level 26"
         );
         let result = score_mercenary(&merc, false);
-        assert!(result.bricks.iter().any(|b| b == "Icicle Rain"));
+        // docs/market-3.30.md "VIS + Icicle Rain": no brick any more; without Vaal Ice Shot
+        // (5c) only Ice Shot 18 + coverage 6 + damage 4 + Mirror CDR 2.4 + Grace 2 count.
+        assert!(result.bricks.is_empty(), "{:?}", result.bricks);
+        assert!((result.score - 32.4).abs() < 0.01, "{}", result.score);
+        assert!(result
+            .highlights
+            .iter()
+            .any(|h| h == "Icicle Rain: no Vaal Ice Shot + Mirror Arrow jackpot package"));
         assert!(!result.jackpot);
 
         let (catalog_ids, catalog_names) = catalog_supports();

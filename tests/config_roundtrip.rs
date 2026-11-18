@@ -12,7 +12,7 @@ fn default_config_serializes() {
     assert_eq!(back.hotkey, cfg.hotkey);
     assert!(back.scan_clipboard_first);
     assert!(back.always_on_top);
-    assert_eq!(back.trade_league, "Allflame");
+    assert_eq!(back.trade_league, "Covens");
     assert_eq!(back.theme, "standard");
 }
 
@@ -20,7 +20,7 @@ fn default_config_serializes() {
 fn older_config_without_trade_league_uses_the_current_default() {
     let cfg: AppConfig = serde_json::from_str(r#"{"hotkey":"Ctrl+M"}"#).unwrap();
     assert_eq!(cfg.hotkey, "Ctrl+M");
-    assert_eq!(cfg.trade_league, "Allflame");
+    assert_eq!(cfg.trade_league, "Covens");
     assert_eq!(cfg.theme, "standard");
 }
 
@@ -93,4 +93,44 @@ fn kineticist_fixture_is_jackpot() {
     assert_eq!(merc.family, "kineticist");
     assert!(result.jackpot);
     assert!(result.score >= 84.0);
+}
+
+#[test]
+fn retired_allflame_league_is_migrated_to_covens_and_saved() {
+    let dir = std::env::temp_dir().join(format!("pmp-config-league-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let path = dir.join("config.json");
+    for (saved, expected) in [
+        ("Allflame", "Covens"),
+        ("Hardcore Allflame", "Hardcore Covens"),
+        ("Ruthless Allflame", "Ruthless Covens"),
+        ("HC Ruthless Allflame", "HC Ruthless Covens"),
+        ("hardcore ALLFLAME", "hardcore Covens"),
+        ("Standard", "Standard"),
+        ("My Private League (PL123)", "My Private League (PL123)"),
+        ("Allflamers (PL123)", "Allflamers (PL123)"),
+        ("Hardcore-Allflame (PL9)", "Hardcore-Covens (PL9)"),
+    ] {
+        let original = format!(r#"{{"hotkey":"Ctrl+M","trade_league":"{saved}"}}"#);
+        std::fs::write(&path, &original).unwrap();
+
+        let (cfg, error) = AppConfig::load_from(&path);
+
+        assert_eq!(error, None);
+        assert_eq!(cfg.trade_league, expected);
+        assert_eq!(cfg.hotkey, "Ctrl+M");
+        let on_disk = std::fs::read_to_string(&path).unwrap();
+        if saved == expected {
+            assert_eq!(on_disk, original, "an unaffected file is not rewritten");
+        } else {
+            let back: AppConfig = serde_json::from_str(&on_disk).unwrap();
+            assert_eq!(back.trade_league, expected);
+            assert_eq!(back.hotkey, "Ctrl+M");
+        }
+        assert!(
+            !dir.join("config.json.tmp").exists(),
+            "atomic save left its temp file"
+        );
+    }
+    std::fs::remove_dir_all(&dir).unwrap();
 }

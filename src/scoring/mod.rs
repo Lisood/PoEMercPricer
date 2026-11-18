@@ -11,7 +11,6 @@ pub fn score_mercenary(merc: &Mercenary, assume_projectile_speed: bool) -> Score
         "kineticist" => kineticist::score(merc),
         "manyshot" => manyshot::score(merc),
         "combatant" => combatant::score(merc, assume_projectile_speed),
-        "stormhand" => extra::score_stormhand(merc),
         family => match market::screen_for(family) {
             Some(screen) => market::score(merc, family, screen),
             None => match crate::catalog::family_listings(family) {
@@ -19,16 +18,19 @@ pub fn score_mercenary(merc: &Mercenary, assume_projectile_speed: bool) -> Score
                 None => ScoreResult {
                     family: if family.is_empty() { "other" } else { family }.into(),
                     action: format!(
-                        "{} could not be matched to a 3.29 mercenary family",
+                        "{} could not be matched to a {} mercenary family",
                         if merc.class_name.is_empty() {
                             "This mercenary"
                         } else {
                             &merc.class_name
-                        }
+                        },
+                        crate::catalog::catalog_patch_short()
                     ),
                     notes: vec![
-                        "All 36 catalog families are scored; audited screens: Kineticist, Manyshot, Combatant, Stormhand."
-                            .into(),
+                        format!(
+                            "All {} catalog families are scored; bespoke screens: Kineticist, Manyshot, Combatant.",
+                            crate::catalog::known_families().count()
+                        ),
                     ],
                     ..Default::default()
                 },

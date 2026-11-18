@@ -2,7 +2,7 @@
 name = "poemercpricer"
 version = "0.2.0"
 edition = "2021"
-description = "In-game overlay that screens Path of Exile 3.29 Mercenary Warrants from the clipboard or screen OCR"
+description = "In-game overlay that screens Path of Exile 3.30 Mercenary Warrants from the clipboard or screen OCR"
 license-file = "LICENSE"
 repository = "https://github.com/Lisood/PoEMercPricer"
 readme = "README.md"

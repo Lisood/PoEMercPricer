@@ -85,10 +85,10 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
         },
     ];
     let score = clamp(parts.iter().map(|p| p.points).sum());
-    // The 2026-09-01 Allflame market export validates KBoC + Greater KB +
-    // Return + GMP as a premium gate even before another coverage support is
-    // required. Coverage and damage supports still improve the quality score.
-    // The gate is Greater (T3) Return and GMP; lower tiers score but never jackpot.
+    // 3.30 survey: KBoC::Return T3 + GMP T3 asks a 200d median (n=14+8 mirror,
+    // none in the cheapest band). Greater KB stays in the gate from 3.29: with
+    // and without it the package is n=7 each, too thin to decide.
+    // Lower tiers score but never jackpot.
     let t3 = |id| kboc.is_some_and(|s| s.support_tier(&[id]) == SupportTier::T3);
     let jackpot = merc.has_skill(&["Greater Kinetic Blast"])
         && t3("return")
@@ -124,7 +124,7 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
         breakdown: parts,
         notes: vec![
             "Screening heuristic, not a Divine/Mirror calculator.".into(),
-            "3.29 Allflame listings validate Greater KB + Return, with a major premium for GMP on KBoC."
+            "3.30 trade survey: KBoC is the gate (200d median with it, 3c without); Return + GMP on KBoC is the premium package."
                 .into(),
             "Supports only count when attached to Kinetic Blast of Clustering.".into(),
         ],

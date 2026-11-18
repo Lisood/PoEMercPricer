@@ -15,7 +15,7 @@ PoEMercPricer is a focused Windows utility. The interface is built around one de
 - Wrap every skill and support group. The minimum supported window width is 440 effective pixels, and no result should need horizontal scrolling.
 - Show active-skill levels and support tiers next to their names. When identical artwork leaves several catalog-backed identities, show each viable tier-specific name as an inline selection button; applying a choice has to immediately recompute the verdict and copied summary. Long candidates wrap instead of getting clipped.
 - Keep advanced diagnostics out of the normal scan path.
-- Use existing 3.29 skill/support art beside readable names and tiers. Icons load lazily, cache once, and never replace text.
+- Use existing 3.30 skill/support art beside readable names and tiers. Icons load lazily, cache once, and never replace text.
 - Use plain labels such as `Skip`, `Price-check`, and `Not scored`. Avoid unexplained abbreviations, web-dashboard styling, gradients, glass effects, and decorative animation.
 - Treat the game-derived serif as display type for names, verdicts, and section titles only. Operational guidance, actions, and helper text use the proportional UI face without decorative italics.
 - Reserve coloured outlines and badges for semantic states such as `BRICK`. Don't turn ordinary metadata, counts, or navigation hints into cards or pills. Bronze double keylines are kept only where they echo the in-game mercenary panel hierarchy.

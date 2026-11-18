@@ -42,6 +42,18 @@ jobs:
         run: |
           $v = (cargo metadata --format-version 1 --no-deps | ConvertFrom-Json).packages[0].version
           if ("v$v" -ne $env:GITHUB_REF_NAME) { throw "tag $env:GITHUB_REF_NAME does not match Cargo.toml version $v" }
+      # The release page opens with this version's CHANGELOG.md section; gh
+      # appends the generated notes after it. A missing, empty or TODO-bearing (heading or body) section fails
+      # the job before anything is built.
+      - name: Release notes from CHANGELOG.md
+        shell: pwsh
+        run: |
+          $ver = $env:GITHUB_REF_NAME -replace '^v', ''
+          $m = [regex]::Match((Get-Content CHANGELOG.md -Raw), '(?ms)^## \[' + [regex]::Escape($ver) + '\][^\r\n]*\r?\n(.*?)(?=^## \[|\z)')
+          $body = $m.Groups[1].Value.Trim()
+          if (-not $m.Success -or -not $body) { throw "CHANGELOG.md has no non-empty '## [$ver]' section" }
+          if ($m.Value -match 'TODO') { throw "CHANGELOG.md '## [$ver]' heading or body still contains a TODO placeholder" }
+          Set-Content -LiteralPath "$env:RUNNER_TEMP/release-notes.md" -Value $body -Encoding utf8NoBOM
       - run: cargo build --release --locked
       - name: Size budget (docs/performance.md, "Binary size and memory")
         shell: pwsh
@@ -81,7 +93,7 @@ jobs:
         run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe -Setup target/installer/poemercpricer-setup-windows-x64.exe
       # Immutable releases lock the tag and assets at publish, so everything
       # is uploaded to the draft first.
-      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --generate-notes
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --notes-file "$env:RUNNER_TEMP/release-notes.md" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
       - run: gh release edit $env:GITHUB_REF_NAME --draft=false

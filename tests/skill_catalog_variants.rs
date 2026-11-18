@@ -1,4 +1,4 @@
-//! 3.29.3 mercenary active-skill catalog acceptance checks.
+//! 3.30.0 mercenary active-skill catalog acceptance checks.
 //!
 //! Source: https://poedb.tw/us/Mercenaries (the current mercenary build table).
 //! The separate Trarthan-gem reward list also contains Dark Bargain of
@@ -25,8 +25,9 @@ const DISPLAYED_TRARTHUS_SKILLS: [&str; 11] = [
 
 /// Names most likely to occupy two OCR lines or collide with a shorter base
 /// skill.  These cover Trarthan gems, transfigured skills, house-flavoured
-/// skills, traps, and the longest bespoke mercenary skills in the 3.29 table.
-const WRAP_AND_COLLISION_RISKS: [&str; 35] = [
+/// skills, traps, and the longest bespoke mercenary skills in the 3.30 table.
+const WRAP_AND_COLLISION_RISKS: [&str; 36] = [
+    "Abyssal Spray Detonation",
     "Ball Lightning of Orbiting Trap",
     "Ball Lightning of Static",
     "Barrage of Volley Fire",
@@ -66,7 +67,7 @@ const WRAP_AND_COLLISION_RISKS: [&str; 35] = [
 
 fn catalog_skill_names() -> BTreeSet<String> {
     let catalog_text =
-        std::fs::read_to_string("assets/catalog-3.29.json").expect("read bundled 3.29 catalog");
+        std::fs::read_to_string("assets/catalog-3.30.json").expect("read bundled 3.30 catalog");
     let catalog: serde_json::Value =
         serde_json::from_str(&catalog_text).expect("valid catalog JSON");
     catalog["skills"]
@@ -78,7 +79,7 @@ fn catalog_skill_names() -> BTreeSet<String> {
 }
 
 #[test]
-fn current_329_mercenary_loadouts_have_the_complete_trarthus_census() {
+fn current_330_mercenary_loadouts_have_the_complete_trarthus_census() {
     let names = catalog_skill_names();
     let actual: BTreeSet<_> = names
         .iter()
@@ -89,7 +90,7 @@ fn current_329_mercenary_loadouts_have_the_complete_trarthus_census() {
 
     assert_eq!(
         actual, expected,
-        "bundled catalog drifted from the 3.29 mercenary loadout census"
+        "bundled catalog drifted from the 3.30 mercenary loadout census"
     );
 }
 
@@ -117,7 +118,7 @@ fn every_trarthus_and_long_variant_is_canonical_and_has_local_art() {
 
 #[test]
 fn similarly_named_base_skills_remain_distinct_from_their_variants() {
-    const PAIRS: [(&str, &str); 8] = [
+    const PAIRS: [(&str, &str); 10] = [
         ("Bladefall", "Bladefall of Trarthus"),
         ("Fireball", "Fireball of Impact"),
         ("Ice Nova", "Ice Nova of Projection"),
@@ -126,6 +127,8 @@ fn similarly_named_base_skills_remain_distinct_from_their_variants() {
         ("Wave of Conviction", "Wave of Conviction of Trarthus"),
         ("Barrage", "Barrage of Volley Fire"),
         ("Lightning Warp", "Lightning Warp Trap"),
+        ("Smite", "Vaal Smite"),
+        ("Abyssal Spray", "Abyssal Spray Detonation"),
     ];
 
     for (base, variant) in PAIRS {
@@ -145,7 +148,7 @@ fn house_names_are_not_invented_as_skill_suffixes() {
             names
                 .iter()
                 .all(|name| !name.ends_with(&format!(" of {house}"))),
-            "3.29 mercenary skills use bespoke house abilities, not an 'of {house}' suffix"
+            "3.30 mercenary skills use bespoke house abilities, not an 'of {house}' suffix"
         );
     }
 }

@@ -161,7 +161,7 @@ fn scan_sanguimancer_grynelle_reads_every_visible_support_cell() {
         query["query"]["filters"]["misc_filters"]["filters"]["ilvl"]["min"],
         83
     );
-    let search = poemercpricer::trade::trade_search(&merc, "Allflame", false).unwrap();
+    let search = poemercpricer::trade::trade_search(&merc, "Covens", false).unwrap();
     assert_eq!(search.selected_skill, "Storm Call of Trarthus");
     assert_eq!(search.included_skills, 1);
     assert_eq!(search.available_skills, 6);
@@ -169,7 +169,7 @@ fn scan_sanguimancer_grynelle_reads_every_visible_support_cell() {
     assert_eq!(search.available_filters, 22);
     assert!(search
         .url
-        .starts_with("https://www.pathofexile.com/trade/search/Allflame?q="));
+        .starts_with("https://www.pathofexile.com/trade/search/Covens?q="));
 }
 
 #[test]

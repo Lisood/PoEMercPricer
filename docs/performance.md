@@ -40,7 +40,7 @@ with the final package. Full installation and release details are in
 - Choosing between those two crops costs no extra work: `vision::is_fullscreen_capture` classifies an image as a full-screen game capture from its dimensions alone, when it is at least 1024 px wide and at least 1.2 times as wide as it is tall (`width * 5 >= height * 6`). That admits 4:3 (1024x768, 1152x864) and 5:4 (1280x1024) monitors; a tighter aspect floor sent them down the cropped-panel path, which OCR'd the whole screen including the world HUD. Cropped panel screenshots and clipboard bitmaps are portrait or tiny, so they stay on the cropped path.
 - Template memory is bounded too. All 152 support identities collapse to 65 unique pixel arts, cached once at 32x32 plus 16x16, roughly 0.32 MiB of raw pixels after duplicates are collapsed.
 - Generic art never produces a missing or speculative result. Silver/gold identities keep their complete PoEDB skill-and-tier compatibility metadata. Unique compatible candidates get an exact name; physically indistinguishable survivors get an explicit candidate-set label and tier instead of `gem` or a guessed name.
-- Eligibility data is compact. The 1,653 support compatibility records are stored once as `Skill|tiers` strings inside the 206 KiB catalog (70 KiB after the build-time minify), not as a second index beside a skill-only list. The visible tier is checked inside the existing catalog pass, with no extra capture, OCR, template, or resident service.
+- Eligibility data is compact. The 1,676 support compatibility records are stored once as `Skill|tiers` strings inside the 105 KiB catalog (71 KiB after the build-time minify), not as a second index beside a skill-only list. The visible tier is checked inside the existing catalog pass, with no extra capture, OCR, template, or resident service.
 - Tooltip proof costs no extra pass. When identical art still leaves several candidates, an exact support title already present in the bounded OCR result resolves one unique ambiguous cell. Descriptions, longer names, multiple titles, and duplicate eligible cells are rejected rather than guessed. No second screenshot or OCR call happens.
 - Manual resolution is event-only. Unresolved identical-art candidates render as ordinary inline buttons. A click updates the in-memory canonical support and recomputes the score once. It adds no OCR, polling, animation, or background work.
 - Icon normalization survives DPI changes: every detected cell is compared at 85%, 100%, and 115% crop scale. Exact matches use a conservative confidence/margin gate, and degraded captures keep the best catalog-backed candidate set rather than emitting `Unresolved support`.
@@ -54,9 +54,9 @@ with the final package. Full installation and release details are in
 - Clipboard images stay in-process. Copied bitmap pixels are converted directly
   to RGBA. Explorer-copied PNG/JPEG/WebP files are decoded with the already-bundled
   image codecs. Neither path starts a helper process or resident service.
-- Catalog matching is pre-normalized. OCR parsing normalizes the 3.29 skill
+- Catalog matching is pre-normalized. OCR parsing normalizes the 3.30 skill
   catalog once per scan and reuses compiled regular expressions. Fuzzy matching
-  never recompiles patterns or renormalizes all 267 skills inside its inner loop.
+  never recompiles patterns or renormalizes all 272 skills inside its inner loop.
 - Interaction frames stay stable. Button labels keep a fixed layout during scans and
   hover animations are off, which avoids animation-only redraw bursts on Windows.
 
@@ -272,8 +272,8 @@ fail when the release exe exceeds 11,000,000 bytes (v0.1.0 measured
 glyph-coverage test, which guard the two build-time trims.
 
 Not a size issue but found on the way: a release uploads the exe, its gzip
-sibling and the notices file and nothing else, so the 419 skill and support
-icons under `assets/icons` (878 KB of webp) are embedded by `build.rs` into
+sibling and the notices file and nothing else, so the 424 skill and support
+icons under `assets/icons` (885 KB of webp) are embedded by `build.rs` into
 `OUT_DIR/icons.rs` and reached through `src/icons.rs`. Nothing reads the
 directory at runtime. While the icons lived on disk only, a copy that was
 just the downloaded exe had no templates and reported every support as
@@ -282,8 +282,8 @@ unresolved.
 ## Official trade searches
 
 Trade-query construction is offline and allocation-bounded. A snapshot of the official
-3.29 mercenary skill and support stat IDs ships with the executable (49 KB in
-`assets/trade-stats-3.29.json`, 34 KB after the build-time minify) and is parsed once on
+3.30 mercenary skill and support stat IDs ships with the executable (49 KB in
+`assets/trade-stats-3.30.json`, 33 KB after the build-time minify) and is parsed once on
 first use. The app never polls or scrapes the trade service, fetches results, or
 retries in the background. A user click creates one encoded official search URL and one
 normal browser navigation, which keeps both resource use and Path of Exile trade traffic low.
@@ -301,4 +301,4 @@ The app itself never submits the encoded query to the API. For release verificat
 the payload locally by default. Its explicit `-Live` mode performs exactly one search
 POST, has no retry loop, and does not fetch listing details. On 2026-09-02 the Grynnelle
 fixture's type + level + six-filter Storm Call query was accepted by the official
-Allflame endpoint with HTTP 200 and one matching result (`RJGD3PRZh7`).
+Allflame endpoint with HTTP 200 and one matching result (`RJGD3PRZh7`). That was the 3.29 league; the `-Live` check has not been repeated against Covens.

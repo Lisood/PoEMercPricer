@@ -71,7 +71,6 @@ pub fn score(merc: &Mercenary, assume_projectile_speed: bool) -> ScoreResult {
         + present(merc.has_skill(&["Wrath"])))
     .min(4.0);
 
-    let both_mains = fb.is_some() && ws.is_some();
     let helix_with_main = helix && (fb.is_some() || ws.is_some());
     let fb_chain_pierce =
         fb.is_some_and(|s| s.has_support(&["chain"]) && s.has_support(&["pierce"]));
@@ -88,7 +87,6 @@ pub fn score(merc: &Mercenary, assume_projectile_speed: bool) -> ScoreResult {
         points: util,
         detail: "capped at 4".into(),
     });
-    parts.push(part("FB+WS penalty", -28.0 * present(both_mains)));
     parts.push(part(
         "Spectral Helix + main",
         -20.0 * present(helix_with_main),
@@ -97,10 +95,10 @@ pub fn score(merc: &Mercenary, assume_projectile_speed: bool) -> ScoreResult {
     parts.push(part("WS Multistrike", -8.0 * present(ws_multistrike)));
     let score = clamp(sum(&parts));
 
+    // 3.30 survey: Frost Blades + Wild Strike asks a 100d median (n=20+3 mirror,
+    // top-share 0.87), level with the family, so it is no longer a brick. It
+    // never carries Static Strike (n=0), so it still cannot jackpot.
     let mut bricks = Vec::new();
-    if both_mains {
-        bricks.push("Frost Blades + Wild Strike".into());
-    }
     if helix_with_main {
         bricks.push("Spectral Helix with a preferred main attack".into());
     }
@@ -162,10 +160,10 @@ pub fn score(merc: &Mercenary, assume_projectile_speed: bool) -> ScoreResult {
         breakdown: parts,
         notes: vec![
             "Screening heuristic, not a Divine/Mirror calculator.".into(),
-            "3.29 Allflame listings validate Return + EDWA + Chain on Frost Blades as a high-value gate."
+            "3.30 trade survey: Frost Blades + Static Strike without Spectral Helix is the core (100d median, none in the cheapest band); Return + Chain + EDWA asks 150d."
                 .into(),
             "Dash and Frostblink are gap closers, not bricks, for melee Combatants.".into(),
-            "Multistrike is a resale penalty on Wild Strike; disputed on Frost Blades.".into(),
+            "Multistrike is a resale penalty on Wild Strike; on Frost Blades it is neutral in the 3.30 survey.".into(),
         ],
         formula: "screening-heuristic".into(),
         estimate: false,

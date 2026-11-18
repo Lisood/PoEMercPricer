@@ -221,6 +221,7 @@ jobs:
         run: |
           $v = (cargo metadata --format-version 1 --no-deps | ConvertFrom-Json).packages[0].version
           if ("v$v" -ne $env:GITHUB_REF_NAME) { throw "tag $env:GITHUB_REF_NAME does not match Cargo.toml version $v" }
+      - name: Release notes from CHANGELOG.md   # extracts the `## [X.Y.Z]` section to $RUNNER_TEMP/release-notes.md; throws if missing, empty or containing TODO
       - run: cargo build --release --locked
       - name: Size budget          # throws above 11,000,000 bytes; docs/performance.md
       - run: Copy-Item target/release/poemercpricer.exe poemercpricer-windows-x64.exe
@@ -234,7 +235,7 @@ jobs:
       - run: ./scripts/test-installer.ps1 -Payload poemercpricer-windows-x64.exe -Setup target/installer/poemercpricer-setup-windows-x64.exe
       # Immutable releases lock the tag and assets at publish, so everything
       # is uploaded to the draft first.
-      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --generate-notes
+      - run: gh release create $env:GITHUB_REF_NAME poemercpricer-windows-x64.exe poemercpricer-windows-x64.exe.gz THIRD_PARTY_NOTICES.html target/installer/poemercpricer-setup-windows-x64.exe --draft --title $env:GITHUB_REF_NAME --notes-file "$env:RUNNER_TEMP/release-notes.md" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
       - run: gh release edit $env:GITHUB_REF_NAME --draft=false
@@ -248,7 +249,7 @@ The app, installer and uninstaller are unsigned. The updater trusts the size and
 
 `gh` is preinstalled on the runner, so no marketplace action is needed. CI already tests every push to `main`; tags are cut from `main`, so the release job reuses those checks and additionally tests the final installer. The job still requires the tagged commit to be on `main` with a green `ci.yml` run before it builds anything, since the tag push and the `main` push race each other. The notices file is generated from the tagged `Cargo.lock` and never committed; `about.toml` and `about.hbs` at the repo root configure it. GitHub adds the `digest` itself, asynchronously, which is why the release script polls for it. The release is created as a draft, all four assets are uploaded to it, and only then is it published; once published, immutable releases mean the tag and assets can never be changed or deleted, so a bad release is fixed by shipping a new patch version, not by editing the old one.
 
-Cutting a release is one command, `.\scripts\release.ps1 -Version X.Y.Z` (rehearse with `-DryRun`). It refuses to run on a private repo, on a dirty tree, off `main`, or with secret-shaped text tracked. Then it bumps `Cargo.toml`, refreshes the lock, builds, checks the exe against the 11,000,000 byte budget, runs fmt, clippy and the tests, commits `Release X.Y.Z`, tags, pushes, watches the workflow run, and polls for up to three minutes until the uploaded exe carries a sha256 digest, requiring valid digests for the exe, `.gz`, notices and installer. It also builds/tests the installer locally; see `docs/installation.md` for the installer build and final-package tests. The runbook with failure recovery is `AGENTS.md` at the repo root.
+Cutting a release is one command, `.\scripts\release.ps1 -Version X.Y.Z` (rehearse with `-DryRun`). It refuses to run on a private repo, on a dirty tree, off `main`, with secret-shaped text tracked, or without a non-empty `## [X.Y.Z]` section for the version in `CHANGELOG.md`, or with a TODO placeholder in that section (the check also runs under `-DryRun`). Then it bumps `Cargo.toml`, refreshes the lock, builds, checks the exe against the 11,000,000 byte budget, runs fmt, clippy and the tests, commits `Release X.Y.Z`, tags, pushes, watches the workflow run, and polls for up to three minutes until the uploaded exe carries a sha256 digest, requiring valid digests for the exe, `.gz`, notices and installer. It also builds/tests the installer locally; see `docs/installation.md` for the installer build and final-package tests. The runbook with failure recovery is `AGENTS.md` at the repo root.
 
 The tag check makes a mismatched tag fail loudly instead of publishing an exe that reports the wrong version and then re-updates itself forever.
 
@@ -409,7 +410,7 @@ Audited 2026-09-03 on the working tree and a local release build:
 | Account names in data | `assets/*.json` hold prices and counts only | Refresh scripts request no seller fields |
 | Screenshots | samples show the mercenary panel and game UI, no chat or account names | Bug template asks reporters to crop |
 | Debug captures and logs | written under `%APPDATA%`, never in the repo | `.gitignore` blocks `debug/` and `*.log`; `release.ps1` refuses tracked ones |
-| Commit messages | quoted by `--generate-notes` on the release page | Rule in `AGENTS.md` |
+| Commit messages | quoted by `--generate-notes` on the release page, below the `CHANGELOG.md` section | Rule in `AGENTS.md` |
 | Email | none in the exe | `authors` is the GitHub handle |
 
 Not done on purpose: `--remap-path-prefix` for local builds (they are never published), SBOM or `cargo deny` (dependabot plus `cargo audit` already run in CI), and a git-history rewrite (nothing to remove).

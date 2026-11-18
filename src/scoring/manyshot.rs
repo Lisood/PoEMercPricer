@@ -32,7 +32,6 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
     let i_ice = present(ice.is_some());
     let i_vaal = present(vaal.is_some());
     let icicle = merc.has_skill(&["Icicle Rain"]);
-    let i_icicle = present(icicle);
     let i_forkshot = present(merc.has_skill(&["Frigid Forkshot"]));
     let i_aura = present(merc.has_skill(&["Hatred"]) || merc.has_skill(&["Grace"]));
 
@@ -98,26 +97,21 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
             detail: String::new(),
         },
         ScoreBreakdown {
-            label: "Icicle Rain brick".into(),
-            points: -40.0 * i_icicle,
-            detail: "hard premium brick".into(),
-        },
-        ScoreBreakdown {
             label: "Frigid Forkshot".into(),
             points: -4.0 * i_forkshot,
             detail: "soft desirability penalty".into(),
         },
     ];
     let score = clamp(parts.iter().map(|p| p.points).sum());
-    let bricks = if icicle {
-        vec!["Icicle Rain".into()]
-    } else {
-        Vec::new()
-    };
+    // 3.30 survey: Vaal Ice Shot + Icicle Rain asks a 175d median (n=14+2 mirror,
+    // top-share 0.88), so Icicle Rain is no longer a score brick. It never sits
+    // beside Vaal Ice Shot + Mirror Arrow (n=0), so it still cannot jackpot.
+    let bricks: Vec<String> = Vec::new();
     let premium_vaal_row =
         mirror.is_some() && t_vaal_return > 0.0 && vaal_t3_edwa && vaal_t3_hypothermia;
-    // Ice Shot::Return+GMP beside Vaal Return fell from a 50d floor (09-01)
-    // to 10c/80c (n=852) by 2026-09-02, so it does not gate jackpot.
+    // 3.30 survey: Vaal Ice Shot::Return + Mirror Arrow asks a 200d median
+    // (n=31+9 mirror, none in the cheapest band). The T3 EDWA + T3 Hypothermia
+    // sub-gate has n=1 in the survey, so it is kept from 3.29, not re-proven.
     let jackpot = ice.is_some() && vaal.is_some() && !icicle && premium_vaal_row;
 
     let mut highlights = Vec::new();
@@ -132,7 +126,7 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
         );
     }
     if icicle {
-        highlights.push("Icicle Rain present, premium resale largely destroyed".into());
+        highlights.push("Icicle Rain: no Vaal Ice Shot + Mirror Arrow jackpot package".into());
     }
 
     let (mut band, mut action) = interpret_score(score, "manyshot");
@@ -152,7 +146,7 @@ pub fn score(merc: &Mercenary) -> ScoreResult {
         breakdown: parts,
         notes: vec![
             "Screening heuristic, not a Divine/Mirror calculator.".into(),
-            "3.29 Allflame listings validate Mirror Arrow + Vaal Ice Shot with Return as the resale core."
+            "3.30 trade survey: Vaal Ice Shot is the gate (200d median with it, 5c without); Return + Mirror Arrow is the premium core."
                 .into(),
             "GMP does not multiply Vaal Ice Shot Mirage Sharpshooter attacks.".into(),
             "Supports only count on the skill they are attached to.".into(),
