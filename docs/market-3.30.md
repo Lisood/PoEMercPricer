@@ -137,4 +137,4 @@ Package columns describe the money skill. A gate list reads `support points`. "f
 - The Manyshot (T3 EDWA + T3 Hypothermia), Combatant (T3 EDWA, Wild Strike) and Kineticist (Greater Kinetic Blast) jackpot sub-gates are carried over from 3.29 untested (n < 8).
 - Sniper's Brutality brick and Thunderquiver's Galvanic Arrow brick sit in the undecided zone but lean against the brick.
 - The 3.30.0 patch notes (mercenaries deal up to 20% less attack damage at level 83; Kinetic Blast's Arcane Might is 150%, down from 200%; Greater Brutality and Greater Trap and Mine Damage are down to 25%, and Pulverise is up to 25%) were read as context only. No weight moved on them.
-- The price sweep in `scripts/fetch-warrant-prices.ps1` samples the cheapest listings per package and will measure the unsampled middle of the books. Its 3.30 family, partner and price-floor tables are proposed in the W3 gate spec.
+- The price sweep in `scripts/fetch-warrant-prices.ps1` samples the cheapest listings per package and will measure the unsampled middle of the books. Its 3.30 family, partner and price-floor tables follow the screens above.
