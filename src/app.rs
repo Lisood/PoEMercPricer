@@ -1830,7 +1830,8 @@ fn skill_header(
                     ui.spacing_mut().item_spacing.x = 8.0;
                     ui.label(poe_text(&skill.canonical, 15.0, p.text));
                     if let Some(level) = skill.level {
-                        ui.label(poe_text(format!("Lvl {level}"), 12.0, p.muted));
+                        let tilde = if skill.level_estimated { "~" } else { "" };
+                        ui.label(poe_text(format!("Lvl {tilde}{level}"), 12.0, p.muted));
                     }
                 });
                 ui.label(poe_text("BRICK: competing attack", 12.0, p.red));
@@ -1838,7 +1839,8 @@ fn skill_header(
         } else {
             ui.label(poe_text(&skill.canonical, 15.0, p.text));
             if let Some(level) = skill.level {
-                ui.label(poe_text(format!("Lvl {level}"), 12.0, p.muted));
+                let tilde = if skill.level_estimated { "~" } else { "" };
+                ui.label(poe_text(format!("Lvl {tilde}{level}"), 12.0, p.muted));
             }
         }
         let show_icons = shows_icon_strip(row_width);

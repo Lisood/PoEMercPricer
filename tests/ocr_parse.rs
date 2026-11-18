@@ -299,6 +299,11 @@ fn chaplain_abyssal_skills_stay_distinct() {
         "ocr",
     );
     assert_eq!(merc.family, "chaplain_of_the_well");
+    // OCR text alone never infers a skill level; scan.rs adds and flags it.
+    assert!(merc
+        .skills
+        .iter()
+        .all(|s| s.level.is_none() && !s.level_estimated));
     let skills: Vec<&str> = merc.skills.iter().map(|s| s.canonical.as_str()).collect();
     assert_eq!(
         skills,

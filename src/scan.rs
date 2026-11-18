@@ -82,7 +82,7 @@ fn scan_ocr_lines(
 
     // Each skill row's icon vision only reads the shared capture, so the six
     // rows run on scoped threads and join before anything is written back.
-    let row = |skill: &Skill| -> Option<(String, Option<u32>, Vec<SupportGem>)> {
+    let row = |skill: &Skill| -> Option<(String, Option<u32>, bool, Vec<SupportGem>)> {
         let skill_started = std::time::Instant::now();
         let line = best_line_for_skill(&cleaned, skill)?;
         let supports = supports_for_skill_row(img, line, &skill.canonical, panel);
@@ -93,11 +93,9 @@ fn scan_ocr_lines(
                 skill_started.elapsed().as_secs_f64() * 1_000.0
             );
         }
-        Some((
-            line.text.clone(),
-            parse_nearby_level(&cleaned, line).or(inferred_skill_level),
-            supports,
-        ))
+        let (level, estimated) =
+            skill_level(parse_nearby_level(&cleaned, line), inferred_skill_level);
+        Some((line.text.clone(), level, estimated, supports))
     };
     let rows: Vec<_> = std::thread::scope(|scope| {
         let handles: Vec<_> = merc
@@ -111,9 +109,10 @@ fn scan_ocr_lines(
             .collect()
     });
     for (skill, found) in merc.skills.iter_mut().zip(rows) {
-        if let Some((raw, level, supports)) = found {
+        if let Some((raw, level, level_estimated, supports)) = found {
             skill.raw = raw;
             skill.level = level;
+            skill.level_estimated = level_estimated;
             skill.supports = supports;
         }
     }
@@ -405,6 +404,15 @@ fn normalized_skill_catalog() -> &'static [(&'static str, String)] {
 
 /// The skill level is printed on its own line beside the skill name, so take
 /// the closest level text on the same row.
+/// A level read off the panel beats the inferred one; only the latter is an
+/// estimate.
+fn skill_level(read: Option<u32>, inferred: Option<u32>) -> (Option<u32>, bool) {
+    match read {
+        Some(level) => (Some(level), false),
+        None => (inferred, inferred.is_some()),
+    }
+}
+
 fn parse_nearby_level(lines: &[OcrLine], skill_line: &OcrLine) -> Option<u32> {
     static LEVEL: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"(?i)\b(?:lv|lvl|level)\s*([1-9]|[1-3][0-9]|40)\b").unwrap());
@@ -584,6 +592,13 @@ mod tests {
         assert_eq!(cleanup_ocr("LVI 83"), "Lvl 83");
         assert_eq!(cleanup_ocr("lv1 26"), "Lvl 26");
         assert_eq!(cleanup_ocr("Silvia"), "Silvia");
+    }
+
+    #[test]
+    fn read_skill_level_is_exact_and_inferred_one_is_an_estimate() {
+        assert_eq!(super::skill_level(Some(24), Some(26)), (Some(24), false));
+        assert_eq!(super::skill_level(None, Some(26)), (Some(26), true));
+        assert_eq!(super::skill_level(None, None), (None, false));
     }
 
     #[test]

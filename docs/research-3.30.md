@@ -51,7 +51,7 @@ The trade JSON reports item level 0, but the trade site's ilvl filter selects th
 - New build: Chaplain of the Well.
 - New skills: Abyssal Spray, Abyssal Spray Detonation, Power of the Depths and Vaal Smite. Steelskin Ally was added too; it was missing from the 3.29 catalog as well, and it only rolls on Swiftblade.
 - Support art is byte-identical to 3.29. No build or skill was removed.
-- No 3.30 patch note changes Mercenary gem levels, so the 3.29-measured skill-level progression (`src/models.rs`) is kept, unverified for 3.30.
+- No 3.30 patch note changes Mercenary gem levels, so the skill-level progression measured in 3.29.3 (`src/models.rs`) is kept. Its source thread can no longer be read and the 3.30 trade data has no skill levels, so it is unverified for 3.30: inferred levels are flagged as estimates and shown with a tilde (`Lvl ~26`).
 - PoEDB's scraper broke on a markup change (`decoding="async"` on the support images) and was fixed.
 
 ### Support-context audit

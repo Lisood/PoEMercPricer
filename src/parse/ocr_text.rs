@@ -149,6 +149,7 @@ pub fn parse_ocr_lines(lines: &[String], source: &str) -> Mercenary {
             canonical: canon,
             supports: Vec::new(),
             level: None,
+            level_estimated: false,
             confidence: score,
             raw: ln.clone(),
         });

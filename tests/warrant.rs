@@ -334,3 +334,32 @@ fn real_330_chaplain_copy_parses_every_skill_support_and_tier() {
         .flat_map(|skill| &skill.supports)
         .all(|support| support.confidence >= 1.0));
 }
+
+#[test]
+fn clipboard_skill_levels_are_estimates_and_shown_with_a_tilde() {
+    let mut merc = parse_warrant_text(SAMPLE);
+    assert!(merc
+        .skills
+        .iter()
+        .all(|skill| skill.level == Some(26) && skill.level_estimated));
+    let result = score_mercenary(&merc, false);
+    let text = poemercpricer::summary::summary(&merc, &result, None);
+    assert!(
+        text.contains("Kinetic Blast of Clustering Lv~26:"),
+        "{text}"
+    );
+
+    // A level read off the panel is printed as is.
+    for skill in &mut merc.skills {
+        skill.level_estimated = false;
+    }
+    let text = poemercpricer::summary::summary(&merc, &result, None);
+    assert!(text.contains("Kinetic Blast of Clustering Lv26:"), "{text}");
+    assert!(!text.contains('~'), "{text}");
+
+    let unlevelled = parse_warrant_text(&SAMPLE.replace("Mercenary Level: 83\n", ""));
+    assert!(unlevelled
+        .skills
+        .iter()
+        .all(|skill| skill.level.is_none() && !skill.level_estimated));
+}

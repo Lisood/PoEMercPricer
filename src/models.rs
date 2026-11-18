@@ -48,11 +48,14 @@ pub struct Skill {
     pub supports: Vec<SupportGem>,
     /// Active-skill level, read directly or derived from the mercenary level.
     pub level: Option<u32>,
+    /// `level` came from `infer_mercenary_skill_level`, not from the panel.
+    pub level_estimated: bool,
     pub confidence: f32,
     pub raw: String,
 }
 
-/// Mercenary active/aura skill progression (measured in 3.29). Supports use tiers instead.
+/// Mercenary active/aura skill progression, measured in 3.29.3; unverified in
+/// 3.30, shown as an estimate. Supports use tiers instead.
 pub fn infer_mercenary_skill_level(mercenary_level: u32) -> Option<u32> {
     let mercenary_level = mercenary_level.min(100);
     (mercenary_level >= 66).then(|| (18 + (mercenary_level - 66) / 2).min(40))
@@ -67,6 +70,7 @@ impl Skill {
             canonical: c,
             supports: Vec::new(),
             level: None,
+            level_estimated: false,
             confidence: 1.0,
             raw: String::new(),
         }

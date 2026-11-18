@@ -50,6 +50,8 @@ pub fn parse_warrant_text(text: &str) -> Mercenary {
         .and_then(|c| c.get(1))
         .and_then(|m| m.as_str().parse().ok());
 
+    // A Ctrl+C copy has no skill levels; this one is inferred, so an estimate.
+    let skill_level = level.and_then(infer_mercenary_skill_level);
     let mut skills = Vec::new();
     let mut started = false;
     for section in sections {
@@ -104,7 +106,8 @@ pub fn parse_warrant_text(text: &str) -> Mercenary {
             name: lines[0].to_string(),
             canonical: skill_name,
             supports: gems,
-            level: level.and_then(infer_mercenary_skill_level),
+            level: skill_level,
+            level_estimated: skill_level.is_some(),
             confidence: conf,
             raw: section.to_string(),
         });

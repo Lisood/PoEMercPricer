@@ -40,7 +40,11 @@ pub fn summary(merc: &Mercenary, result: &ScoreResult, market: Option<&MarketEst
         } else {
             gems.join(", ")
         };
-        let level = sk.level.map(|n| format!(" Lv{n}")).unwrap_or_default();
+        let tilde = if sk.level_estimated { "~" } else { "" };
+        let level = sk
+            .level
+            .map(|n| format!(" Lv{tilde}{n}"))
+            .unwrap_or_default();
         s.push_str(&format!("  {}{level}: {gems}\n", sk.canonical));
     }
     if !result.bricks.is_empty() {

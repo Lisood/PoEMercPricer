@@ -17,7 +17,7 @@ Inspired by [Awakened PoE Trade](https://github.com/SnosMe/awakened-poe-trade): 
 - On-demand screen OCR of the inspect panel on Windows, via `Windows.Media.Ocr`
 - The 3.30.0 OCR catalog covers all 37 builds and 272 active-skill names
 - OCR reads active-skill names; image recognition handles all 152 support names in the catalog, at every visible tier I / II / III
-- Active-skill level comes from mercenary level: 83 gives skill level 26, 84 gives 27
+- Active-skill level is estimated from the mercenary level (83 gives 26, 84 gives 27) on clipboard pastes, and on scans when the panel shows none; estimates are shown with a tilde, such as `Lvl ~26`. The progression was measured in 3.29.3 and is unverified in 3.30
 - The 3.30 Warrant lines `Limit`, `Portal`, `Area Level` and `Item Tier` are ignored by the clipboard parser wherever they appear, and OCR never reads an `Area Level` line as the mercenary level
 - A screen for every family, recalibrated from a 3.30 trade-site survey: market screens with skill-bound gates and bricks, jackpot screens for the premium packages, and a tier-capped generic estimate for six families (see Scoring)
 - A market ask range next to the score, from a bundled snapshot of the cheapest level-83+ instant-buyout listings on the official trade site per family and support package, with listing count (the trade site's search total at ilvl 83+, instant buyout), listing age, and the snapshot date (see `docs/market-3.30.md`; refresh with `scripts/fetch-warrant-prices.ps1`)

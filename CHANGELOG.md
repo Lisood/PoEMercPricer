@@ -24,6 +24,7 @@ Path of Exile 3.30.0 (Covens of Umbra) support.
   - Details and evidence are in `docs/market-3.30.md`.
 - Market data now comes from the official trade site only. Trade stats, warrant types, listing counts and prices are collected there, and a listing count is the site's search total at item level 83+, instant buyout. This replaces the third-party ledger counts used in 3.29.
 - A package with no listings falls back to the next package or shows "no listings data" instead of a price of 0c.
+- Active-skill levels worked out from the mercenary level are now shown as estimates with a tilde, such as `Lvl ~26`. The formula was measured in 3.29.3 and could not be checked for 3.30, because the 3.30 trade data has no skill levels. A level read from the panel is shown as before.
 
 ### Fixed
 

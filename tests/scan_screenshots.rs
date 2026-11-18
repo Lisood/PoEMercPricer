@@ -34,7 +34,11 @@ fn scan_blade_ambusher_sid() {
     assert_eq!(merc.family, "blade_ambusher");
     assert_eq!(merc.name, "Sid, the Slack-Jawed");
     assert_eq!(merc.level, Some(83));
-    assert!(merc.skills.iter().all(|skill| skill.level == Some(26)));
+    // The panel shows no skill level, so it is inferred and flagged as an estimate.
+    assert!(merc
+        .skills
+        .iter()
+        .all(|skill| skill.level == Some(26) && skill.level_estimated));
     assert_eq!(
         rows(&merc),
         vec![
@@ -179,7 +183,11 @@ fn scan_storming_zealot_orvan() {
     assert_eq!(merc.family, "storming_zealot");
     assert_eq!(merc.name, "Orvan, the Keitan Convert");
     assert_eq!(merc.level, Some(83));
-    assert!(merc.skills.iter().all(|skill| skill.level == Some(26)));
+    // The panel shows no skill level, so it is inferred and flagged as an estimate.
+    assert!(merc
+        .skills
+        .iter()
+        .all(|skill| skill.level == Some(26) && skill.level_estimated));
     assert_eq!(
         rows(&merc),
         vec![
