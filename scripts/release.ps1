@@ -122,9 +122,11 @@ try {
     $pushed = $true
     Step '9/10 watch the release workflow'
     $runId = $null
+    # Match the commit too: a tag that was withdrawn and cut again still lists its old run under the same name.
+    $head = git rev-parse HEAD
     $deadline = (Get-Date).AddSeconds(60)
     while ((Get-Date) -lt $deadline -and -not $runId) {
-        $runs = @(gh run list --workflow release.yml --branch "v$Version" --limit 1 --json databaseId | ConvertFrom-Json)
+        $runs = @(gh run list --workflow release.yml --branch "v$Version" --commit $head --limit 1 --json databaseId | ConvertFrom-Json)
         if ($runs.Count -gt 0) { $runId = $runs[0].databaseId } else { Start-Sleep -Seconds 3 }
     }
     if (-not $runId) { throw "No release.yml run appeared for v$Version within 60s." }
