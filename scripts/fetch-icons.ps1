@@ -52,7 +52,7 @@ function ConvertTo-SupportFamily([string]$Name) {
 }
 
 function Get-Page([string]$Url) {
-  (Invoke-WebRequest -UseBasicParsing -Headers $headers $Url).Content
+  (Invoke-WebRequest -UseBasicParsing -Headers $headers -TimeoutSec 60 $Url).Content
 }
 
 # PoEDB still serves the pre-3.26 swirl art for Return; the live client draws
@@ -61,7 +61,10 @@ $pinnedIcons = @('return__returnprojectiles.webp')
 function Save-Icon([string]$Url, [string]$Path) {
   if ((Test-Path -LiteralPath $Path) -and -not $RefreshCatalog) { return }
   if ($pinnedIcons -contains (Split-Path -Leaf $Path)) { return }
-  Invoke-WebRequest -UseBasicParsing -Headers $headers $Url -OutFile $Path
+  # Download beside the target, then swap: a failed download must not leave a truncated icon that later runs skip.
+  try { Invoke-WebRequest -UseBasicParsing -Headers $headers -TimeoutSec 60 $Url -OutFile "$Path.part" }
+  catch { Remove-Item -LiteralPath "$Path.part" -Force -ErrorAction SilentlyContinue; throw }
+  Move-Item -LiteralPath "$Path.part" -Destination $Path -Force
 }
 
 $mercHtml = Get-Page 'https://poedb.tw/us/Mercenaries'

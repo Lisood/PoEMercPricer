@@ -42,6 +42,20 @@ fn older_config_without_update_keys_defaults_both_checks_on() {
 }
 
 #[test]
+fn config_saved_with_a_utf8_bom_still_loads() {
+    let dir = std::env::temp_dir().join(format!("pmp-config-bom-{}", std::process::id()));
+    let path = dir.join("config.json");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(&path, "\u{feff}{\"hotkey\": \"Ctrl+M\"}").unwrap();
+
+    let (cfg, error) = AppConfig::load_from(&path);
+
+    assert_eq!(cfg.hotkey, "Ctrl+M");
+    assert_eq!(error, None);
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[test]
 fn corrupt_config_is_left_untouched_and_reported() {
     let dir = std::env::temp_dir().join(format!("pmp-config-{}", std::process::id()));
     let path = dir.join("config.json");

@@ -19,7 +19,7 @@ Inspired by [Awakened PoE Trade](https://github.com/SnosMe/awakened-poe-trade): 
 - OCR reads active-skill names; image recognition handles all 152 support names in the catalog, at every visible tier I / II / III
 - Active-skill level is estimated from the mercenary level (83 gives 26, 84 gives 27) on clipboard pastes, and on scans when the panel shows none; estimates are shown with a tilde, such as `Lvl ~26`. The progression was measured in 3.29.3 and is unverified in 3.30
 - The 3.30 Warrant lines `Limit`, `Portal`, `Area Level` and `Item Tier` are ignored by the clipboard parser wherever they appear, and OCR never reads an `Area Level` line as the mercenary level
-- A screen for every family, recalibrated from a 3.30 trade-site survey: market screens with skill-bound gates and bricks, jackpot screens for the premium packages, and a tier-capped generic estimate for six families (see Scoring)
+- A screen for every family, recalibrated from a 3.30 trade-site survey: market screens with skill-bound gates and bricks, jackpot screens for the premium packages, and a tier-capped generic estimate for the seven families without one (see Scoring)
 - A market ask range next to the score, from a bundled snapshot of the cheapest level-83+ instant-buyout listings on the official trade site per family and support package, with listing count (the trade site's search total at ilvl 83+, instant buyout), listing age, and the snapshot date (see `docs/market-3.30.md`; refresh with `scripts/fetch-warrant-prices.ps1`)
 - Jackpot boolean screens for premium packages with no bricks
 - Score breakdown, copy summary, and a pre-filled official Path of Exile trade search
@@ -115,7 +115,7 @@ Hover a Mercenary Warrant in game and press `Ctrl+C`, then press the hotkey or c
 
 ### Screenshot or image file
 
-Click Scan to capture the Path of Exile window, or copy an image and click Clipboard. Clipboard accepts both copied bitmap pixels (from an editor or a browser) and a PNG, JPEG or WebP file copied in Explorer, including `samples\manyshot_alara.png`. Images are capped at 8192 px per side, and clipboard bitmaps at 40 million pixels total.
+Click Scan to capture the Path of Exile window, or copy an image and click Clipboard. Clipboard accepts both copied bitmap pixels (from an editor or a browser) and a PNG, JPEG or WebP file copied in Explorer, including `samples\manyshot_alara.png`. Images are capped at 8192 px per side and 40 million pixels total, which fits an 8K screenshot.
 
 For images, the overlay reads current active-skill names from the panel text and matches support artwork cell by cell, reading each support's Roman tier. Support matches stay bound to their owning skill row.
 
@@ -261,7 +261,7 @@ Fast in-game rules:
 - Swiftblade and Shattersword lose their jackpot. Swiftblade's Rallying Cry with CDR + More Duration is a 30d package, below the 50d jackpot bar, and Shattersword is a mid family.
 - Stormhand is no longer a bespoke sleeper scorer. It is a mid family (10d) scored by the same market screen as the rest: Arc + Ball Lightning of Static with Chain and Gilded Chain Distance on Arc.
 
-Every current build and skill is recognised and scored. Cardinal, Withertouch, Frosthand, Bloodletter, Ripper and Warpriest have no market screen of their own and use the generic estimate (support tiers plus trade demand), capped at their price tier: 72 for high, 62 for mid, 52 for floor. A family with no listings (Mysterious Diver, Warpriest of the Ruckus) keeps its old screen or the generic estimate, and the market row says "no listings data" rather than quoting 0c.
+Every current build and skill is recognised and scored. Cardinal, Withertouch, Frosthand, Bloodletter, Ripper and Warpriest have no market screen of their own and use the generic estimate (support tiers plus trade demand), capped at their price tier: 72 for high, 62 for mid, 52 for floor. A family with no listings keeps what it had (Mysterious Diver its old screen, Warpriest of the Ruckus the generic estimate), and the market row says "no listings data" rather than quoting 0c.
 
 ## How it reads the game
 

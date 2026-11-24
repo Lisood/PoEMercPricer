@@ -1,184 +1,184 @@
 {
   "patch": "3.30.0",
   "league": "Covens",
-  "generated_at": "2026-11-18T04:36:25Z",
+  "generated_at": "2026-11-24T10:16:47Z",
   "market_source": "https://www.pathofexile.com/api/trade/search (status securable, ilvl >= 83, per warrant type total)",
   "game_data_source": "https://poedb.tw/us/Mercenaries",
   "builds": [
     {
-      "name": "Kineticist",
-      "family": "kineticist",
-      "listings": 6313
+      "name": "Manyshot",
+      "family": "manyshot",
+      "listings": 15730
     },
     {
       "name": "Combatant",
       "family": "combatant",
-      "listings": 6089
+      "listings": 14671
     },
     {
-      "name": "Manyshot",
-      "family": "manyshot",
-      "listings": 5925
+      "name": "Kineticist",
+      "family": "kineticist",
+      "listings": 14594
     },
     {
       "name": "Chaplain of the Well",
       "family": "chaplain_of_the_well",
-      "listings": 4425
+      "listings": 10000
     },
     {
       "name": "Thunderquiver",
       "family": "thunderquiver",
-      "listings": 2264
+      "listings": 5860
     },
     {
       "name": "Sniper",
       "family": "sniper",
-      "listings": 2218
+      "listings": 5642
     },
     {
       "name": "Cruel Mistress",
       "family": "cruel_mistress",
-      "listings": 1355
+      "listings": 3964
     },
     {
       "name": "Swiftblade",
       "family": "swiftblade",
-      "listings": 1219
-    },
-    {
-      "name": "Withertouch",
-      "family": "withertouch",
-      "listings": 991
+      "listings": 2810
     },
     {
       "name": "Bladebitter",
       "family": "bladebitter",
-      "listings": 988
+      "listings": 2748
     },
     {
-      "name": "Blade Ambusher",
-      "family": "blade_ambusher",
-      "listings": 970
+      "name": "Withertouch",
+      "family": "withertouch",
+      "listings": 2718
     },
     {
       "name": "Toxicologist",
       "family": "toxicologist",
-      "listings": 913
+      "listings": 2698
     },
     {
       "name": "Flamequiver",
       "family": "flamequiver",
-      "listings": 912
+      "listings": 2597
     },
     {
       "name": "Striker",
       "family": "striker",
-      "listings": 862
+      "listings": 2483
+    },
+    {
+      "name": "Blade Ambusher",
+      "family": "blade_ambusher",
+      "listings": 2425
     },
     {
       "name": "Stormhand",
       "family": "stormhand",
-      "listings": 684
-    },
-    {
-      "name": "Warpriest",
-      "family": "warpriest",
-      "listings": 606
-    },
-    {
-      "name": "Smoulderstrike",
-      "family": "smoulderstrike",
-      "listings": 586
-    },
-    {
-      "name": "Fallen Reverend",
-      "family": "fallen_reverend",
-      "listings": 585
+      "listings": 2176
     },
     {
       "name": "Bladecaster",
       "family": "bladecaster",
-      "listings": 582
+      "listings": 1940
+    },
+    {
+      "name": "Smoulderstrike",
+      "family": "smoulderstrike",
+      "listings": 1825
+    },
+    {
+      "name": "Fallen Reverend",
+      "family": "fallen_reverend",
+      "listings": 1796
+    },
+    {
+      "name": "Warpriest",
+      "family": "warpriest",
+      "listings": 1794
     },
     {
       "name": "Cardinal",
       "family": "cardinal",
-      "listings": 565
-    },
-    {
-      "name": "Frosthand",
-      "family": "frosthand",
-      "listings": 558
+      "listings": 1761
     },
     {
       "name": "Bastion",
       "family": "bastion",
-      "listings": 557
+      "listings": 1730
+    },
+    {
+      "name": "Frosthand",
+      "family": "frosthand",
+      "listings": 1675
     },
     {
       "name": "Shock Ambusher",
       "family": "shock_ambusher",
-      "listings": 506
+      "listings": 1506
     },
     {
       "name": "Sanguimancer",
       "family": "sanguimancer",
-      "listings": 460
-    },
-    {
-      "name": "Bloodletter",
-      "family": "bloodletter",
-      "listings": 452
+      "listings": 1497
     },
     {
       "name": "Storming Zealot",
       "family": "storming_zealot",
-      "listings": 434
+      "listings": 1415
     },
     {
-      "name": "Shattersword",
-      "family": "shattersword",
-      "listings": 418
+      "name": "Bloodletter",
+      "family": "bloodletter",
+      "listings": 1379
     },
     {
       "name": "Earthshaker",
       "family": "earthshaker",
-      "listings": 382
+      "listings": 1346
     },
     {
       "name": "Ripper",
       "family": "ripper",
-      "listings": 365
+      "listings": 1265
     },
     {
-      "name": "Eruptor",
-      "family": "eruptor",
-      "listings": 318
+      "name": "Shattersword",
+      "family": "shattersword",
+      "listings": 1087
     },
     {
       "name": "Reanimator",
       "family": "reanimator",
-      "listings": 284
+      "listings": 974
     },
     {
       "name": "Flamehand",
       "family": "flamehand",
-      "listings": 280
+      "listings": 968
     },
     {
-      "name": "Frost Ambusher",
-      "family": "frost_ambusher",
-      "listings": 266
+      "name": "Eruptor",
+      "family": "eruptor",
+      "listings": 941
     },
     {
       "name": "Winter Deacon",
       "family": "winter_deacon",
-      "listings": 262
+      "listings": 904
+    },
+    {
+      "name": "Frost Ambusher",
+      "family": "frost_ambusher",
+      "listings": 796
     },
     {
       "name": "Flaming Charlatan",
       "family": "flaming_charlatan",
-      "listings": 172
+      "listings": 567
     },
     {
       "name": "Mysterious Diver",

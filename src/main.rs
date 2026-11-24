@@ -38,7 +38,11 @@ fn main() -> Result<()> {
     #[cfg(all(windows, not(debug_assertions)))]
     attach_parent_console();
 
-    let args = std::env::args().skip(1).collect::<Vec<_>>();
+    // args() panics on a non-Unicode argument; a lossy path fails later with a readable error.
+    let args = std::env::args_os()
+        .skip(1)
+        .map(|arg| arg.to_string_lossy().into_owned())
+        .collect::<Vec<_>>();
     if args.first().map(|s| s.as_str()) == Some("--help")
         || args.first().map(|s| s.as_str()) == Some("-h")
     {
@@ -97,7 +101,7 @@ fn main() -> Result<()> {
         // Diagnostics must not create or rewrite config.json as a side effect.
         let cfg: AppConfig = std::fs::read_to_string(AppConfig::path())
             .ok()
-            .and_then(|text| serde_json::from_str(&text).ok())
+            .and_then(|text| serde_json::from_str(text.trim_start_matches('\u{feff}')).ok())
             .unwrap_or_default();
         let img = crate::capture::capture_poe_or_primary(&cfg.poe_window_title)?;
         if let Some(path) = args.get(1) {
@@ -109,11 +113,22 @@ fn main() -> Result<()> {
         return Ok(());
     }
     if args.first().map(|s| s.as_str()) == Some("clipboard") {
-        let text = if let Some(path) = args.get(1) {
-            std::fs::read_to_string(path)?
-        } else {
-            std::io::read_to_string(std::io::stdin())?
+        use std::io::Read as _;
+        const MAX_INPUT: u64 = 64 * 1024;
+        let input: Box<dyn std::io::Read> = match args.get(1) {
+            Some(path) => Box::new(std::fs::File::open(path)?),
+            None => Box::new(std::io::stdin()),
         };
+        // Same guard as the GUI paste path: fuzzy matching a huge input takes many seconds.
+        // Read one byte past the limit so an oversized input is refused without buffering it.
+        let mut bytes = Vec::new();
+        input.take(MAX_INPUT + 1).read_to_end(&mut bytes)?;
+        anyhow::ensure!(
+            bytes.len() as u64 <= MAX_INPUT,
+            "input is over 64 KB; a copied warrant is a few hundred bytes"
+        );
+        let text =
+            String::from_utf8(bytes).map_err(|_| anyhow::anyhow!("input is not valid UTF-8"))?;
         let merc = parse_warrant_text(&text);
         let result = score_mercenary(&merc, false);
         print_result(&merc, &result);
@@ -219,6 +234,10 @@ fn wgpu_options() -> eframe::egui_wgpu::WgpuConfiguration {
             }),
             ..Default::default()
         }),
+        // Strict vsync, not eframe's default AutoVsync (FifoRelaxed), which lets a
+        // late frame tear; this app draws only on input, so most of its frames are
+        // late. Frame pacing itself is `pace_to_compositor` in src/app.rs.
+        present_mode: wgpu::PresentMode::Fifo,
         ..Default::default()
     }
 }

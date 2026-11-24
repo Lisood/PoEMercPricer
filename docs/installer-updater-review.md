@@ -1,8 +1,7 @@
 # Installer and updater review — 2026-09-05
 
 The installer, updater, app worker integration, registration handling, tests
-and release scripts were reviewed locally. Nothing was committed, tagged,
-pushed or published. The final local installer is 5,747,108 bytes; its app is
+and release scripts were reviewed locally. The final local installer is 5,747,108 bytes; its app is
 8,805,376 bytes, within the existing 8 MB and 11 MB packaging gates.
 
 ## Findings fixed
@@ -24,7 +23,7 @@ and [stream reads](https://learn.microsoft.com/en-us/uwp/api/windows.storage.str
 
 ## Executed verification
 
-| Check | Result | Local evidence under `target/verification-20260905` |
+| Check | Result | Local evidence (not in the repo) |
 |---|---|---|
 | Full Rust suite | 223 passed; opt-in tests run separately | `rust-checks.log` |
 | Formatting and Clippy | Passed, warnings denied | Local command results |
@@ -44,14 +43,15 @@ The GUI update fixture was built from a separate copy of the current source
 as v0.0.0, with a private settings directory. Only the version and settings
 location differed. It contacted the real published v0.1.0 release through
 the unchanged updater code. Both test installations were removed and the
-user's original configuration remained byte-for-byte unchanged.
+existing configuration remained byte-for-byte unchanged.
 
-The first GUI installer launch through the computer-use launcher reported
+The first GUI installer launch, started from an automation harness, reported
 success but its registration was not visible to the shell. That result was
 not counted as a registration pass. A second GUI run through normal Windows
 process launch created and retained the expected key, passed automatic
 updating and metadata verification, then removed the key on uninstall. The
-evidence suggests a launcher-context difference; its exact cause is unproven.
+evidence suggests the launch context made the difference; its exact cause is
+unproven.
 
 ## Security and remaining limits
 
@@ -70,7 +70,7 @@ release metadata, not an independent publisher certificate. Older published
 clients do not use the new update lock. Close other copies during migration.
 Filesystem failures and abrupt power loss remain operating-system failure
 cases; a rollback copy is recovery support, not a guarantee against hardware
-failure. High contrast and 200% scaling were not exercised in this session;
+failure. High contrast and 200% scaling were not tested;
 the visible GUI checks used the current desktop scaling.
 
 No additional blocking defect was identified in the reviewed paths after

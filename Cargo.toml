@@ -42,6 +42,7 @@ windows = { version = "0.58", features = [
     "Web_Http",
     "Web_Http_Headers",
     "Win32_Foundation",
+    "Win32_Graphics_Dwm",
     "Win32_Security_Cryptography",
     "Win32_System_Com",
     "Win32_System_Console",

@@ -100,9 +100,10 @@ function Invoke-TradeRequest([string]$Method, [string]$Uri, [string]$Body, [stri
         if ($status -eq 429) {
             $script:Counts.r429++
             if (++$script:Consec429 -ge 3) { throw 'aborting: 3 consecutive HTTP 429 responses' }
-            $ra = Read-Header $r 'Retry-After'; $sleep = 65
-            if ($ra -and [int]::TryParse($ra, [ref]$null) -and [int]$ra -ge 1) { $sleep = [int]$ra }
-            elseif ($restriction -gt 0) { $sleep = $restriction }   # no Retry-After: the state header still says how long
+            $ra = Read-Header $r 'Retry-After'; $raSec = 0
+            if ($ra) { $null = [int]::TryParse($ra, [ref]$raSec) }
+            # The state header can carry a longer restriction than Retry-After; resuming at the shorter one earns another 429.
+            $sleep = [math]::Max($raSec, $restriction); if ($sleep -lt 1) { $sleep = 65 }
             Write-Host "    429: sleeping $($sleep + 1)s"; Start-Sleep -Seconds ($sleep + 1); continue
         }
         $script:Consec429 = 0

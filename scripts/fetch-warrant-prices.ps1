@@ -19,7 +19,7 @@
 
 .EXAMPLE
     pwsh scripts/fetch-warrant-prices.ps1 -League Covens -Out assets/warrant-prices-3.30.json
-    pwsh scripts/fetch-warrant-prices.ps1 -Families kineticist,manyshot -Out C:\tmp\test.json
+    pwsh scripts/fetch-warrant-prices.ps1 -Families kineticist,manyshot -Out $env:TEMP\test.json
 #>
 [CmdletBinding()]
 param(
@@ -424,7 +424,8 @@ $currencyTag = @{
 function ConvertTo-Chaos([double]$amount, [string]$currency) {
     switch ($currency) {
         'chaos' { return $amount }
-        'divine' { return $amount * $chaosPerDivine }
+        # Both spellings use the run's pinned rate (a merge or resume must not mix in the live one).
+        { $_ -in 'divine', 'divine-orb' } { return $amount * $chaosPerDivine }
         default {
             if ($rateByTag.ContainsKey($currency)) { return $amount * $rateByTag[$currency] }
             $details = if ($currencyTag.ContainsKey($currency)) { $currencyTag[$currency] } else { $currency }
@@ -600,7 +601,13 @@ if ($rows.Count -ne $work.Count) { throw "expected $($work.Count) rows but have 
 $finalRows = $rows
 if ($PartnerSweep -or $Merge) {
     if (-not (Test-Path -LiteralPath $outPath)) { throw "-PartnerSweep/-Merge merges into an existing file, but $outPath does not exist" }
-    $base = Get-Content -LiteralPath $outPath -Raw | ConvertFrom-Json
+    $baseRaw = Get-Content -LiteralPath $outPath -Raw
+    # Anything that rewrote the file during this run (a full refresh, or another merge, which keeps generated_at)
+    # would be lost or mis-rated.
+    if ($baseRaw -cne $snapRaw) {
+        throw "$outPath changed while this run was in progress; the asset was NOT written. Delete $Checkpoint and rerun."
+    }
+    $base = $baseRaw | ConvertFrom-Json
     $byKey = @{}
     foreach ($r in $rows) { $byKey["$($r.family)|$($r.infamous)|$($r.package)|$($r.money_skill)"] = $r }
     $merged = [System.Collections.Generic.List[object]]::new()

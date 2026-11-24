@@ -34,26 +34,13 @@ fn windows_ocr_lines(img: &RgbaImage) -> Result<Vec<OcrLine>> {
     use windows::Graphics::Imaging::{BitmapAlphaMode, BitmapPixelFormat, SoftwareBitmap};
     use windows::Media::Ocr::OcrEngine;
     use windows::Storage::Streams::Buffer;
-    use windows::Win32::Foundation::RPC_E_CHANGED_MODE;
-    use windows::Win32::System::WinRT::{
-        IBufferByteAccess, RoInitialize, RoUninitialize, RO_INIT_MULTITHREADED,
-    };
+    use windows::Win32::System::WinRT::IBufferByteAccess;
 
-    struct WinRtGuard;
-    impl Drop for WinRtGuard {
-        fn drop(&mut self) {
-            unsafe { RoUninitialize() };
-        }
-    }
-
-    // scan_rgba runs on a worker thread that never pumps messages, so use the
-    // MTA. A thread already initialized in another mode keeps working; that
-    // failed call must not be balanced by RoUninitialize.
-    let _winrt = match unsafe { RoInitialize(RO_INIT_MULTITHREADED) } {
-        Ok(()) => Some(WinRtGuard),
-        Err(error) if error.code() == RPC_E_CHANGED_MODE => None,
-        Err(error) => return Err(error).context("initializing WinRT OCR"),
-    };
+    // Each scan runs on a fresh thread. Uninitializing here would tear the MTA
+    // down when no other WinRT thread is alive (updates off, debug builds) and
+    // leave the cached OCR factories dangling for the next scan, so share the
+    // updater's process-wide pin instead.
+    crate::update::winrt()?;
 
     let bytes = img.as_raw();
     let byte_len = u32::try_from(bytes.len()).context("OCR image is too large")?;

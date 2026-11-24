@@ -32,7 +32,8 @@ memory", says what the numbers mean.
 Do not run the GUI in automation. `cargo run`, `--fixture` and `--scan FILE`
 all open a window and, in a release build, register the hotkey and start an
 update check. `--help`, `--version`, `score`, `clipboard` and the `dump-*`
-subcommands print to stdout and exit.
+subcommands print to stdout and exit. `clipboard` refuses input over 64 KB,
+the same guard as the GUI paste path.
 
 ## Where things live
 

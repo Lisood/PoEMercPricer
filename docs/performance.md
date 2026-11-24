@@ -24,8 +24,7 @@ The app is 25,600 bytes larger than the published v0.1.0 executable. Timing
 depends on disk and antivirus activity. `scripts/test-installer.ps1` records
 each lifecycle timing and launcher peak working set (about 16 MiB here).
 That launcher measurement excludes the separate Inno worker and is not a
-total installer memory measurement. The user explicitly authorized GUI tests,
-so the idle-GUI memory test was run too. The scan-memory and latency tests
+total installer memory measurement. The idle-GUI memory test was run too. The scan-memory and latency tests
 run without a GUI. The updater now streams bounded HTTP bodies in 64 KiB
 chunks and holds a file lock only during installation; it adds no idle polling.
 
@@ -262,10 +261,25 @@ cargo test --release --test scan_screenshots warm_fullscreen_scan_stays_within_i
 cargo test --release --test resource_budgets -- --ignored --nocapture --test-threads=1
 ```
 
+Frame pacing: the swapchain uses strict `Fifo` vsync instead of eframe's
+default `AutoVsync` (`FifoRelaxed`), which lets a late frame tear. wgpu 24's
+Vulkan backend on NVIDIA does not block a vsynced present, so frames left in
+bursts (21, 1, 1 and 5 ms apart at 143 Hz) and scrolling stuttered.
+`pace_to_compositor` in `src/app.rs` calls `DwmFlush` only when a frame
+follows the previous one within 4 ms; the same test then measured 7.0 ms
++/- 0.7. The 4 ms threshold is fixed, so a display of about 240 Hz or more
+has its correctly paced frames held too and draws at half its refresh rate.
+Remove the workaround once the app is on wgpu 26.0.6+ or 27.0.4+
+(gfx-rs/wgpu issue 8310).
+
 `resource_budgets` asserts the warm fullscreen scan peaks under 96 MB working
 set (measured 40 MB) and the idle GUI stays under 160 MB working set
 (measured 125 MB). Both are `#[ignore]` because they measure this machine's
-GPU driver, like the latency test. `scripts/release.ps1` and `release.yml`
+GPU driver, like the latency test. Re-measured 2026-11-24 on the same machine:
+v0.2.1 and a pre-release build of v0.2.2 both idle at 130-135 MB over three launches
+each (one cold first launch of v0.2.1 read 148 MB), and the scan still peaks at
+40 MB. The idle figure moves about 5 MB between launches, so compare several
+runs of both builds before calling a change a regression. `scripts/release.ps1` and `release.yml`
 fail when the release exe exceeds 11,000,000 bytes (v0.1.0 measured
 8,779,776). `tests/resource_budgets.rs` measures memory only, not exe size. The normal
 `cargo test` also runs the embedded-JSON equivalence test and the font

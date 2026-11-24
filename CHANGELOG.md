@@ -2,6 +2,29 @@
 
 All notable changes to PoEMercPricer are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/). The release workflow publishes the section for the tagged version as the whole GitHub release notes, so write each section for players.
 
+## [0.2.2] - 2026-11-24
+
+Week-two prices for Covens, a clearer Settings page and scan fixes.
+
+### Changed
+
+- Market ask ranges come from a new trade-site snapshot taken on 2026-11-24, day 11 of the league. The market is about two and a half times deeper than in the first week. For example the Kineticist jackpot package (Kinetic Blast of Clustering with Return and Multiple Projectiles) now asks about 15 div on an ordinary warrant and 63 div on an Infamous one, down from 33 and 75.
+- Listing counts per build are refreshed too. The build, skill and support lists are unchanged: 37 builds, 272 skills and 152 support arts.
+- Scores use the same screens as 0.2.1. Six builds without their own screen (Cardinal, Withertouch, Frosthand, Bloodletter, Ripper and Warpriest) count trade listings in their estimate, so they score about 2 points higher in the deeper market. All other scores are unchanged.
+- The Settings page is laid out as one bordered group per section, with more space between groups. The note that explains a setting now sits directly under that setting instead of floating at the right edge, and the page scrolls when it does not fit.
+- In Settings, clicking anywhere on a row toggles its checkbox, the checkbox shows a ring when it has keyboard focus, and the two links look like links.
+- When an update check fails, the retry buttons sit under the error message instead of squeezing it into a narrow column.
+- Tabbing through Settings scrolls the page to the control that has focus.
+- Scrolling is smoother on graphics drivers that let frames through in bursts.
+
+### Fixed
+
+- A possible crash when scanning more than once with update checks turned off.
+- A support whose icon has very little gold in it, such as Return, could be dropped when it was the first support in a row.
+- 8K screenshots failed to load from a file. Images up to 40 megapixels now load, the same limit as a pasted image.
+- A settings file saved with a byte-order mark, as some editors do, was treated as broken, so the app ran on its defaults.
+- Starting the app with a file path that is not valid Unicode no longer crashes it.
+
 ## [0.2.1] - 2026-11-18
 
 Path of Exile 3.30.0 (Covens of Umbra) support.

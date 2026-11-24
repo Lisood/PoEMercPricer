@@ -57,7 +57,7 @@ Rules:
 | Verdict title | Georgia | 20, line-height 1.15, wraps |
 | Score number | Georgia | 30, `of 100` at 11 muted |
 | Mercenary name, class | Georgia | 16 class, 14 muted name/level |
-| Section titles (`Mercenary skills`, Settings sections) | Georgia | 15 to 16 gold |
+| Section titles | Georgia | 16 gold (`Mercenary skills`), 17 gold (Settings sections) |
 | Skill name | Georgia | 15, level 12 muted |
 | Market range, tier `T3` | Georgia | 15 / 12 |
 | Body, buttons, checkboxes | UI face, weight 300 | 14 |
@@ -88,7 +88,7 @@ body          bg, padding 12
     identity row  class · Lvl · name
     verdict box   title + action | score
                   score bar
-                  highlights (max 2)
+                  highlights (max 3)
                   market row + detail
   Mercenary skills (n)           [Scroll for all skills]  cue only on overflow
   skills pane                   the only thing that scrolls; min 140
@@ -111,20 +111,37 @@ Height: the skills pane takes `available_height().max(140)`. When content exceed
 
 ## 6. Settings pane
 
-Full-window pane replacing the body; command bar and footer stay. Header: `Back` button, `Settings` in Georgia 18 gold, `Open config folder` link. Footer status: `Changes apply immediately and save when you go back.` plus a gold `Done`. No Save button: edits apply live, closing saves, an invalid hotkey keeps the pane open with the error line under the field.
+Full-window pane replacing the body; command bar and footer stay. Header: `Back to result` button with a painted gold chevron, `Settings` in Georgia 18 gold, `Open config folder` link in `gold` (underlines on hover). Footer status: `Changes apply immediately and save when you go back.` plus a gold `Done`. No Save button: edits apply live, closing saves, an invalid hotkey keeps the pane open with the error line under the field.
 
-Section order, always: Appearance, Scanning, Window, Trade, Updates, Advanced (collapsed). The layout is the Ledger: one row per setting, label left, control right, section titles Georgia 15 gold over a `border_dark` rule. Helper text 11.5 `subtle`, one line, only when the label cannot carry it.
+Section order, always: Appearance, Scanning, Window, Trade, Updates, Advanced (collapsed). Each section is a heading over a card:
+
+```
+Appearance                                  [link]   Georgia 17 gold; link in gold
+┌───────────────────────────────────────────────┐   card: surface, 1 px border, radius 2
+│ Label                                 control │   row: 12 × 7 padding, 30 px line
+│ Helper line, under its own label              │   12 subtle, optional
+├───────────────────────────────────────────────┤   1 px border_dark between rows
+│ Label                                     [x] │
+└───────────────────────────────────────────────┘
+            18 px to the next heading, 6 px heading to card
+```
+
+- One row per setting: label left, control right, at least 16 px between them. The label wraps; the control never does.
+- Helper text sits under its own label inside the same row, left-aligned, 12 px `subtle` (status colours for the hotkey: `gold` while recording, `red` when invalid; the Updates status row's second line is `muted`).
+- Under the pointer a row fills with `raised` so the eye can follow a label to its control. A checkbox row toggles from anywhere on the row; the checkbox stays the only tab stop and gets a gold focus ring 3 px outside the box. A control that gains keyboard focus is scrolled into view, since egui does not do that itself. Unchecked boxes use a `subtle` outline, checked ones `gold`.
+- Advanced is its own card: a disclosure header (chevron, `Advanced` in the heading style, a 12 px `subtle` hint), collapsed by default; its rows follow inside the card when open.
+- The pane scrolls when it does not fit; legibility beats fitting 780 px. The header shows `Scroll for more` (the skills pane's cue) while it overflows and the header row has room for it; below that the solid scrollbar alone carries it. The attribution sits on the pane's floor when there is room and one section gap under Advanced when the pane scrolls.
 
 Adding a setting:
 1. Add the field to `AppConfig` with a default; document it in `README.md` Settings row.
 2. Pick the section. If none fits, it goes in Advanced, not a new section.
 3. Control by type: boolean → checkbox; two to four choices → segmented buttons; free text → 26 px field; a list that can grow (leagues) → dropdown with a custom fallback field; action → 26 px button on the row's right.
 4. Label is a short noun phrase. Consequence goes in the helper line (`Applies after restart.`).
-5. Check the Ledger still fits at 780 tall; if not, move something to Advanced or accept the scrollbar (never clip).
+5. Use `settings_row` or `settings_checkbox` inside the section's card; never draw a bare row outside a card.
 
-Hotkey control: text field plus `Record`. While recording the field shows `Ctrl+Shift+…` in gold with a `Cancel` button; Escape cancels. Reject chords `parse_hotkey` cannot express and show `Invalid hotkey: …` in red under the field.
+Hotkey control: text field plus `Record`. While recording the field shows `Ctrl+Shift+…` in gold with a `Cancel` button; Escape cancels. Reject chords `parse_hotkey` cannot express and show `Invalid hotkey: …` in red on the row's helper line.
 
-Updates section shows exactly two lines from `update_copy()` plus the one button for the state (`Check now`, `Update to X`, `Restart to update`, or `Check now` + `Open releases page` after a failure). Never add progress bars or spinners; the line of text is the progress.
+Updates section shows exactly two lines from `update_copy()` (the first as the row label, the second as its helper) plus the one button for the state (`Check now`, `Update to X`, `Restart to update`). After a failure the error text is long, so `Check now` and `Open releases page` sit on their own line under it instead of beside it. Never add progress bars or spinners; the line of text is the progress.
 
 ## 7. States that must be designed for every change
 
@@ -140,14 +157,14 @@ Empty, normal result, jackpot, bricked skip, not scored, ambiguous support, scan
 
   ```
   ≈ 4.5–9.0 div
-  12 listed · level 83+ · typical ask 6.8 div · median listing age 4 d · Covens snapshot 2026-11-18
+  12 listed · level 83+ · typical ask 6.8 div · median listing age 4 d · Covens snapshot 2026-11-24
   ```
 
 - Plain labels only: `Skip`, `Price-check`, `Not scored`. No unexplained abbreviations beyond `KBoC`, `GMP`, `EDWA`, `T3`, which the game uses.
 
 ## 9. Do not
 
-- Add cards, pills, badges or coloured outlines around ordinary metadata.
+- Add cards, pills, badges or coloured outlines around ordinary metadata. (Settings section cards group controls, not metadata.)
 - Use emoji, icon fonts or drawn glyphs; chevrons, ticks, radios and the scroll cue are painted 1.25 to 1.5 px vector primitives.
 - Introduce opacity on text (egui cannot); pick a token instead.
 - Put anything in a `<img src>` or texture path that might not exist; icons load lazily and fail to text.

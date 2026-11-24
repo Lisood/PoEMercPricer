@@ -144,8 +144,8 @@ replacement test passed separately. The latter used the actual published
 v0.1.0 payload and notices; local newer-release tests use a simulated release.
 Formatting, Clippy, workflow validation, PowerShell parsing, release dry-run
 restoration tests and all four release-asset checks also passed. No release,
-tag or push was made. The user subsequently authorized GUI testing explicitly; the results below
-include actual installation, update-button and restart interaction.
+tag or push was made. The GUI results below include actual installation,
+update-button and restart interaction.
 
 ## GUI verification, 2026-09-05
 
@@ -163,17 +163,16 @@ and command-bar restart all succeeded. The restarted GUI displayed v0.1.0.
 The executable and notices matched GitHub's published hashes, the previous
 executable was v0.0.0, and Windows' registered version became v0.1.0.
 
-The computer-use launcher's first installer run wrote files and reported
-success, but its registration was not visible from the shell. Repeating the
-GUI install through a normal Windows process launch produced and retained the
-expected registration; that run passed automatic updating and metadata checks.
-The launcher-context discrepancy is retained in the evidence, not counted as
-a successful registration test. Both test installations were uninstalled.
+The first installer run, started from an automation harness, wrote files and
+reported success, but its registration was not visible from the shell.
+Repeating the GUI install through a normal Windows process launch produced and
+retained the expected registration; that run passed automatic updating and
+metadata checks. The first run is not counted as a successful registration
+test. Both test installations were uninstalled.
 
-Screenshots, transcripts and hash evidence are under
-`target/verification-20260905`. They are local and ignored by git. High-contrast
-and 200% scaling remain separate visual checks; this session did not change
-Windows display or accessibility settings. See [the review](installer-updater-review.md).
+Screenshots, transcripts and hash evidence were kept locally and are not in
+the repo. High-contrast and 200% scaling remain separate visual checks and
+were not tested. See [the review](installer-updater-review.md).
 
 ## Release
 
@@ -187,7 +186,7 @@ to the exact release exe. The final installer and its installed updater are
 tested before all assets are uploaded to a draft and the release is published.
 `release.ps1` rehearses installer build/tests locally and checks all four
 published digests. A dry run restores both Cargo files byte for byte even if
-a check fails. Publishing requires explicit authorization.
+a check fails.
 
 ## Research and tradeoffs
 

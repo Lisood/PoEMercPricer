@@ -68,7 +68,8 @@ impl AppConfig {
 
     pub fn load_from(path: &Path) -> (Self, Option<String>) {
         match fs::read_to_string(path) {
-            Ok(text) => match serde_json::from_str::<Self>(&text) {
+            // PowerShell 5 and old Notepad save UTF-8 with a BOM, which serde_json rejects.
+            Ok(text) => match serde_json::from_str::<Self>(text.trim_start_matches('\u{feff}')) {
                 Ok(mut cfg) => match retired_league_successor(&cfg.trade_league) {
                     Some(league) => {
                         cfg.trade_league = league;

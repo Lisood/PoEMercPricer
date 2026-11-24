@@ -750,7 +750,14 @@ fn snap_clusters_to_grid(shaped: Vec<(u32, u32, u32)>, side: u32) -> Vec<(u32, u
             .iter()
             .any(|center| center.abs_diff(expected) <= tolerance)
     };
+    // A low-gold icon can also be the first cell, left of every strong one.
     let mut cells = Vec::new();
+    let mut left = first;
+    while let Some(cluster) = left.checked_sub(pitch).and_then(&nearest) {
+        cells.push(cluster);
+        left -= pitch;
+    }
+    cells.reverse();
     let mut expected = first;
     loop {
         match nearest(expected) {
@@ -1039,6 +1046,8 @@ fn count_roman_strokes(img: &RgbaImage, x0: u32, y0: u32, x1: u32, y1: u32) -> u
             in_stroke = false;
         }
     }
+    // The clamp is load-bearing: a real III can count four columns (the Alara
+    // fixture does), and the OCR fallback then misreads it as a guessed T2.
     strokes.min(3)
 }
 
@@ -1071,6 +1080,16 @@ mod tests {
     }
 
     use super::*;
+
+    #[test]
+    fn a_low_gold_first_cell_is_kept_on_the_grid() {
+        // (left, right, gold area) with side 50: only areas >= 100 anchor.
+        let weak_first = vec![(80, 120, 30), (140, 180, 300), (200, 240, 300)];
+        assert_eq!(snap_clusters_to_grid(weak_first.clone(), 50), weak_first);
+        // An off-grid blob on the left is still dropped.
+        let stray = vec![(40, 60, 30), (140, 180, 300), (200, 240, 300)];
+        assert_eq!(snap_clusters_to_grid(stray.clone(), 50), stray[1..]);
+    }
 
     #[test]
     fn fullscreen_predicate_uses_aspect_ratio_and_size() {

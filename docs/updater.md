@@ -88,7 +88,7 @@ pub enum UpdateState {
 /// One GET. Ok(None) = already current. Tags must parse as `vX.Y.Z`.
 pub fn check() -> anyhow::Result<Option<Release>>;
 /// Download next to the exe, verify size and sha256, keep the old exe as
-/// `poemercpricer-previous.exe`, then self_replace. Blocking; 30-120 s worst case.
+/// `poemercpricer-previous.exe`, then self_replace. Blocking; each of its up to three downloads has its own 120 s limit.
 pub fn install(release: &Release, exe: &Path) -> anyhow::Result<()>;
 /// Parsing helpers, unit-tested without network.
 pub fn parse_release(json: &[u8], current: &str) -> anyhow::Result<Option<Release>>;
@@ -103,7 +103,7 @@ pub fn gunzip(gz: &[u8], expected_len: u64) -> anyhow::Result<Vec<u8>>;
 pub fn fetch(url: &str, timeout: Duration) -> anyhow::Result<Vec<u8>>;
 ```
 
-HTTP helper. WinRT is initialised per thread with `RoInitialize(RO_INIT_MULTITHREADED)`, tolerating `RPC_E_CHANGED_MODE`, and deliberately never released, so the updater keeps a thread-local "initialised" flag instead of the RAII guard `winocr.rs` uses. `RoInitialize` alone ties the process MTA's lifetime to whichever threads called it: when the last one exits, the MTA tears down mid-process and the activation factories `windows` caches in statics dangle, faulting the next WinRT call from a fresh thread (reproduced by `cargo test --test update -- --test-threads=1`). `winrt()` also calls `CoIncrementMTAUsage` once per process, behind a `std::sync::Once`, to pin the MTA for good with a cookie that is deliberately never released.
+HTTP helper. WinRT is initialised per thread with `RoInitialize(RO_INIT_MULTITHREADED)`, tolerating `RPC_E_CHANGED_MODE`, and deliberately never released, so `winrt()` keeps a thread-local "initialised" flag instead of an RAII guard. `winocr.rs` calls the same function: with its own guard, a scan thread exiting while updates were off tore the MTA down under the cached OCR factories. `RoInitialize` alone ties the process MTA's lifetime to whichever threads called it: when the last one exits, the MTA tears down mid-process and the activation factories `windows` caches in statics dangle, faulting the next WinRT call from a fresh thread (reproduced by `cargo test --test update -- --test-threads=1`). `winrt()` also calls `CoIncrementMTAUsage` once per process, behind a `std::sync::Once`, to pin the MTA for good with a cookie that is deliberately never released.
 
 The HTTP helper requests headers first and reads the body in 64 KiB chunks.
 Both `Content-Length` and the actual streamed byte count are checked: JSON is
@@ -116,7 +116,7 @@ without buffering the rest. See `fetch_bounded` in `src/update.rs`.
 The implementation follows Microsoft's [HTTP completion options](https://learn.microsoft.com/en-us/uwp/api/windows.web.http.httpcompletionoption)
 and [input-stream reading API](https://learn.microsoft.com/en-us/uwp/api/windows.storage.streams.iinputstream.readasync).
 
-Timeouts: 15 s for the JSON, 120 s for the download. A 15 MB asset took 0.5 s on the test machine and the v0.1.0 exe is 8.8 MB, so 120 s is there to cover a slow connection without hanging forever.
+Timeouts: 15 s for the JSON, 120 s for the download. A 15 MB asset took 0.5 s on the test machine and the v0.1.0 exe is 8.8 MB, so 120 s is there to cover a slow connection without hanging forever. The limit is per download, not per install: the gzip attempt, the exe fallback and the notices each get their own, so an install whose gzip download stalls can take up to about six minutes before it fails or finishes.
 
 `install` first obtains an exclusive, delete-on-close file handle for
 `poemercpricer-update.lock` in the executable folder. The handle covers the

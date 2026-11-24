@@ -90,7 +90,7 @@ Trade stats, warrant types, listing counts and prices come from the official tra
 
 ### Price snapshot
 
-`assets/warrant-prices-3.30.json`: 193 rows (base 65, money 64, money_gates 64), 23 of them partner-swept. Rows with no listings fall back to the next package or show "no listings data", never 0c. Mysterious Diver and Warpriest of the Ruckus have 0 listings.
+`assets/warrant-prices-3.30.json`, refreshed 2026-11-24: 193 rows (base 65, money 64, money_gates 64), 21 of them partner-swept. Rows with no listings fall back to the next package or show "no listings data", never 0c. Mysterious Diver and Warpriest of the Ruckus have 0 listings.
 
 ### Currency rates
 
@@ -98,7 +98,7 @@ Two poe.ninja rates are in use, and they feed different things:
 
 | Rate | Read | Feeds |
 |---|---|---|
-| 95.29 chaos per divine | poe.ninja, 2026-11-18 05:49Z | the bundled price snapshot and the market row in the overlay |
+| 140.4 chaos per divine | poe.ninja, 2026-11-24 09:58Z | the bundled price snapshot and the market row in the overlay (95.29 in the 2026-11-18 snapshot) |
 | 101.5 chaos per divine | poe.ninja, 2026-11-18 02:57Z | the scoring survey in `market-3.30.md` (converting divine asks to chaos for medians and tiers) |
 
 The survey rate is not a price shown to users. Snapshot prices are stored in chaos, so the displayed ranges only depend on the snapshot rate.

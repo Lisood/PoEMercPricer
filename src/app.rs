@@ -270,6 +270,8 @@ pub struct PricerApp {
     exe: Option<PathBuf>,
     no_updates: bool,
     first_frame: bool,
+    /// When the last frame started, for `pace_to_compositor`.
+    last_frame: Option<Instant>,
     /// When the last check started, not when it finished: a failed check should
     /// wait out the same interval before trying again.
     last_update_check: Option<Instant>,
@@ -393,6 +395,7 @@ impl PricerApp {
             exe: std::env::current_exe().ok(),
             no_updates,
             first_frame: true,
+            last_frame: None,
             last_update_check: None,
         };
         if let Some(path) = app.pending_image.take() {
@@ -638,8 +641,43 @@ impl PricerApp {
     }
 }
 
+/// A frame that took less than this from the start of one `update` to the
+/// start of the next was not held back by vsync.
+const UNPACED_FRAME: Duration = Duration::from_millis(4);
+
+/// Holds a frame that the driver let through unpaced until the desktop
+/// compositor's next refresh.
+///
+/// wgpu 24's Vulkan backend has no wait after acquiring a swapchain image, and
+/// NVIDIA's default present method on Windows (layered on a DXGI swapchain)
+/// does not block a vsynced present once per refresh. Frames then leave in
+/// bursts (measured at 143 Hz: 21, 1, 1 and 5 ms apart, on repeat) and, with
+/// the mouse moving, at several times the refresh rate. egui sizes each scroll
+/// step by the time since the last frame, so the page moved in a jump followed
+/// by near-stops. wgpu 26.0.6 and 27.0.4 fix it with a fence wait (gfx-rs/wgpu
+/// issue 8310); limiting the loop to the refresh rate is the workaround until
+/// this app is on one of those. With it the same test measured 7.0 ms +/- 0.7.
+///
+/// Only a frame that follows the last one within `UNPACED_FRAME` is held. A
+/// frame after an idle spell is not, so a click is never delayed, and neither
+/// is one from a driver that paces properly, whose frames are already a
+/// refresh apart; holding those too would halve the frame rate.
+///
+/// shortcut: the threshold is fixed, so a display of about 240 Hz or more (a
+/// refresh under 4.2 ms) has paced frames held too and draws at half rate;
+/// derive it from `DwmGetCompositionTimingInfo` if that ever shows.
+fn pace_to_compositor(last_frame: &mut Option<Instant>) {
+    #[cfg(windows)]
+    if last_frame.is_some_and(|last| last.elapsed() < UNPACED_FRAME) {
+        // Fails only with composition off, which Windows 8 and later never do.
+        let _ = unsafe { windows::Win32::Graphics::Dwm::DwmFlush() };
+    }
+    *last_frame = Some(Instant::now());
+}
+
 impl eframe::App for PricerApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        pace_to_compositor(&mut self.last_frame);
         let palette = palette_for(&self.cfg.theme, ctx.system_theme());
         if palette != self.palette {
             self.palette = palette;
@@ -1228,11 +1266,7 @@ fn idle_help(ui: &mut Ui, hotkey: &str, p: &Palette) {
         .inner_margin(Margin::same(16))
         .stroke(Stroke::new(1.0_f32, p.border))
         .show(ui, |ui| {
-            ui.label(
-                RichText::new("No mercenary scanned yet")
-                    .color(p.text)
-                    .size(18.0),
-            );
+            ui.label(poe_text("No mercenary scanned yet", 18.0, p.text));
             ui.add_space(14.0);
             ui.spacing_mut().item_spacing.y = 8.0;
             ui.spacing_mut().interact_size.y = 0.0;
@@ -2151,6 +2185,15 @@ fn apply_support_choice(merc: &mut Mercenary, choice: &SupportChoice) -> bool {
     true
 }
 
+/// egui never scrolls a tabbed-to widget into view, and the Settings page is
+/// taller than the default window.
+fn reveal_on_focus(response: egui::Response) -> egui::Response {
+    if response.gained_focus() {
+        response.scroll_to_me(None);
+    }
+    response
+}
+
 /// Rect-sensed rows draw no widget chrome, so keyboard focus is shown here.
 fn focus_ring(ui: &Ui, response: &egui::Response, p: &Palette) {
     if response.gained_focus() {
@@ -2185,7 +2228,7 @@ fn skills_heading(ui: &mut Ui, count: usize, overflows: bool, p: &Palette) {
         ui.label(poe_text(format!("({count})"), 13.0, p.muted));
         if overflows {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                scroll_cue(ui, p);
+                scroll_cue(ui, "Scroll for all skills", p);
             });
         }
     });
@@ -2195,7 +2238,7 @@ fn scroll_cue_visible(content_height: f32, viewport_height: f32) -> bool {
     content_height > viewport_height + 0.5
 }
 
-fn scroll_cue(ui: &mut Ui, p: &Palette) {
+fn scroll_cue(ui: &mut Ui, text: &str, p: &Palette) {
     ui.horizontal(|ui| {
         ui.spacing_mut().item_spacing.x = 5.0;
         let (rect, _) = ui.allocate_exact_size(Vec2::new(9.0, 16.0), egui::Sense::hover());
@@ -2222,11 +2265,7 @@ fn scroll_cue(ui: &mut Ui, p: &Palette) {
             ],
             stroke,
         );
-        ui.label(
-            RichText::new("Scroll for all skills")
-                .color(p.muted)
-                .size(12.0),
-        );
+        ui.label(RichText::new(text).color(p.muted).size(12.0));
     });
 }
 
@@ -2486,102 +2525,180 @@ fn modifiers_prefix(m: egui::Modifiers) -> String {
     }
 }
 
-/// Breathing room above a section title. 4, not the mock's 7: only at 4 does
-/// the whole settings panel fit a 780 px window without a scrollbar clipping the
-/// attribution line.
-const SETTINGS_TITLE_PAD_TOP: f32 = 4.0;
+/// Space between one settings card and the next section heading: clearly more
+/// than the rows inside a card, so each section reads as its own group.
+const SETTINGS_SECTION_GAP: f32 = 18.0;
 
-/// A section title over a hairline rule, optionally with a right-aligned link.
-/// Returns true on the frame that link is clicked.
-fn settings_title(ui: &mut Ui, title: &str, right: Option<&str>, p: &Palette) -> bool {
+/// Height of a settings row's main line. Every control (26 px) fits in it.
+const SETTINGS_LINE_HEIGHT: f32 = 30.0;
+
+/// A settings section: a serif heading, an optional right-aligned link, and
+/// a bordered card holding the section's rows. Returns true on the frame the
+/// link is clicked.
+fn settings_section(
+    ui: &mut Ui,
+    title: &str,
+    link: Option<&str>,
+    p: &Palette,
+    body: impl FnOnce(&mut Ui),
+) -> bool {
     let mut clicked = false;
-    ui.add_space(SETTINGS_TITLE_PAD_TOP);
+    if ui.cursor().top() > ui.max_rect().top() + 0.5 {
+        ui.add_space(SETTINGS_SECTION_GAP);
+    }
     ui.horizontal(|ui| {
-        ui.set_min_height(18.0);
-        ui.label(poe_text(title, 15.0, p.gold));
-        if let Some(right) = right {
+        ui.set_min_height(22.0);
+        ui.label(poe_text(title, 17.0, p.gold));
+        if let Some(link) = link {
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                clicked = ui.link(right).clicked();
+                clicked = reveal_on_focus(ui.link(RichText::new(link).color(p.gold))).clicked();
             });
         }
     });
-    ui.add_space(3.0);
-    settings_rule(ui, p);
+    ui.add_space(6.0);
+    settings_card(ui, p, body);
     clicked
 }
 
-/// The 1 px hairline a section title and the attribution line sit against.
+/// The bordered group a section's rows sit in.
+fn settings_card(ui: &mut Ui, p: &Palette, body: impl FnOnce(&mut Ui)) {
+    Frame::new()
+        .fill(p.surface)
+        .corner_radius(2)
+        .stroke(Stroke::new(1.0_f32, p.border))
+        .show(ui, |ui| {
+            ui.set_min_width(ui.available_width());
+            body(ui);
+        });
+}
+
+/// The 1 px hairline above the attribution line.
 fn settings_rule(ui: &mut Ui, p: &Palette) {
     let (rule, _) =
         ui.allocate_exact_size(Vec2::new(ui.available_width(), 1.0), egui::Sense::hover());
     ui.painter().rect_filled(rule, 0.0, p.border_dark);
 }
 
-/// One settings line: a wrapping label on the left, its control hard right.
+/// Paints the frame around a settings row once its rect is known: a hairline
+/// above every row but a card's first, and a fill under the pointer so the
+/// eye can follow a label across to its control.
+fn settings_row_chrome(
+    ui: &Ui,
+    fill: egui::layers::ShapeIdx,
+    row: egui::Rect,
+    first: bool,
+    p: &Palette,
+) {
+    if ui.rect_contains_pointer(row) {
+        ui.painter()
+            .set(fill, egui::Shape::rect_filled(row, 0.0, p.raised));
+    }
+    if !first {
+        ui.painter().hline(
+            row.x_range(),
+            row.top(),
+            Stroke::new(1.0_f32, p.border_dark),
+        );
+    }
+}
+
+/// One row of a settings card: a wrapping label on the left, its control
+/// hard right, and an optional helper line under the label. Returns the
+/// row's rect.
 fn settings_row(
     ui: &mut Ui,
     label: impl Into<egui::WidgetText>,
-    min_height: f32,
+    help: Option<RichText>,
+    p: &Palette,
     control: impl FnOnce(&mut Ui),
-) {
-    ui.horizontal(|ui| {
-        ui.set_min_height(min_height);
-        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            control(ui);
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
-                ui.add(egui::Label::new(label).wrap());
-            });
-        });
-    });
+) -> egui::Rect {
+    let first = ui.cursor().top() <= ui.max_rect().top() + 0.5;
+    let fill = ui.painter().add(egui::Shape::Noop);
+    let row = Frame::new()
+        .inner_margin(Margin::symmetric(12, 7))
+        .show(ui, |ui| {
+            ui.set_min_width(ui.available_width());
+            // A sized child, not `ui.horizontal`: with the body's zero
+            // interact height a plain row is 0 px tall, and the label then
+            // hugs the top instead of centring on the control.
+            ui.allocate_ui_with_layout(
+                Vec2::new(ui.available_width(), SETTINGS_LINE_HEIGHT),
+                egui::Layout::right_to_left(egui::Align::Center),
+                |ui| {
+                    ui.set_min_height(SETTINGS_LINE_HEIGHT);
+                    // A control's own `ui.horizontal` starts this tall and is
+                    // centred from there; at the body's 0 it would start at
+                    // the midline and hang below it.
+                    ui.spacing_mut().interact_size.y = 26.0;
+                    control(ui);
+                    ui.add_space(16.0);
+                    ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
+                        ui.add(egui::Label::new(label).wrap());
+                    });
+                },
+            );
+            if let Some(help) = help {
+                ui.add_space(1.0);
+                ui.add(egui::Label::new(help.size(12.0)).wrap());
+            }
+        })
+        .response
+        .rect;
+    settings_row_chrome(ui, fill, row, first, p);
+    row
 }
 
-/// A settings line whose control is a checkbox, with an optional dimmer
-/// clarifier trailing the label on the same line.
-fn settings_checkbox(
-    ui: &mut Ui,
-    value: &mut bool,
-    label: &str,
-    suffix: Option<&str>,
-    p: &Palette,
-) {
-    let mut job = egui::text::LayoutJob::default();
-    job.append(
-        label,
-        0.0,
-        TextFormat {
-            font_id: FontId::new(14.0, FontFamily::Proportional),
-            color: p.text,
-            ..Default::default()
+/// A settings row whose control is a checkbox. The whole row toggles it, so
+/// the label is as easy to hit as the box.
+fn settings_checkbox(ui: &mut Ui, value: &mut bool, label: &str, help: Option<&str>, p: &Palette) {
+    let checked = *value;
+    let row = settings_row(
+        ui,
+        settings_label(label, p),
+        help.map(|help| RichText::new(help).color(p.subtle)),
+        p,
+        |ui| {
+            // The checkbox widens to interact_size.y and draws its box at the
+            // left edge; 0 keeps the box flush right like the other controls.
+            ui.spacing_mut().interact_size.y = 0.0;
+            ui.spacing_mut().icon_width = 14.0;
+            // egui paints the tick with one stroke colour whatever the state,
+            // so the box outline, not the tick, is what turns gold once
+            // checked. Unchecked uses `subtle`, which keeps 3:1 against the
+            // card in every palette where `border` would not.
+            let widgets = &mut ui.visuals_mut().widgets;
+            for style in [
+                &mut widgets.inactive,
+                &mut widgets.hovered,
+                &mut widgets.active,
+            ] {
+                style.fg_stroke = Stroke::new(1.5_f32, p.text);
+                style.bg_fill = p.raised;
+                style.bg_stroke = Stroke::new(1.0_f32, if checked { p.gold } else { p.subtle });
+            }
+            let response = reveal_on_focus(ui.add(egui::Checkbox::without_text(value)));
+            if response.has_focus() {
+                ui.painter().rect_stroke(
+                    response.rect.expand(3.0),
+                    2,
+                    Stroke::new(1.0_f32, p.gold),
+                    egui::StrokeKind::Inside,
+                );
+            }
         },
     );
-    if let Some(suffix) = suffix {
-        job.append(
-            suffix,
-            6.0,
-            TextFormat {
-                font_id: FontId::new(11.5, FontFamily::Proportional),
-                color: p.subtle,
-                ..Default::default()
-            },
-        );
+    // CLICK without FOCUSABLE: the checkbox stays the row's only tab stop.
+    if ui
+        .interact(
+            row,
+            ui.id().with(("settings_checkbox", label)),
+            egui::Sense::CLICK,
+        )
+        .on_hover_cursor(egui::CursorIcon::PointingHand)
+        .clicked()
+    {
+        *value = !*value;
     }
-    let checked = *value;
-    settings_row(ui, job, 30.0, |ui| {
-        ui.spacing_mut().icon_width = 14.0;
-        // egui paints the tick with one stroke colour whatever the state, so
-        // the box outline, not the tick, is what turns gold once checked.
-        let widgets = &mut ui.visuals_mut().widgets;
-        for style in [
-            &mut widgets.inactive,
-            &mut widgets.hovered,
-            &mut widgets.active,
-        ] {
-            style.fg_stroke = Stroke::new(1.5_f32, p.text);
-            style.bg_fill = p.raised;
-            style.bg_stroke = Stroke::new(1.0_f32, if checked { p.gold } else { p.border });
-        }
-        ui.add(egui::Checkbox::without_text(value));
-    });
 }
 
 /// A 26 px single-line text field in the pane's colours.
@@ -2595,13 +2712,15 @@ fn settings_field(ui: &mut Ui, text: &mut String, width: f32, p: &Palette) {
         ] {
             style.bg_stroke = Stroke::new(1.0_f32, p.border);
         }
-        ui.add(
-            egui::TextEdit::singleline(text)
-                .desired_width(width)
-                .font(FontId::new(13.0, FontFamily::Proportional))
-                .text_color(p.text)
-                .background_color(p.surface)
-                .margin(Margin::symmetric(6, 5)),
+        reveal_on_focus(
+            ui.add(
+                egui::TextEdit::singleline(text)
+                    .desired_width(width)
+                    .font(FontId::new(13.0, FontFamily::Proportional))
+                    .text_color(p.text)
+                    .background_color(p.surface)
+                    .margin(Margin::symmetric(6, 5)),
+            ),
         );
     });
 }
@@ -2622,7 +2741,7 @@ fn small_button_widget(text: &str, gold: bool, p: &Palette) -> egui::Button<'sta
 }
 
 fn small_button(ui: &mut Ui, text: &str, gold: bool, p: &Palette) -> egui::Response {
-    ui.add(small_button_widget(text, gold, p))
+    reveal_on_focus(ui.add(small_button_widget(text, gold, p)))
 }
 
 /// The left-hand label of a settings row.
@@ -2646,8 +2765,9 @@ fn league_is_listed(options: &[String], league: &str) -> bool {
     options.iter().any(|option| option == league)
 }
 
-/// The Settings pane: a header row over a ring-framed body, drawn in the
-/// central panel in place of the result. Returns the frame's one action.
+/// The Settings pane: a header row over a scrolling stack of section cards,
+/// drawn in the central panel in place of the result. Returns the frame's one
+/// action.
 fn settings_panel(
     ui: &mut Ui,
     cfg: &mut AppConfig,
@@ -2658,6 +2778,13 @@ fn settings_panel(
     p: &Palette,
 ) -> Option<SettingsAction> {
     let mut action = None;
+    // Like the skills pane, overflow is only known after the scroll area lays
+    // out, so the header cue uses last frame's answer.
+    let overflow_id = ui.id().with("settings_overflow");
+    let overflows = ui
+        .ctx()
+        .data(|data| data.get_temp(overflow_id))
+        .unwrap_or(false);
 
     ui.horizontal(|ui| {
         ui.set_min_height(30.0);
@@ -2682,69 +2809,64 @@ fn settings_panel(
         ui.add_space(6.0);
         ui.label(poe_text("Settings", 18.0, p.gold));
         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            if ui.link("Open config folder").clicked() {
+            if ui
+                .link(RichText::new("Open config folder").color(p.gold))
+                .clicked()
+            {
                 action = Some(SettingsAction::OpenFolder);
+            }
+            // Same cue as the skills pane; it yields when the row is short.
+            if overflows && ui.available_width() >= 130.0 {
+                ui.add_space(8.0);
+                scroll_cue(ui, "Scroll for more", p);
             }
         });
     });
-    ui.add_space(4.0);
+    ui.add_space(10.0);
 
     let modifiers = ui.input(|input| input.modifiers);
-    Frame::new()
-        .fill(p.raised)
-        .corner_radius(2)
-        .inner_margin(Margin::same(3))
-        .stroke(Stroke::new(1.0_f32, p.border))
-        .show(ui, |ui| {
-            Frame::new()
-                .fill(p.bg)
-                .inner_margin(Margin {
-                    left: 14,
-                    right: 14,
-                    top: 6,
-                    bottom: 10,
-                })
-                .stroke(Stroke::new(1.0_f32, p.border_dark))
-                .show(ui, |ui| {
-                    // A solid, allocated track, matching the skills pane.
-                    {
-                        let scroll = &mut ui.style_mut().spacing.scroll;
-                        scroll.floating = false;
-                        scroll.bar_width = 10.0;
-                        scroll.handle_min_length = 36.0;
-                        scroll.bar_inner_margin = 6.0;
-                        scroll.bar_outer_margin = 2.0;
-                        scroll.foreground_color = true;
-                    }
-                    ui.visuals_mut().widgets.inactive.fg_stroke =
-                        Stroke::new(1.0_f32, p.gold.gamma_multiply(0.72));
-                    ui.visuals_mut().widgets.hovered.fg_stroke = Stroke::new(1.0_f32, p.gold);
-                    ui.visuals_mut().widgets.active.fg_stroke = Stroke::new(1.0_f32, p.orange);
-                    egui::ScrollArea::vertical()
-                        .id_salt("settings_scroll")
-                        .auto_shrink([false, false])
-                        .animated(false)
-                        .scroll_bar_visibility(
-                            egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded,
-                        )
-                        .show(ui, |ui| {
-                            ui.set_min_width(ui.available_width());
-                            ui.spacing_mut().interact_size.y = 0.0;
-                            ui.spacing_mut().item_spacing.y = 0.0;
-                            settings_body(
-                                ui,
-                                cfg,
-                                update,
-                                no_updates,
-                                recheck,
-                                recording,
-                                modifiers,
-                                p,
-                                &mut action,
-                            );
-                        });
-                });
-        });
+    ui.scope(|ui| {
+        // A solid, allocated track, matching the skills pane.
+        {
+            let scroll = &mut ui.style_mut().spacing.scroll;
+            scroll.floating = false;
+            scroll.bar_width = 10.0;
+            scroll.handle_min_length = 36.0;
+            scroll.bar_inner_margin = 6.0;
+            scroll.bar_outer_margin = 2.0;
+            scroll.foreground_color = true;
+        }
+        ui.visuals_mut().widgets.inactive.fg_stroke =
+            Stroke::new(1.0_f32, p.gold.gamma_multiply(0.72));
+        ui.visuals_mut().widgets.hovered.fg_stroke = Stroke::new(1.0_f32, p.gold);
+        ui.visuals_mut().widgets.active.fg_stroke = Stroke::new(1.0_f32, p.orange);
+        let output = egui::ScrollArea::vertical()
+            .id_salt("settings_scroll")
+            .auto_shrink([false, false])
+            .animated(false)
+            .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded)
+            .show(ui, |ui| {
+                ui.set_min_width(ui.available_width());
+                ui.spacing_mut().interact_size.y = 0.0;
+                ui.spacing_mut().item_spacing.y = 0.0;
+                settings_body(
+                    ui,
+                    cfg,
+                    update,
+                    no_updates,
+                    recheck,
+                    recording,
+                    modifiers,
+                    p,
+                    &mut action,
+                );
+            });
+        let now = scroll_cue_visible(output.content_size.y, output.inner_rect.height());
+        if now != overflows {
+            ui.ctx().data_mut(|data| data.insert_temp(overflow_id, now));
+            ui.ctx().request_repaint();
+        }
+    });
     action
 }
 
@@ -2762,8 +2884,62 @@ fn settings_body(
     p: &Palette,
     action: &mut Option<SettingsAction>,
 ) {
-    settings_title(ui, "Appearance", None, p);
-    settings_row(ui, settings_label("Theme", p), 34.0, |ui| {
+    settings_section(ui, "Appearance", None, p, |ui| {
+        appearance_rows(ui, cfg, p, action)
+    });
+    settings_section(ui, "Scanning", None, p, |ui| {
+        scanning_rows(ui, cfg, recording, modifiers, p, action)
+    });
+    settings_section(ui, "Window", None, p, |ui| {
+        settings_checkbox(ui, &mut cfg.always_on_top, "Always on top", None, p);
+        settings_checkbox(
+            ui,
+            &mut cfg.hide_on_escape,
+            "Hide the window when Escape is pressed",
+            None,
+            p,
+        );
+    });
+    settings_section(ui, "Trade", None, p, |ui| trade_rows(ui, cfg, p, action));
+    if settings_section(ui, "Updates", Some("Release notes"), p, |ui| {
+        update_rows(ui, cfg, update, no_updates, recheck, p, action)
+    }) {
+        *action = Some(SettingsAction::OpenReleases);
+    }
+    ui.add_space(SETTINGS_SECTION_GAP);
+    settings_card(ui, p, |ui| advanced_rows(ui, cfg, p));
+
+    // The attribution sits on the pane's floor when there is room, and one
+    // section gap under the last card when the pane scrolls.
+    let attribution = egui::WidgetText::from(
+        RichText::new(
+            "Path of Exile and its game artwork are owned by or licensed to Grinding Gear Games Limited. Not affiliated with or endorsed by Grinding Gear Games.",
+        )
+        .size(11.5)
+        .color(p.subtle),
+    )
+    .into_galley(
+        ui,
+        Some(egui::TextWrapMode::Wrap),
+        ui.available_width(),
+        egui::TextStyle::Body,
+    );
+    // 4 px of slack: content that exactly fills the pane can switch the
+    // scrollbar on, narrow the text into an extra line and clip it.
+    let floor = ui.available_height() - attribution.size().y - 7.0 - 4.0;
+    ui.add_space(floor.max(SETTINGS_SECTION_GAP));
+    settings_rule(ui, p);
+    ui.add_space(6.0);
+    ui.label(attribution);
+}
+
+fn appearance_rows(
+    ui: &mut Ui,
+    cfg: &mut AppConfig,
+    p: &Palette,
+    action: &mut Option<SettingsAction>,
+) {
+    settings_row(ui, settings_label("Theme", p), None, p, |ui| {
         ui.horizontal(|ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
             // `ui.horizontal` inherits the row's right-to-left direction, so
@@ -2792,21 +2968,41 @@ fn settings_body(
                     .min_size(Vec2::new(0.0, 26.0))
                     .corner_radius(2)
                     .wrap_mode(egui::TextWrapMode::Extend);
-                if ui.add(button).clicked() {
+                if reveal_on_focus(ui.add(button)).clicked() {
                     cfg.theme = value.to_string();
                     *action = Some(SettingsAction::Save);
                 }
             }
         });
     });
+}
 
-    settings_title(ui, "Scanning", None, p);
+fn scanning_rows(
+    ui: &mut Ui,
+    cfg: &mut AppConfig,
+    recording: bool,
+    modifiers: egui::Modifiers,
+    p: &Palette,
+    action: &mut Option<SettingsAction>,
+) {
     let hotkey_error = if recording {
         None
     } else {
         parse_hotkey(&cfg.hotkey).err().map(|e| format!("{e}"))
     };
-    settings_row(ui, settings_label("Scan hotkey", p), 34.0, |ui| {
+    let (help, help_color) = match (recording, &hotkey_error) {
+        (true, _) => (
+            "Press the key combination now. Escape cancels.".to_string(),
+            p.gold,
+        ),
+        (false, Some(error)) => (format!("Invalid hotkey: {error}"), p.red),
+        (false, None) => (
+            "Applies after restart. Ctrl, Shift, Alt, Win plus a letter or digit.".to_string(),
+            p.subtle,
+        ),
+    };
+    let help = Some(RichText::new(help).color(help_color));
+    settings_row(ui, settings_label("Scan hotkey", p), help, p, |ui| {
         ui.horizontal(|ui| {
             // Right-to-left row: the button is added first so it sits right
             // of the field.
@@ -2839,24 +3035,6 @@ fn settings_body(
             }
         });
     });
-    let (help, help_color) = match (recording, &hotkey_error) {
-        (true, _) => (
-            "Press the key combination now. Escape cancels.".to_string(),
-            p.gold,
-        ),
-        (false, Some(error)) => (format!("Invalid hotkey: {error}"), p.red),
-        (false, None) => (
-            "Applies after restart. Ctrl, Shift, Alt, Win plus a letter or digit.".to_string(),
-            p.subtle,
-        ),
-    };
-    // Inside a vertical parent a bare right_to_left child claims the whole
-    // remaining height and centres in it, so the line needs its own row.
-    ui.horizontal(|ui| {
-        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            ui.add(egui::Label::new(RichText::new(help).size(11.5).color(help_color)).wrap());
-        });
-    });
     settings_checkbox(
         ui,
         &mut cfg.scan_clipboard_first,
@@ -2871,18 +3049,9 @@ fn settings_body(
         None,
         p,
     );
+}
 
-    settings_title(ui, "Window", None, p);
-    settings_checkbox(ui, &mut cfg.always_on_top, "Always on top", None, p);
-    settings_checkbox(
-        ui,
-        &mut cfg.hide_on_escape,
-        "Hide the window when Escape is pressed",
-        None,
-        p,
-    );
-
-    settings_title(ui, "Trade", None, p);
+fn trade_rows(ui: &mut Ui, cfg: &mut AppConfig, p: &Palette, action: &mut Option<SettingsAction>) {
     let (patch, snapshot_league, _source) = poemercpricer::trade::bundled_trade_stat_provenance();
     let league_choices = league_options(snapshot_league);
     let listed = league_is_listed(&league_choices, &cfg.trade_league);
@@ -2891,14 +3060,18 @@ fn settings_body(
         .ctx()
         .data(|d| d.get_temp::<bool>(custom_id))
         .unwrap_or(false);
-    settings_row(ui, settings_label("League", p), 34.0, |ui| {
+    let help = RichText::new(format!(
+        "From the bundled {patch} snapshot. Pick Custom for any other league name."
+    ))
+    .color(p.subtle);
+    settings_row(ui, settings_label("League", p), Some(help), p, |ui| {
         ui.spacing_mut().interact_size.y = 26.0;
         let selected_text = if listed && !custom_chosen {
             cfg.trade_league.clone()
         } else {
             "Custom".to_string()
         };
-        egui::ComboBox::from_id_salt("trade_league")
+        let league = egui::ComboBox::from_id_salt("trade_league")
             .width(150.0)
             .selected_text(RichText::new(selected_text).size(13.0).color(p.text))
             .show_ui(ui, |ui| {
@@ -2922,23 +3095,10 @@ fn settings_body(
                     ui.ctx().data_mut(|d| d.insert_temp(custom_id, true));
                 }
             });
-    });
-    ui.horizontal(|ui| {
-        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            ui.add(
-                egui::Label::new(
-                    RichText::new(format!(
-                        "From the bundled {patch} snapshot. Pick Custom for any other league name."
-                    ))
-                    .size(11.5)
-                    .color(p.subtle),
-                )
-                .wrap(),
-            );
-        });
+        reveal_on_focus(league.response);
     });
     if !listed || custom_chosen {
-        settings_row(ui, settings_label("Custom league", p), 34.0, |ui| {
+        settings_row(ui, settings_label("Custom league", p), None, p, |ui| {
             settings_field(ui, &mut cfg.trade_league, 150.0, p);
         });
     }
@@ -2946,13 +3106,20 @@ fn settings_body(
         ui,
         &mut cfg.trade_every_skill,
         "Search every skill",
-        Some("(up to 5; needs a pathofexile.com login)"),
+        Some("Up to 5 skills. Needs a pathofexile.com login."),
         p,
     );
+}
 
-    if settings_title(ui, "Updates", Some("Release notes"), p) {
-        *action = Some(SettingsAction::OpenReleases);
-    }
+fn update_rows(
+    ui: &mut Ui,
+    cfg: &mut AppConfig,
+    update: &UpdateState,
+    no_updates: bool,
+    recheck: Option<Duration>,
+    p: &Palette,
+    action: &mut Option<SettingsAction>,
+) {
     let (line1, line2) = update_copy(
         update,
         cfg.check_updates && !no_updates,
@@ -2964,58 +3131,59 @@ fn settings_body(
     } else {
         p.text
     };
-    ui.horizontal(|ui| {
-        ui.set_min_height(34.0);
-        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-            match update {
-                UpdateState::Ready { .. } => {
-                    if small_button(ui, "Restart to update", true, p).clicked() {
-                        *action = Some(SettingsAction::Restart);
-                    }
-                }
-                UpdateState::Available(release) => {
-                    if small_button(ui, &format!("Update to {}", release.version), true, p)
-                        .clicked()
-                    {
-                        *action = Some(SettingsAction::Install);
-                    }
-                }
-                // A launch that failed offline has to be retryable without a restart.
-                UpdateState::Failed { .. } => {
-                    ui.horizontal(|ui| {
-                        if small_button(ui, "Open releases page", false, p).clicked() {
-                            *action = Some(SettingsAction::OpenReleases);
-                        }
-                        if small_button(ui, "Check now", false, p).clicked() {
-                            *action = Some(SettingsAction::CheckNow);
-                        }
-                    });
-                }
-                state => {
-                    let busy = matches!(state, UpdateState::Checking | UpdateState::Downloading(_));
-                    if ui
-                        .add_enabled(!busy, small_button_widget("Check now", false, p))
-                        .clicked()
-                    {
-                        *action = Some(SettingsAction::CheckNow);
-                    }
+    let help = (!line2.is_empty()).then(|| RichText::new(line2).color(p.muted));
+    settings_row(
+        ui,
+        RichText::new(line1).size(14.0).color(line1_color),
+        help,
+        p,
+        |ui| match update {
+            UpdateState::Ready { .. } => {
+                if small_button(ui, "Restart to update", true, p).clicked() {
+                    *action = Some(SettingsAction::Restart);
                 }
             }
-            ui.with_layout(egui::Layout::left_to_right(egui::Align::Center), |ui| {
-                ui.vertical(|ui| {
-                    ui.spacing_mut().item_spacing.y = 1.0;
-                    ui.add(
-                        egui::Label::new(RichText::new(line1).size(14.0).color(line1_color)).wrap(),
-                    );
-                    if !line2.is_empty() {
-                        ui.add(
-                            egui::Label::new(RichText::new(line2).size(11.5).color(p.muted)).wrap(),
-                        );
+            UpdateState::Available(release) => {
+                if small_button(ui, &format!("Update to {}", release.version), true, p).clicked() {
+                    *action = Some(SettingsAction::Install);
+                }
+            }
+            // Drawn under the message instead; see below.
+            UpdateState::Failed { .. } => {}
+            state => {
+                let busy = matches!(state, UpdateState::Checking | UpdateState::Downloading(_));
+                if reveal_on_focus(
+                    ui.add_enabled(!busy, small_button_widget("Check now", false, p)),
+                )
+                .clicked()
+                {
+                    *action = Some(SettingsAction::CheckNow);
+                }
+            }
+        },
+    );
+    // A launch that failed offline has to be retryable without a restart. The
+    // error text is long, so the two buttons get their own line under it
+    // rather than squeezing it into a narrow column.
+    if matches!(update, UpdateState::Failed { .. }) {
+        Frame::new()
+            .inner_margin(Margin {
+                left: 12,
+                right: 12,
+                top: 0,
+                bottom: 9,
+            })
+            .show(ui, |ui| {
+                ui.horizontal(|ui| {
+                    if small_button(ui, "Check now", false, p).clicked() {
+                        *action = Some(SettingsAction::CheckNow);
+                    }
+                    if small_button(ui, "Open releases page", false, p).clicked() {
+                        *action = Some(SettingsAction::OpenReleases);
                     }
                 });
             });
-        });
-    });
+    }
     settings_checkbox(
         ui,
         &mut cfg.check_updates,
@@ -3027,28 +3195,44 @@ fn settings_body(
         ui,
         &mut cfg.install_updates_automatically,
         "Install updates automatically",
-        Some("(you still choose when to restart)"),
+        Some("You still choose when to restart."),
         p,
     );
+}
 
-    ui.add_space(SETTINGS_TITLE_PAD_TOP);
+/// The collapsed-by-default Advanced card: a disclosure header row, then
+/// the diagnostic settings once opened.
+fn advanced_rows(ui: &mut Ui, cfg: &mut AppConfig, p: &Palette) {
     let id = ui.make_persistent_id("advanced_settings");
     let mut state =
         egui::collapsing_header::CollapsingState::load_with_default_open(ui.ctx(), id, false);
     let expanded = state.is_open();
-    let header = ui.horizontal(|ui| {
-        ui.set_min_height(30.0);
-        disclosure_chevron(ui, expanded, true, 22.0, p);
-        ui.label(RichText::new("Advanced").size(14.0).color(p.muted));
-        ui.label(
-            RichText::new("Diagnostic capture, Path of Exile window title")
-                .size(11.5)
-                .color(p.subtle),
-        );
-    });
+    let fill = ui.painter().add(egui::Shape::Noop);
+    let header = Frame::new()
+        .inner_margin(Margin::symmetric(12, 7))
+        .show(ui, |ui| {
+            ui.set_min_width(ui.available_width());
+            ui.horizontal(|ui| {
+                ui.set_min_height(SETTINGS_LINE_HEIGHT);
+                ui.spacing_mut().item_spacing.x = 10.0;
+                disclosure_chevron(ui, expanded, true, SETTINGS_LINE_HEIGHT, p);
+                ui.label(poe_text("Advanced", 17.0, p.gold));
+                ui.add(
+                    egui::Label::new(
+                        RichText::new("Diagnostic capture, Path of Exile window title")
+                            .size(12.0)
+                            .color(p.subtle),
+                    )
+                    .wrap(),
+                );
+            });
+        })
+        .response
+        .rect;
+    settings_row_chrome(ui, fill, header, true, p);
     let response = ui
         .interact(
-            header.response.rect,
+            header,
             ui.id().with("advanced_disclosure"),
             egui::Sense::click(),
         )
@@ -3060,42 +3244,21 @@ fn settings_body(
         ui.ctx().request_repaint();
     }
     if state.is_open() {
-        ui.horizontal(|ui| {
-            ui.add_space(20.0);
-            ui.vertical(|ui| {
-                settings_checkbox(
-                    ui,
-                    &mut cfg.dump_debug,
-                    "Save the last capture for diagnostics",
-                    None,
-                    p,
-                );
-                settings_row(
-                    ui,
-                    settings_label("Path of Exile window title", p),
-                    34.0,
-                    |ui| {
-                        settings_field(ui, &mut cfg.poe_window_title, 150.0, p);
-                    },
-                );
-            });
-        });
+        settings_checkbox(
+            ui,
+            &mut cfg.dump_debug,
+            "Save the last capture for diagnostics",
+            None,
+            p,
+        );
+        settings_row(
+            ui,
+            settings_label("Path of Exile window title", p),
+            None,
+            p,
+            |ui| settings_field(ui, &mut cfg.poe_window_title, 150.0, p),
+        );
     }
-
-    // The attribution sits on the pane's floor, not under the last section.
-    ui.add_space((ui.available_height() - 48.0).max(0.0));
-    settings_rule(ui, p);
-    ui.add_space(6.0);
-    ui.add(
-        egui::Label::new(
-            RichText::new(
-                "Path of Exile and its game artwork are owned by or licensed to Grinding Gear Games Limited. Not affiliated with or endorsed by Grinding Gear Games.",
-            )
-            .size(11.0)
-            .color(p.subtle),
-        )
-        .wrap(),
-    );
 }
 
 /// Also the verdict title's text colour, so every entry keeps 4.5:1 on its palette's `bg`.

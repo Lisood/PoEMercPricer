@@ -314,7 +314,7 @@ pub fn sha256_hex(bytes: &[u8]) -> Result<String> {
     }
 }
 
-/// The updater runs on worker threads that never pump messages, so use the MTA.
+/// The updater and the OCR run on worker threads that never pump messages, so use the MTA.
 /// A thread already initialized in another mode keeps working. `RoInitialize`
 /// alone ties the process MTA's lifetime to threads: when the last WinRT thread
 /// exits, its apartment reference goes with it, and once the count hits zero
@@ -323,7 +323,7 @@ pub fn sha256_hex(bytes: &[u8]) -> Result<String> {
 /// `CoIncrementMTAUsage` pins the MTA for the process with a cookie that is
 /// deliberately never released.
 #[cfg(windows)]
-fn winrt() -> Result<()> {
+pub(crate) fn winrt() -> Result<()> {
     use std::cell::Cell;
     use std::sync::Once;
     use windows::Win32::Foundation::RPC_E_CHANGED_MODE;
@@ -345,7 +345,7 @@ fn winrt() -> Result<()> {
         match unsafe { RoInitialize(RO_INIT_MULTITHREADED) } {
             Ok(()) => {}
             Err(error) if error.code() == RPC_E_CHANGED_MODE => {}
-            Err(error) => return Err(error).context("initializing WinRT for the updater"),
+            Err(error) => return Err(error).context("initializing WinRT"),
         }
         initialized.set(true);
         Ok(())

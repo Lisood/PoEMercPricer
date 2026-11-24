@@ -30,6 +30,7 @@ pub fn clipboard_image_rgba() -> Result<Option<RgbaImage>> {
 
 /// Largest image side accepted from the clipboard or a copied file.
 const MAX_IMAGE_SIDE: u32 = 8192;
+const MAX_IMAGE_PIXELS: u64 = 40_000_000;
 
 /// Decode the first image file copied in a file manager (Windows `CF_HDROP`).
 /// This is distinct from copying pixels with an image editor/browser.
@@ -154,8 +155,8 @@ pub fn clipboard_image_data_to_rgba(data: ImageData<'_>) -> Result<RgbaImage> {
         "clipboard image {width}x{height} exceeds {MAX_IMAGE_SIDE} px per side"
     );
     anyhow::ensure!(
-        u64::from(width) * u64::from(height) <= 40_000_000,
-        "clipboard image {width}x{height} exceeds 40,000,000 px total"
+        u64::from(width) * u64::from(height) <= MAX_IMAGE_PIXELS,
+        "clipboard image {width}x{height} exceeds {MAX_IMAGE_PIXELS} px total"
     );
     let expected_len = data
         .width
@@ -327,11 +328,19 @@ pub fn load_image(path: &Path) -> Result<RgbaImage> {
     let mut limits = image::Limits::default();
     limits.max_image_width = Some(MAX_IMAGE_SIDE);
     limits.max_image_height = Some(MAX_IMAGE_SIDE);
-    limits.max_alloc = Some(64 << 20);
+    // Same ceiling as the clipboard path (40 M pixels of RGBA): an 8K capture needs about 133 MB.
+    limits.max_alloc = Some(160 << 20);
     reader.limits(limits);
     let img = reader
         .decode()
         .with_context(|| format!("decoding {}", path.display()))?;
+    // `max_alloc` counts bytes in the file's own pixel format, so a grayscale image far
+    // over the pixel ceiling passes it and would then quadruple in `into_rgba8`.
+    let (width, height) = (img.width(), img.height());
+    anyhow::ensure!(
+        u64::from(width) * u64::from(height) <= MAX_IMAGE_PIXELS,
+        "image {width}x{height} exceeds {MAX_IMAGE_PIXELS} px total"
+    );
     Ok(img.into_rgba8())
 }
 
@@ -367,6 +376,27 @@ mod tests {
             super::window_title_match_rank("PoEMercPricer", "Path of Exile"),
             None
         );
+    }
+
+    #[test]
+    fn load_image_takes_an_8k_capture_and_refuses_more_pixels_in_any_format() {
+        let dir = std::env::temp_dir().join(format!("pmp-load-image-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).expect("temp dir");
+        let eight_k = dir.join("8k.png");
+        image::RgbaImage::new(7680, 4320)
+            .save(&eight_k)
+            .expect("write 8K png");
+        let loaded = super::load_image(&eight_k).expect("an 8K RGBA capture loads");
+        assert_eq!((loaded.width(), loaded.height()), (7680, 4320));
+        drop(loaded);
+        // 49 MP of grayscale is 49 MB to decode, well inside the allocation limit.
+        let gray = dir.join("gray.png");
+        image::GrayImage::new(8192, 6000)
+            .save(&gray)
+            .expect("write gray png");
+        let error = super::load_image(&gray).expect_err("over the pixel ceiling");
+        assert!(format!("{error:#}").contains("px total"), "{error:#}");
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[cfg(windows)]
